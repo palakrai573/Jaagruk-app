@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher foreground: a helmet over an open eye.
+
+  "Jaagruk" means alert or watchful, and the mark says the same thing without words — which is the right
+  choice for an app whose users may not read the label under the icon.
+
+  Drawn as a vector so there is one asset rather than five densities to keep in step, and kept inside the
+  adaptive-icon safe zone (the middle 66 dp of the 108 dp canvas) so no launcher mask clips it.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Helmet dome -->
+    <path
+        android:fillColor="#FFFFD100"
+        android:pathData="M28,54 C28,39 40,28 54,28 C68,28 80,39 80,54 Z" />
+
+    <!-- Helmet brim -->
+    <path
+        android:fillColor="#FFFFD100"
+        android:pathData="M24,54 h60 a3,3 0 0 1 3,3 v5 a3,3 0 0 1 -3,3 h-60 a3,3 0 0 1 -3,-3 v-5 a3,3 0 0 1 3,-3 z" />
+
+    <!-- Helmet centre rib, so the shape still reads in monochrome -->
+    <path
+        android:fillColor="#FF00363A"
+        android:pathData="M52,30 h4 v24 h-4 z" />
+
+    <!-- Eye: outer almond -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M30,76 C38,66 48,62 54,62 C60,62 70,66 78,76 C70,86 60,90 54,90 C48,90 38,86 30,76 Z" />
+
+    <!-- Eye: iris -->
+    <path
+        android:fillColor="#FF00696E"
+        android:pathData="M54,66 m-9,10 a9,10 0 1,0 18,0 a9,10 0 1,0 -18,0" />
+
+    <!-- Eye: pupil -->
+    <path
+        android:fillColor="#FF10161C"
+        android:pathData="M54,71 m-4,5 a4,5 0 1,0 8,0 a4,5 0 1,0 -8,0" />
+
+</vector>

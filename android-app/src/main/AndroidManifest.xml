@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Permission set is deliberately minimal and every entry is justified below. A safety app that
+      asks for more than it needs is one a site IT department will refuse to deploy.
+    -->
+
+    <!-- AR scenes, hazard photos, QR scanning. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Voice commands and hazard voice notes. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Sync upload and Cloud Anchor resolution when connectivity happens to exist. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Refresher reminders. Requested at runtime on API 33+. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--
+      Re-arms the refresher check after a reboot. The schedule itself lives in the database as
+      timestamps, so this only affects how soon the check runs, never whether the schedule survives.
+    -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--
+      Nearby Connections, for two-phone buddy drills and for relaying records to a supervisor's
+      handset when there is no network at all. The permission set differs by API level: before 31
+      Nearby needed the legacy Bluetooth permissions plus fine location, which is why the modern
+      ones carry maxSdkVersion and the old ones are capped.
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"
+        tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"
+        tools:targetApi="s" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="tiramisu" />
+
+    <!--
+      Fine location is required by Nearby Connections below API 31, and is genuinely useful for
+      tagging a surface hazard. It is capped at 30 so a modern device never has to grant location
+      just to run a buddy drill, and the app functions without it: underground reports are located
+      by zone label or AR anchor instead, because there is no GPS fix down there anyway.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+    <!--
+      Declared alongside FINE because the platform requires both to be requested together; a FINE-only
+      request is silently downgraded on some builds, which would make Nearby fail on exactly the pre-31
+      devices this pair exists for. Both are capped at 30 for the same reason FINE is.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- Torch, for the tracking coach's low-light prompt. -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <!--
+      Camera is required; ARCore is not. Roughly a third of mid-range Android stock in this market
+      is not ARCore certified, and those handsets fall back to a sensor-driven mode. Marking ARCore
+      as required would make the app invisible on Play for exactly the workers who need it most.
+    -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-feature android:glEsVersion="0x00030000" android:required="true" />
+
+    <application
+        android:name=".JaagrukApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Jaagruk.Splash"
+        tools:targetApi="tiramisu">
+
+        <!--
+          Backup is off on purpose. The device holds a site signing key and offline PIN hashes;
+          restoring those onto a different handset would clone a certificate-issuing identity.
+        -->
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Jaagruk.Splash"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode|smallestScreenSize|density">
+            <!--
+              configChanges is handled rather than recreating the activity. A rotation mid-drill
+              would otherwise tear down the ARCore session and the GL surface, and the decision
+              latency being measured at that moment is the whole point of the assessment.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+              Deep link for the printable certificate card, so a stock camera app that opens the
+              URL hands off to Jaagruk. Verification still happens entirely offline; the URL is a
+              convenience, not part of the trust path.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="jaagruk.jharkhand.gov.in"
+                    android:pathPrefix="/v/" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          Declares that this app can use ARCore but does not require it. "optional" is what lets the
+          app install and run on a non-certified handset, which then takes the sensor fallback path.
+        -->
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
+        <!--
+          The minimum ARCore APK version is deliberately not declared here. The ARCore library states its own
+          requirement in its manifest, and pinning a second value would either contradict it or silently go
+          stale on the next dependency bump — and the failure mode is a session that will not create on a
+          device that should have supported it.
+        -->
+
+        <!-- Keep the barcode model out of the base APK; it downloads on first use. -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
+
+        <!--
+          Hilt supplies the WorkManager factory, so the default initialiser is removed and
+          JaagrukApplication configures WorkManager itself.
+        -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
+        <receiver
+            android:name=".sync.RefresherReminderReceiver"
+            android:exported="false">
+            <intent-filter>
+                <!-- Refresher schedules are derived from stored timestamps, so a reboot only needs
+                     to re-arm the alarm; it can never lose the schedule itself. -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>

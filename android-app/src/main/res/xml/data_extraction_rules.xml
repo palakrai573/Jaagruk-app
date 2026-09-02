@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nothing is backed up or transferred. Not a precaution — a requirement.
+
+  This handset holds a site's Ed25519 signing private key and the offline PIN hashes for its workers.
+  Restoring that onto a different phone would clone a certificate-issuing identity, and two phones signing as
+  the same site would fork the chain: two different records at one sequence number, which is exactly what a
+  tampered ledger looks like.
+
+  The manifest also sets `allowBackup="false"`, so this file is the belt to that braces. Unsynced records are
+  not at risk from this: they live in the app database and are delivered on the next upload or relayed to a
+  supervisor's phone.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

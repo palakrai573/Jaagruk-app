@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hindi (hi) UI strings.
+
+  Register chosen deliberately: plain spoken Hindi as used on a Jharkhand shop floor, not Sanskritised
+  administrative Hindi. A worker who has to parse "संस्थापन" instead of "लगाना" is a worker who stops reading.
+  Where an English technical term is what people actually say on site — PIN, QR, AR, Bluetooth — it is kept
+  in Devanagari transliteration rather than translated into something nobody uses.
+
+  Needs review by a native Hindi speaker familiar with mine-site vocabulary before a field pilot. That is a
+  translation-quality question, not a functional gap: every key resolves and the app is fully usable.
+-->
+<resources>
+
+    <string name="app_name">जागरुक</string>
+
+    <string name="signin_tagline">व्यावसायिक सुरक्षा प्रशिक्षण और प्रमाणन</string>
+    <string name="signin_search_hint">नाम या कर्मचारी नंबर से खोजें</string>
+    <string name="signin_no_workers">इस फ़ोन में अभी कोई कर्मचारी नहीं है। सुपरवाइज़र टूल से जोड़ा जा सकता है।</string>
+    <string name="signin_no_site">यह फ़ोन किसी साइट से नहीं जुड़ा है। प्रशिक्षण चलेगा; प्रमाणपत्र के लिए साइट कुंजी चाहिए।</string>
+    <string name="signin_queued_records">%1$d रिकॉर्ड इस फ़ोन में सुरक्षित हैं, अपलोड बाकी है। कुछ नहीं खोया।</string>
+    <string name="signin_pin_not_set">पिन अभी सेट नहीं है</string>
+    <string name="signin_enter_pin">शिफ़्ट शुरू करने के लिए अपना पिन डालें</string>
+    <string name="signin_choose_pin">4 से 8 अंकों का पिन चुनें। यह सिर्फ़ आपको पता होगा।</string>
+    <string name="signin_pin_label">पिन</string>
+    <string name="signin_locked_out">अभी %1$d सेकंड और बंद रहेगा।</string>
+    <string name="signin_wrong_pin">पिन ग़लत है। बंद होने से पहले %1$d कोशिश बची है।</string>
+    <string name="signin_unknown_worker">यह कर्मचारी इस फ़ोन में नहीं है।</string>
+    <string name="signin_pin_not_saved">यह पिन सेव नहीं हो सका। दूसरा चुनें।</string>
+    <string name="signin_pin_too_short">पिन कम से कम %1$d अंकों का होना चाहिए।</string>
+    <string name="signin_pin_too_long">पिन ज़्यादा से ज़्यादा %1$d अंकों का होना चाहिए।</string>
+    <string name="signin_pin_not_digits">पिन में सिर्फ़ अंक होने चाहिए।</string>
+    <string name="signin_pin_too_guessable">यह पिन आसानी से पता चल जाएगा। 1234, 0000 या एक ही अंक न रखें।</string>
+    <string name="signin_supervisor_title">सुपरवाइज़र साइन-इन</string>
+    <string name="signin_supervisor_explainer">इसके लिए नेटवर्क चाहिए। साइट कुंजी बनाने और रिकॉर्ड भेजने के लिए। कर्मचारी साइन-इन बिना नेटवर्क भी चलता है।</string>
+    <string name="signin_username">यूज़रनेम</string>
+    <string name="signin_password">पासवर्ड</string>
+    <string name="signin_bad_credentials">यूज़रनेम या पासवर्ड ग़लत है।</string>
+    <string name="signin_rate_limited">बहुत बार कोशिश हो गई। एक मिनट रुककर दोबारा करें।</string>
+    <string name="signin_failed_code">साइन-इन नहीं हुआ (%1$d)।</string>
+    <string name="signin_empty_session">सर्वर से जवाब आया पर सेशन नहीं मिला।</string>
+    <string name="signin_offline">सर्वर से संपर्क नहीं है। कर्मचारी साइन-इन बिना नेटवर्क भी चलता है।</string>
+
+    <string name="home_no_site">कोई साइट नहीं जुड़ी</string>
+    <string name="home_needs_attention">ध्यान चाहिए</string>
+    <string name="home_ready_modules">तैयार</string>
+    <string name="home_queued_records">%1$d रिकॉर्ड अपलोड होने बाकी हैं। आपका प्रशिक्षण पहले से सुरक्षित है।</string>
+    <string name="home_rejected_records">%1$d रिकॉर्ड सर्वर ने नहीं लिए और जाँच के लिए रखे हैं। सुपरवाइज़र को दिखाएँ।</string>
+    <string name="home_clock_skew">इस फ़ोन की घड़ी लगभग %1$d मिनट आगे-पीछे है। प्रमाणपत्र की तारीख़ पर निशान लगेगा।</string>
+    <string name="home_resume_title">अधूरा अभ्यास</string>
+    <string name="home_resume_body">एक अभ्यास बीच में रुक गया था। जो जवाब दे चुके हैं वे सुरक्षित हैं। तैयार होने पर मॉड्यूल फिर शुरू करें, या इसे हटा दें।</string>
+    <string name="home_refreshers_due">%1$d मॉड्यूल में दोहराव बाकी है।</string>
+    <string name="home_valid_but_stale">काग़ज़ पर वैध है, पर आपकी तैयारी घट गई है। दोहराव कर लें।</string>
+    <string name="home_module_no_bespoke_ar">पूरा मूल्यांकन; इस मॉड्यूल में सामान्य AR जगह इस्तेमाल होती है, अलग दृश्य नहीं।</string>
+    <string name="home_other_actions">अन्य काम</string>
+    <string name="home_sync_requested">अपलोड के लिए कह दिया गया। नेटवर्क मिलते ही चलेगा।</string>
+
+    <string name="band_ready">तैयार</string>
+    <string name="band_due">समय हुआ</string>
+    <string name="band_stale">पुराना</string>
+    <string name="band_expired">ख़त्म</string>
+
+    <string name="action_required_none">कुछ बाकी नहीं</string>
+    <string name="action_required_refresher">दोहराव बाकी</string>
+    <string name="action_required_full">पूरा मॉड्यूल चाहिए</string>
+    <string name="action_required_never">कभी प्रमाणित नहीं</string>
+
+    <string name="action_sign_in">साइन-इन</string>
+    <string name="action_sign_out">साइन-आउट</string>
+    <string name="action_back">पीछे</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_done">पूरा हुआ</string>
+    <string name="action_save_pin">पिन सेव करें</string>
+    <string name="action_verify">जाँचें</string>
+    <string name="action_verify_certificate">प्रमाणपत्र जाँचें</string>
+    <string name="action_supervisor">सुपरवाइज़र टूल</string>
+    <string name="action_report_hazard">ख़तरे की सूचना दें</string>
+    <string name="action_my_certificates">मेरे प्रमाणपत्र</string>
+    <string name="action_sync_now">अभी अपलोड करें</string>
+    <string name="action_start_module">मॉड्यूल शुरू करें</string>
+    <string name="action_start_refresher">दोहराव शुरू करें</string>
+    <string name="action_full_module">पूरा मॉड्यूल</string>
+    <string name="action_buddy_drill">दो फ़ोन का साथी अभ्यास</string>
+    <string name="action_practice">अभ्यास (प्रमाणपत्र नहीं)</string>
+    <string name="action_discard_run">अधूरा अभ्यास हटाएँ</string>
+    <string name="action_show_qr">QR दिखाएँ</string>
+    <string name="action_scan">स्कैन करें</string>
+    <string name="action_stop_scanning">स्कैन बंद करें</string>
+    <string name="action_allow_camera">कैमरा चालू करने दें</string>
+    <string name="action_allow_microphone">माइक चालू करने दें</string>
+    <string name="action_allow_nearby">आस-पास के फ़ोन खोजने दें</string>
+    <string name="action_check_identity">पहचान जाँचें</string>
+
+    <string name="cd_info">जानकारी</string>
+    <string name="cd_warning">चेतावनी</string>
+    <string name="cd_stop">रुकें</string>
+    <string name="cd_readiness_bar">तैयारी %1$d प्रतिशत</string>
+    <string name="cd_voice_listening">आवाज़ के आदेश सुने जा रहे हैं</string>
+    <string name="cd_ar_marker">दृश्य में जवाब का निशान</string>
+    <string name="cd_turn_left">निशान बाईं ओर है। बाएँ घूमें।</string>
+    <string name="cd_turn_right">निशान दाईं ओर है। दाएँ घूमें।</string>
+    <string name="cd_certificate_qr">प्रमाणपत्र का QR कोड</string>
+
+    <string name="drill_step_of">चरण %1$d / %2$d</string>
+    <string name="drill_unknown_scenario">यह अभ्यास इस ऐप की सूची में नहीं है।</string>
+    <string name="drill_needs_buddy">इस अभ्यास के लिए दूसरा फ़ोन चाहिए। साथी अभ्यास स्क्रीन से शुरू करें।</string>
+    <string name="drill_confirm_selection">चुनाव पक्का करें</string>
+    <string name="drill_confirm_order">यह क्रम पक्का करें</string>
+    <string name="drill_select_something">पहले कम से कम एक जवाब चुनें।</string>
+    <string name="drill_timed_out">उस चरण का समय ख़त्म हो गया।</string>
+    <string name="drill_stop">अभ्यास रोकें</string>
+    <string name="drill_resume">आगे बढ़ें</string>
+    <string name="drill_paused_title">रुका हुआ</string>
+    <string name="drill_paused_not_counted">रुकने का समय आपके ख़िलाफ़ नहीं गिना जाता। आराम से करें।</string>
+    <string name="drill_paused_tracking">रुका: कैमरा दृश्य पकड़ नहीं पा रहा।</string>
+    <string name="drill_paused_backgrounded">रुका: आपने ऐप छोड़ दिया था।</string>
+    <string name="drill_ar_gave_up">यहाँ AR टिक नहीं रहा। अभ्यास तस्वीरों से आगे चलेगा।</string>
+    <string name="drill_voice_unclear">कुछ सुना, पर साफ़ नहीं। फिर बोलें।</string>
+    <string name="drill_voice_not_applicable">यह आदेश इस चरण पर नहीं चलता।</string>
+    <string name="drill_help_hint">अपने जवाब का नंबर बोलें, या उसे दबाएँ। सवाल दोबारा सुनने के लिए \"दोहराओ\" बोलें।</string>
+
+    <string name="ar_hint_none"></string>
+    <string name="ar_hint_too_dark">बहुत अंधेरा है। हेडलैंप चालू करें या रोशनी में आएँ।</string>
+    <string name="ar_hint_too_fast">फ़ोन बहुत तेज़ हिल रहा है। धीरे करें।</string>
+    <string name="ar_hint_no_texture">दीवार या मशीन की तरफ़ करें, ख़ाली फ़र्श की तरफ़ नहीं।</string>
+    <string name="ar_hint_look_around">फ़ोन को धीरे-धीरे दाएँ-बाएँ घुमाएँ।</string>
+    <string name="ar_hint_camera_blocked">कैमरा ढका है या उपलब्ध नहीं है।</string>
+    <string name="ar_hint_recovering">दृश्य फिर से खोजा जा रहा है। स्थिर रहें।</string>
+
+    <string name="result_not_found">वह अभ्यास परिणाम इस फ़ोन में नहीं है।</string>
+    <string name="result_passed">पास</string>
+    <string name="result_not_passed">पास नहीं</string>
+    <string name="result_score">अंक</string>
+    <string name="result_median_latency">आम तौर पर निर्णय का समय</string>
+    <string name="result_hesitation">जवाब आपको पता थे, पर %1$d प्रतिशत चरणों में आप रुके। असली दबाव में यह रुकना भारी पड़ता है। फिर अभ्यास करें।</string>
+    <string name="result_aborted">अभ्यास बीच में ख़त्म हुआ (%1$s)। जो किया वह सुरक्षित है, पर उससे प्रमाणपत्र नहीं बनेगा।</string>
+    <string name="result_certificate_issued">क्रम %1$d पर प्रमाणपत्र बन गया। यह बिना नेटवर्क भी काम करता है।</string>
+    <string name="result_certificate_pending">पास हुए। सुपरवाइज़र इस फ़ोन की साइट कुंजी बनाते ही प्रमाणपत्र बन जाएगा।</string>
+    <string name="result_void_guessing">इतने जवाब इतनी जल्दी आए जितना कोई सोच भी नहीं सकता। यह प्रयास नहीं गिना जाएगा।</string>
+    <string name="result_void_solo_buddy">इस अभ्यास के लिए असली दूसरा फ़ोन चाहिए। अकेले करने पर प्रमाणपत्र नहीं बनेगा।</string>
+    <string name="result_void_generic">यह प्रयास अवैध मानकर अलग रखा गया।</string>
+    <string name="result_review_title">इन पर ध्यान दें</string>
+    <string name="result_review_body">ये वे चरण हैं जिनमें ग़लती हुई या आप रुके।</string>
+    <string name="result_step_correct">सही</string>
+    <string name="result_step_wrong">ग़लत</string>
+    <string name="result_step_timing">आपने %1$d मिली-सेकंड लिए; अभ्यस्त कर्मचारी लगभग %2$d लेता है</string>
+
+    <string name="certificates_title">प्रमाणपत्र</string>
+    <string name="certificates_none">अभी कोई प्रमाणपत्र नहीं। मॉड्यूल पास करके पाएँ।</string>
+    <string name="certificates_seq_and_score">क्रम %1$d · %2$d%%</string>
+    <string name="certificates_not_uploaded">अभी अपलोड नहीं हुआ। यह अब भी वैध है और बिना नेटवर्क जाँचा जा सकता है।</string>
+    <string name="certificates_offline_note">इस कोड में प्रमाणपत्र ख़ुद मौजूद है, कोई नंबर नहीं। निरीक्षक इसे बिना नेटवर्क जाँच सकते हैं।</string>
+    <string name="certificates_site">साइट</string>
+    <string name="certificates_sequence">क्रम</string>
+    <string name="certificates_score">अंक</string>
+    <string name="certificates_key_epoch">कुंजी काल</string>
+    <string name="certificates_record_hash">रिकॉर्ड हैश</string>
+    <string name="certificates_text_form">पाठ रूप (कोड ख़राब हो तो इस्तेमाल करें)</string>
+
+    <string name="flag_buddy">दो फ़ोन का साथी अभ्यास</string>
+    <string name="flag_site_scanned">इसी साइट के स्कैन किए दृश्य में प्रशिक्षण</string>
+    <string name="flag_refresher">दोहराव</string>
+    <string name="flag_hesitation">रुकावट दर्ज</string>
+    <string name="flag_assisted">आवाज़ या इशारे से जवाब</string>
+
+    <string name="verify_title">प्रमाणपत्र जाँचें</string>
+    <string name="verify_offline_note">यह जाँच पूरी तरह इसी फ़ोन पर होती है। नेटवर्क की ज़रूरत नहीं।</string>
+    <string name="verify_camera_needed">कोड स्कैन करने के लिए कैमरा चाहिए। नीचे पाठ रूप भी डाल सकते हैं।</string>
+    <string name="verify_manual_title">कोड टाइप करें</string>
+    <string name="verify_manual_hint">प्रमाणपत्र का पाठ चिपकाएँ या टाइप करें</string>
+    <string name="verify_details_title">विवरण</string>
+    <string name="verify_site">साइट: %1$s</string>
+    <string name="verify_sequence">क्रम: %1$d</string>
+    <string name="verify_score">अंक: %1$d%%</string>
+    <string name="verify_worker_hash">कर्मचारी हैश: %1$s…</string>
+    <string name="verify_confirm_identity">पक्का करें कि यह वही कर्मचारी है</string>
+    <string name="verify_worker_id_hint">कार्ड पर लिखा कर्मचारी नंबर</string>
+    <string name="verify_identity_match">मेल खाता है। यह प्रमाणपत्र उसी कर्मचारी नंबर का है।</string>
+    <string name="verify_identity_mismatch">उस कर्मचारी नंबर से मेल नहीं खाता।</string>
+
+    <string name="verify_status_verified">जाँच पूरी, सही</string>
+    <string name="verify_status_signature_only">हस्ताक्षर सही</string>
+    <string name="verify_status_unknown_site">साइट कुंजी अज्ञात</string>
+    <string name="verify_status_bad_signature">हस्ताक्षर ग़लत</string>
+    <string name="verify_status_broken_link">श्रृंखला टूटी है</string>
+    <string name="verify_status_malformed">यह जागरुक प्रमाणपत्र नहीं है</string>
+    <string name="verify_status_sequence_gap">बीच के रिकॉर्ड नहीं हैं</string>
+
+    <string name="verify_explain_verified">हस्ताक्षर सही है और रिकॉर्ड इस फ़ोन की श्रृंखला में ठीक से जुड़ता है।</string>
+    <string name="verify_explain_signature_only">हस्ताक्षर असली है। इस फ़ोन में उस साइट की श्रृंखला नहीं है, इसलिए जुड़ाव नहीं जाँचा जा सका।</string>
+    <string name="verify_explain_unknown_site">इस फ़ोन में उस साइट की सार्वजनिक कुंजी नहीं है। एक बार सिंक करके दोबारा जाँचें।</string>
+    <string name="verify_explain_bad_signature">सामग्री बदली गई है, या ग़लत कुंजी से हस्ताक्षर हुआ है। इसे स्वीकार न करें।</string>
+    <string name="verify_explain_broken_link">यह रिकॉर्ड पिछले रिकॉर्ड से नहीं जुड़ता। यह छेड़छाड़ का संकेत है, कमी का नहीं।</string>
+    <string name="verify_explain_malformed">यह कोड जागरुक का प्रमाणपत्र नहीं है।</string>
+    <string name="verify_explain_sequence_gap">हस्ताक्षर और जुड़ाव ठीक हैं, पर बीच के कुछ रिकॉर्ड इस फ़ोन में नहीं हैं।</string>
+
+    <string name="hazard_title">ख़तरे की सूचना दें</string>
+    <string name="hazard_offline_note">तुरंत इसी फ़ोन में सुरक्षित हो जाता है। बाद में अपलोड होगा; सिग्नल की ज़रूरत नहीं।</string>
+    <string name="hazard_what">आपने क्या देखा?</string>
+    <string name="hazard_how_bad">कितना ख़तरनाक है?</string>
+    <string name="hazard_where">कहाँ है?</string>
+    <string name="hazard_zone_hint">क्षेत्र या निशानी, जैसे 3 नॉर्थ, कन्वेयर हेड के पास</string>
+    <string name="hazard_note">कुछ और बताना है?</string>
+    <string name="hazard_note_hint">वैकल्पिक टिप्पणी</string>
+    <string name="hazard_record_voice">आवाज़ में बताएँ</string>
+    <string name="hazard_rerecord_voice">फिर रिकॉर्ड करें</string>
+    <string name="hazard_stop_recording">रोकें (%1$d से)</string>
+    <string name="hazard_submit">सूचना भेजें</string>
+    <string name="hazard_mic_permission">आवाज़ में बताने के लिए माइक चाहिए। बिना आवाज़ भी सूचना भेज सकते हैं।</string>
+    <string name="hazard_recorder_unavailable">रिकॉर्डर उपलब्ध नहीं है। बिना आवाज़ सूचना भेजें।</string>
+    <string name="hazard_voice_too_short">वह रिकॉर्डिंग बहुत छोटी थी, रखी नहीं गई।</string>
+    <string name="hazard_rate_limited">पिछले %2$d मिनट में %1$d सूचनाएँ भेज दी गईं। अगली भेजने से पहले थोड़ा रुकें।</string>
+    <string name="hazard_invalid">यह सूचना नहीं भेजी जा सकी: %1$s</string>
+
+    <string name="supervisor_title">सुपरवाइज़र टूल</string>
+    <string name="supervisor_not_signed_in">सर्वर पर साइन-इन नहीं है</string>
+    <string name="supervisor_site_key_title">साइट हस्ताक्षर कुंजी</string>
+    <string name="supervisor_site_key_explainer">यह फ़ोन प्रमाणपत्रों पर उस कुंजी से हस्ताक्षर करता है जो सिर्फ़ यहीं रखी है। हर तैनाती पर एक बार बनाएँ। बदलाव सर्वर पर नए काल के साथ होता है, फ़ोन से कभी नहीं।</string>
+    <string name="supervisor_site_id_hint">साइट आईडी, जैसे JH-DHN-001</string>
+    <string name="supervisor_site_id_required">पहले साइट आईडी डालें।</string>
+    <string name="supervisor_generate_key">साइट कुंजी बनाएँ</string>
+    <string name="supervisor_key_created">साइट कुंजी बन गई। अगले अपलोड पर सर्वर तक पहुँच जाएगी।</string>
+    <string name="supervisor_key_exists">इस फ़ोन में पहले से साइट कुंजी है। दूसरी कुंजी प्रमाणपत्र श्रृंखला को दो हिस्सों में बाँट देगी।</string>
+    <string name="supervisor_key_failed">इस फ़ोन पर कुंजी नहीं बन सकी।</string>
+    <string name="supervisor_key_present">%1$s की कुंजी मौजूद, काल %2$d</string>
+
+    <string name="supervisor_readiness_title">शिफ़्ट की तैयारी</string>
+    <string name="supervisor_valid_but_stale">%1$d कर्मचारी-मॉड्यूल काग़ज़ पर वैध हैं पर व्यवहार में पुराने। पहले इन्हें देखें।</string>
+
+    <string name="supervisor_chain_title">प्रमाणपत्र बही</string>
+    <string name="supervisor_chain_summary">इस फ़ोन में %1$d प्रमाणपत्र, श्रृंखला का सिरा क्रम %2$d पर।</string>
+    <string name="supervisor_audit_chain">श्रृंखला जाँचें</string>
+    <string name="supervisor_chain_clean">%1$d रिकॉर्ड जाँचे। हर जोड़ सही है।</string>
+    <string name="supervisor_chain_problem">क्रम %1$d से आगे के रिकॉर्ड नहीं जुड़ते। इसकी सूचना दें; रिकॉर्ड रखे गए हैं, मिटाए नहीं गए।</string>
+
+    <string name="supervisor_ar_title">साइट AR स्कैन</string>
+    <string name="supervisor_anchor_count">%1$d निशान लगाए गए</string>
+    <string name="supervisor_cloud_anchors_on">क्लाउड ऐंकर सेट हैं। स्कैन दूसरे फ़ोनों पर भी चलेगा।</string>
+    <string name="supervisor_cloud_anchors_off">इस बिल्ड में क्लाउड ऐंकर कुंजी नहीं है, इसलिए स्कैन सिर्फ़ इस सेशन तक रहेगा। अभ्यास चलते रहेंगे; बाद में सामान्य जगह इस्तेमाल होगी।</string>
+    <string name="supervisor_scan_site">यह साइट स्कैन करें</string>
+
+    <string name="supervisor_voice_title">आवाज़ के आदेश</string>
+    <string name="supervisor_voice_explainer">हर साइट पर एक बार आदेश शब्द रिकॉर्ड करें, उसी भाषा में जो यहाँ के कर्मचारी बोलते हैं। संताली के लिए ज़रूरी है, क्योंकि कोई भी स्पीच इंजन उसे नहीं समझता।</string>
+    <string name="supervisor_enrol_voice">आदेश शब्द रिकॉर्ड करें</string>
+
+    <string name="supervisor_sync_title">अपलोड</string>
+    <string name="supervisor_sync_summary">%1$d बाकी, %2$d अस्वीकृत और जाँच के लिए रखे गए।</string>
+    <string name="supervisor_never_synced">यह फ़ोन अभी तक सर्वर तक नहीं पहुँचा। तब तक सब कुछ यहीं सुरक्षित है।</string>
+    <string name="supervisor_sync_requested">अपलोड के लिए कह दिया गया।</string>
+
+    <string name="supervisor_relay_title">रिकॉर्ड दूसरे फ़ोन को दें</string>
+    <string name="supervisor_relay_explainer">उन रिकॉर्डों के लिए जो नीचे से बाहर नहीं जा सकते। दूसरा फ़ोन उन्हें ऊपर ले जाएगा। रास्ते में कुछ बदला नहीं जा सकता: हर प्रमाणपत्र पर हस्ताक्षर है।</string>
+    <string name="supervisor_relay_progress">%1$d भेजे, %2$d मिले</string>
+    <string name="supervisor_relay_collect">रिकॉर्ड बाहर ले जाएँ</string>
+    <string name="supervisor_relay_offer">रिकॉर्ड सौंपें</string>
+    <string name="supervisor_relay_stop">रोकें</string>
+    <string name="supervisor_relay_collecting">उस फ़ोन का इंतज़ार जिसके पास देने के लिए रिकॉर्ड हैं।</string>
+    <string name="supervisor_relay_offering">इस फ़ोन के रिकॉर्ड पास के फ़ोन को दिए जा रहे हैं।</string>
+
+    <string name="supervisor_diagnostics_title">जाँच जानकारी</string>
+    <string name="supervisor_device_id">डिवाइस</string>
+    <string name="supervisor_device_registered">दर्ज</string>
+    <string name="supervisor_clock_skew">घड़ी का अंतर</string>
+    <string name="supervisor_worker_count">कर्मचारी</string>
+    <string name="supervisor_site_scanned">साइट स्कैन</string>
+    <string name="supervisor_pin_reset">%1$s का पिन हटा दिया गया। अगले साइन-इन पर वे नया चुनेंगे।</string>
+    <string name="supervisor_worker_unknown">%1$s इस फ़ोन में नहीं है।</string>
+
+    <string name="sitescan_title">यह साइट स्कैन करें</string>
+    <string name="sitescan_instruction">असली वस्तु के सामने, दो मीटर दूर खड़े होकर उसका निशान लगाएँ। फिर कर्मचारियों के अभ्यास में असली जगह इस्तेमाल होगी।</string>
+    <string name="sitescan_progress">%2$d में से %1$d मुख्य निशान लगे</string>
+    <string name="sitescan_no_camera">इस फ़ोन में कैमरे का रास्ता काम नहीं करता, इसलिए साइट स्कैन नहीं हो सकती।</string>
+    <string name="sitescan_needs_arcore">इस फ़ोन में ARCore नहीं है, इसलिए निशान जगह पर टिकाए नहीं जा सकते। अभ्यास सामान्य जगह के साथ चलेंगे।</string>
+    <string name="sitescan_not_placed">नहीं लगा</string>
+    <string name="sitescan_placed_cloud">लगा और दूसरे फ़ोनों से साझा</string>
+    <string name="sitescan_placed_session">सिर्फ़ इस सेशन के लिए लगा</string>
+    <string name="sitescan_place">यहाँ लगाएँ</string>
+    <string name="sitescan_replace">यहाँ दोबारा लगाएँ</string>
+    <string name="sitescan_placed_ok">निशान लग गया।</string>
+    <string name="sitescan_place_failed">यह निशान नहीं लग सका। धीरे चलकर दोबारा कोशिश करें।</string>
+    <string name="sitescan_clear_all">सभी निशान हटाएँ</string>
+    <string name="sitescan_cleared">सभी निशान हट गए। दोबारा स्कैन तक अभ्यास सामान्य जगह इस्तेमाल करेंगे।</string>
+
+    <string name="target_exit_primary">मुख्य निकास मार्ग</string>
+    <string name="target_exit_secondary">दूसरा निकास मार्ग</string>
+    <string name="target_assembly_point">एकत्र स्थल</string>
+    <string name="target_extinguisher_station">अग्निशामक स्थान</string>
+    <string name="target_fire_alarm_point">आग का अलार्म</string>
+    <string name="target_gas_zone">गैस ख़तरा क्षेत्र</string>
+    <string name="target_vent_fan">हवा का पंखा</string>
+    <string name="target_confined_space_entry">बंद जगह का प्रवेश</string>
+    <string name="target_isolator_switch">आइसोलेटर स्विच</string>
+    <string name="target_machine_nip_point">मशीन का दबाव बिंदु</string>
+    <string name="target_refuge_chamber">शरण कक्ष</string>
+    <string name="target_anchor_point_valid">स्वीकृत हार्नेस ऐंकर</string>
+    <string name="target_damaged_cable">ख़राब केबल</string>
+    <string name="target_generic">निशान</string>
+
+    <string name="voiceenroll_title">आदेश शब्द रिकॉर्ड करें</string>
+    <string name="voiceenroll_explainer">हर शब्द दो बार बोलें। सेव करने से पहले दोनों रिकॉर्डिंग की तुलना होती है, ताकि खाँसी या कटा शब्द बाद में ग़लत जवाब न बनाए।</string>
+    <string name="voiceenroll_progress">%1$d शब्द रिकॉर्ड हुए; आवाज़ चालू होने के लिए %2$d चाहिए</string>
+    <string name="voiceenroll_mic_needed">आदेश शब्द रिकॉर्ड करने के लिए माइक चाहिए।</string>
+    <string name="voiceenroll_recordings">%2$d में से %1$d रिकॉर्डिंग</string>
+    <string name="voiceenroll_record">रिकॉर्ड करें</string>
+    <string name="voiceenroll_rerecord">फिर रिकॉर्ड करें</string>
+    <string name="voiceenroll_speak_now">तैयार हो जाएँ…</string>
+    <string name="voiceenroll_take">अब बोलें — रिकॉर्डिंग %1$d</string>
+    <string name="voiceenroll_saved">%1$d रिकॉर्डिंग सेव हुईं।</string>
+    <string name="voiceenroll_accepted">स्वीकार।</string>
+    <string name="voiceenroll_inconsistent">दोनों रिकॉर्डिंग एक जैसी नहीं लगीं। दोनों बार वही शब्द बोलें।</string>
+    <string name="voiceenroll_too_short">एक रिकॉर्डिंग बहुत छोटी थी। साफ़ बोलकर दोबारा करें।</string>
+    <string name="voiceenroll_not_enough">पूरी रिकॉर्डिंग नहीं हो पाईं।</string>
+    <string name="voiceenroll_mic_failed">माइक इस्तेमाल नहीं हो सका।</string>
+    <string name="voiceenroll_not_yet_usable">कम से कम %1$d शब्द रिकॉर्ड होने तक आवाज़ का विकल्प छिपा रहेगा। आधा-अधूरा माइक न होने से भी बुरा है।</string>
+
+    <string name="buddy_title">दो फ़ोन का साथी अभ्यास</string>
+    <string name="buddy_explainer">दोनों कर्मचारी यह स्क्रीन खोलें। फ़ोन ब्लूटूथ और वाई-फ़ाई डायरेक्ट से एक-दूसरे को खोज लेंगे — इंटरनेट या सिग्नल की ज़रूरत नहीं।</string>
+    <string name="buddy_paired_with">%1$s से जुड़ा</string>
+    <string name="buddy_role_host">यह फ़ोन अभ्यास चलाएगा</string>
+    <string name="buddy_role_guest">यह फ़ोन साथ चलेगा</string>
+    <string name="buddy_peer_stale">दूसरा फ़ोन चुप हो गया है। पास आएँ।</string>
+    <string name="buddy_transport_problem">दूसरे फ़ोन तक अभी नहीं पहुँच पाए। यह स्क्रीन खुली रखें।</string>
+
+    <string name="buddy_phase_idle">शुरू नहीं हुआ</string>
+    <string name="buddy_phase_handshake">साथी का फ़ोन खोजा जा रहा है</string>
+    <string name="buddy_phase_ready">जुड़ गया</string>
+    <string name="buddy_phase_countdown">साथ में शुरू हो रहा है</string>
+    <string name="buddy_phase_running">अभ्यास चल रहा है</string>
+    <string name="buddy_phase_distress">आपके साथी को मदद चाहिए</string>
+    <string name="buddy_phase_result">परिणाम मिलाए जा रहे हैं</string>
+    <string name="buddy_phase_complete">पूरा हुआ</string>
+    <string name="buddy_phase_aborted">रुक गया</string>
+
+    <string name="buddy_explain_idle">अनुमति दें, फिर दोनों फ़ोन पास रखें।</string>
+    <string name="buddy_explain_handshake">दोनों फ़ोन कुछ मीटर के भीतर रखें।</string>
+    <string name="buddy_explain_ready">दोनों फ़ोन एक ही अभ्यास पर सहमत हैं। थोड़ी देर में शुरू।</string>
+    <string name="buddy_explain_countdown">दोनों फ़ोन एक ही पल पर शुरू होंगे।</string>
+    <string name="buddy_explain_running">अभ्यास साथ मिलकर पूरा करें।</string>
+    <string name="buddy_explain_distress">अभी कार्रवाई करें। आपकी प्रतिक्रिया का समय नापा जा रहा है।</string>
+    <string name="buddy_explain_result">दोनों फ़ोन अपने अंक साझा कर रहे हैं।</string>
+    <string name="buddy_explain_complete">दोनों कर्मचारियों ने पूरा किया। प्रमाणपत्र में दर्ज होगा कि यह असली दो-व्यक्ति अभ्यास था।</string>
+    <string name="buddy_explain_aborted">अभ्यास रुक गया। जो आपने किया वह सुरक्षित है।</string>
+
+    <string name="buddy_abort_peer_lost">दूसरा फ़ोन दूर चला गया। आपका हिस्सा सुरक्षित है।</string>
+    <string name="buddy_abort_version">दोनों फ़ोनों में ऐप के अलग संस्करण हैं। दोनों अपडेट करें।</string>
+    <string name="buddy_abort_same_worker">दोनों फ़ोनों पर एक ही कर्मचारी साइन-इन है। साथी अभ्यास के लिए दो लोग चाहिए।</string>
+    <string name="buddy_abort_scenario">दोनों फ़ोनों ने अलग अभ्यास चुने।</string>
+    <string name="buddy_abort_cancelled">आपने अभ्यास रोक दिया।</string>
+    <string name="buddy_abort_peer_cancelled">दूसरे कर्मचारी ने अभ्यास रोक दिया।</string>
+    <string name="buddy_abort_malformed">दोनों फ़ोनों का संपर्क इतना कमज़ोर था कि आगे नहीं चल सका।</string>
+    <string name="buddy_abort_handshake_timeout">फ़ोन समय पर सहमत नहीं हो पाए। पास आकर दोबारा करें।</string>
+    <string name="buddy_abort_result_timeout">परिणाम साझा नहीं हो सके। आपका अपना प्रयास सुरक्षित है।</string>
+
+    <string name="nearby_rationale_bluetooth">जागरुक को आस-पास के फ़ोन खोजने की अनुमति चाहिए ताकि आपका फ़ोन सीधे साथी के फ़ोन से जुड़ सके। इंटरनेट इस्तेमाल नहीं होता।</string>
+    <string name="nearby_rationale_location">एंड्रॉइड के इस संस्करण में पास के फ़ोन खोजने के लिए लोकेशन अनुमति ज़रूरी है। जागरुक आपकी जगह दर्ज नहीं करता।</string>
+
+    <string name="refresher_channel_name">दोहराव की याद</string>
+    <string name="refresher_channel_description">जब छोटा सुरक्षा दोहराव बाकी हो तो कर्मचारी को याद दिलाता है।</string>
+    <string name="refresher_due_title">%1$s — दोहराव बाकी</string>
+    <plurals name="refresher_due_body">
+        <item quantity="one">%1$d मॉड्यूल में छोटा दोहराव बाकी है।</item>
+        <item quantity="other">%1$d मॉड्यूल में छोटा दोहराव बाकी है।</item>
+    </plurals>
+
+</resources>

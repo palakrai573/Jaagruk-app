@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Only the handful of colours the platform needs outside Compose: the window background before the first
+  frame, and the launcher icon. Everything else is in `ui/theme/Theme.kt`.
+-->
+<resources>
+    <color name="jaagruk_surface_dark">#FF10161C</color>
+    <color name="jaagruk_teal">#FF00696E</color>
+    <color name="ic_launcher_background">#FF00363A</color>
+</resources>

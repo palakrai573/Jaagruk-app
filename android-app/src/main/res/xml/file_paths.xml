@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The only directories a FileProvider may expose, and both are app-private.
+
+  Hazard photos and voice notes never go near shared storage or the device gallery. A near-miss photo can show
+  a colleague's face or an unsafe act that is about to be discussed with a supervisor; in the gallery it would
+  be readable by every app with storage permission and, in practice, by whoever picks the shared site phone up
+  next.
+-->
+<paths>
+    <files-path name="hazard_photos" path="hazard_photos/" />
+    <files-path name="hazard_voice" path="hazard_voice/" />
+</paths>

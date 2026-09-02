@@ -1,0 +1,18 @@
+# Jaagruk backend — runtime dependencies.
+#
+# Pinned exactly. A safety-certification backend should not change behaviour because a
+# transitive release shipped on a Tuesday.
+#
+# PostgreSQL support is intentionally in requirements-postgres.txt: the test suite and local
+# development run on SQLite, so a psycopg build failure cannot block anyone from running the
+# backend at all.
+
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+alembic==1.14.0
+pydantic==2.10.4
+pydantic-settings==2.7.0
+PyJWT==2.10.1
+cryptography==44.0.0
+python-multipart==0.0.20

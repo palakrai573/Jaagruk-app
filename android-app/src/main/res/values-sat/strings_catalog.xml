@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Scenario catalog strings, Santali (Ol Chiki).
+
+  Sentences are kept short and imperative on purpose. This is the language most likely to be read by someone
+  who reads slowly, and a long clause is a clause that gets skipped — which in a timed safety drill shows up as
+  hesitation the worker did not actually have.
+
+  Industrial terms with no settled Santali equivalent are transliterated rather than invented: ᱢᱮᱥᱤᱱ, ᱦᱟᱨᱱᱮᱥ,
+  ᱯᱚᱨᱢᱤᱴ, ᱠᱚᱱᱵᱷᱮᱭᱚᱨ. That is what Santali-medium safety material does, and a coined word nobody recognises is
+  worse than a borrowed one everybody does.
+
+  Needs review by a native Santali speaker familiar with mine-site vocabulary before a field pilot. Coverage is
+  complete; wording quality is a separate question and pretending otherwise would be dishonest.
+-->
+<resources>
+
+    <string name="module_fire_title">ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱯᱷᱟᱴᱟᱣ ᱨᱮ ᱠᱟᱹᱢᱤ</string>
+    <string name="module_fire_desc">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ, ᱴᱷᱤᱠ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ ᱵᱟᱪᱷᱟᱣ, ᱟᱨ ᱚᱱᱟ ᱦᱚᱨ ᱛᱮ ᱚᱰᱚᱠ ᱡᱟᱦᱟᱸ ᱥᱟᱹᱨᱤ ᱛᱮ ᱠᱷᱩᱞᱟᱹ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="module_gas_title">ᱜᱮᱥ ᱟᱨ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱚᱞᱚ</string>
+    <string name="module_gas_desc">ᱜᱮᱥ ᱡᱟᱭᱜᱟ ᱯᱟᱹᱦᱪᱟᱱ, ᱵᱚᱞᱚ ᱨᱮᱭᱟᱜ ᱠᱨᱚᱢ, ᱜᱟᱛᱮ ᱡᱟᱸᱪ, ᱟᱨ ᱩᱰᱩᱜᱟᱠᱟᱱ ᱜᱟᱛᱮ ᱛᱟᱭᱚᱢ ᱵᱟᱝ ᱵᱚᱞᱚ ᱨᱮᱭᱟᱜ ᱠᱟᱨᱚᱬ ᱾</string>
+    <string name="module_machinery_title">ᱢᱮᱥᱤᱱ ᱞᱚᱠᱟᱣᱴ ᱟᱨ ᱜᱟᱨᱰ</string>
+    <string name="module_machinery_desc">ᱡᱚᱢᱟ ᱛᱟᱠᱚᱛ ᱟᱞᱜᱟ, ᱟᱡᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣ, ᱟᱨ ᱡᱟᱢ ᱠᱷᱩᱞᱟᱹ ᱚᱠᱛᱚ ᱟᱡ ᱛᱮ ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱵᱟᱝ ᱦᱩᱭ ᱾</string>
+    <string name="module_ppe_height_title">ᱨᱩᱠᱷᱤᱭᱟᱹ ᱭᱟᱹᱱ ᱟᱨ ᱩᱥᱩᱞ ᱨᱮ ᱠᱟᱹᱢᱤ</string>
+    <string name="module_ppe_height_desc">ᱠᱟᱹᱢᱤ ᱞᱮᱠᱟᱛᱮ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱪᱷᱟᱣ, ᱦᱟᱨᱱᱮᱥ ᱡᱟᱸᱪ, ᱟᱨ ᱚᱱᱟ ᱮᱸᱠᱚᱨ ᱵᱟᱪᱷᱟᱣ ᱡᱟᱦᱟᱸ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="module_electrical_title">ᱵᱤᱡᱞᱤ ᱨᱮ ᱞᱟᱦᱟ ᱠᱟᱹᱢᱤ</string>
+    <string name="module_electrical_desc">ᱡᱩᱢᱤᱫ ᱞᱟᱦᱟ ᱥᱟᱯᱞᱟᱭ ᱵᱚᱸᱫᱚ, ᱵᱤᱜᱟᱲ ᱠᱮᱵᱚᱞ, ᱯᱚᱨᱢᱤᱴ, ᱟᱨ ᱡᱷᱟᱴᱠᱟ ᱥᱮ ᱡᱚᱞᱚ ᱨᱮ ᱞᱟᱦᱟ ᱜᱚᱲᱚ ᱾</string>
+
+    <string name="scenario_fire_evac_full_title">ᱥᱮᱠᱥᱚᱱ ᱨᱮ ᱥᱮᱸᱜᱮᱞ — ᱯᱩᱨᱟᱹ ᱰᱨᱤᱞ</string>
+    <string name="scenario_fire_evac_refresher_title">ᱥᱮᱸᱜᱮᱞ ᱨᱮ ᱠᱟᱹᱢᱤ — ᱦᱩᱰᱤᱧ ᱡᱟᱸᱪ</string>
+    <string name="scenario_gas_confined_full_title">ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱚᱞᱚ — ᱯᱩᱨᱟᱹ ᱰᱨᱤᱞ</string>
+    <string name="scenario_gas_confined_buddy_title">ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ — ᱵᱟᱨ ᱦᱚᱲ ᱨᱮᱭᱟᱜ ᱰᱨᱤᱞ</string>
+    <string name="scenario_gas_confined_refresher_title">ᱜᱮᱥ ᱟᱨ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ — ᱦᱩᱰᱤᱧ ᱡᱟᱸᱪ</string>
+    <string name="scenario_machinery_loto_full_title">ᱢᱟᱨᱟᱢᱚᱛ ᱞᱟᱦᱟ ᱞᱚᱠᱟᱣᱴ — ᱯᱩᱨᱟᱹ ᱰᱨᱤᱞ</string>
+    <string name="scenario_machinery_loto_refresher_title">ᱞᱚᱠᱟᱣᱴ — ᱦᱩᱰᱤᱧ ᱡᱟᱸᱪ</string>
+    <string name="scenario_ppe_height_full_title">ᱩᱥᱩᱞ ᱨᱮ ᱠᱟᱹᱢᱤ — ᱯᱩᱨᱟᱹ ᱰᱨᱤᱞ</string>
+    <string name="scenario_ppe_height_refresher_title">ᱨᱩᱠᱷᱤᱭᱟᱹ ᱭᱟᱹᱱ ᱟᱨ ᱩᱥᱩᱞ — ᱦᱩᱰᱤᱧ ᱡᱟᱸᱪ</string>
+    <string name="scenario_electrical_full_title">ᱵᱤᱡᱞᱤ ᱡᱷᱟᱴᱠᱟ ᱨᱮ ᱠᱟᱹᱢᱤ — ᱯᱩᱨᱟᱹ ᱰᱨᱤᱞ</string>
+    <string name="scenario_electrical_refresher_title">ᱵᱤᱡᱞᱤ ᱨᱮ ᱠᱟᱹᱢᱤ — ᱦᱩᱰᱤᱧ ᱡᱟᱸᱪ</string>
+
+    <string name="step_fire_detect_alarm_prompt">ᱵᱮᱞᱴ ᱰᱨᱟᱭᱵᱷ ᱱᱟᱜᱟᱢ ᱫᱷᱩᱸᱣᱟᱹ ᱟᱨ ᱥᱮᱸᱜᱮᱞ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾ ᱞᱟᱦᱟ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_fire_detect_alarm_remedy">ᱞᱟᱦᱟ ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ, ᱡᱟᱦᱟᱸ ᱚᱠᱛᱚ ᱦᱚᱸ ᱾ ᱫᱮᱨᱤ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚ ᱥᱮᱠᱮᱸᱰ ᱚᱱᱟ ᱥᱮᱠᱮᱸᱰ ᱠᱟᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱮᱴᱟᱜ ᱡᱟᱦᱟᱸᱭ ᱵᱟᱝ ᱵᱟᱲᱟᱭᱟ ᱾</string>
+    <string name="step_fire_pick_extinguisher_prompt">ᱥᱮᱸᱜᱮᱞ ᱵᱤᱡᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱚᱠᱟ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ ᱦᱟᱛᱟᱣᱟᱢ?</string>
+    <string name="step_fire_pick_extinguisher_remedy">ᱵᱤᱡᱞᱤ ᱥᱮᱸᱜᱮᱞ ᱨᱮ ᱠᱟᱨᱵᱚᱱ ᱰᱟᱭᱚᱠᱥᱟᱭᱰ ᱾ ᱡᱤᱭᱚᱱ ᱯᱮᱱᱮᱞ ᱨᱮ ᱫᱟᱜ ᱥᱮ ᱯᱷᱚᱢ ᱠᱟᱨᱮᱸᱴ ᱟᱢ ᱥᱮᱡ ᱨᱩᱣᱟᱹᱲ ᱟᱭᱩᱨᱟ ᱾</string>
+    <string name="step_fire_extinguisher_sequence_prompt">ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ ᱨᱮᱭᱟᱜ ᱯᱩᱱ ᱴᱷᱮᱜ ᱠᱨᱚᱢ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_fire_extinguisher_sequence_remedy">ᱯᱤᱱ ᱚᱲᱚᱸᱜ, ᱱᱤᱥᱟᱱ ᱞᱟᱜᱟᱣ, ᱚᱛᱟ, ᱟᱨ ᱡᱚᱡᱚᱢ ᱞᱮᱡᱟᱝ ᱟᱨᱦᱚᱸ ᱾ ᱱᱤᱥᱟᱱ ᱥᱮᱸᱜᱮᱞ ᱨᱮᱭᱟᱜ ᱡᱟᱲ ᱨᱮ, ᱫᱷᱩᱸᱣᱟᱹ ᱨᱮ ᱵᱟᱝ ᱾</string>
+    <string name="step_fire_locate_exit_prompt">ᱦᱚᱨ ᱨᱮ ᱫᱷᱩᱸᱣᱟᱹ ᱯᱮᱨᱮᱡᱚᱜ ᱠᱟᱱᱟ ᱾ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱦᱚᱨ ᱩᱫᱩᱜ ᱢᱮ ᱾</string>
+    <string name="step_fire_locate_exit_remedy">ᱪᱤᱱᱦᱟᱹᱠᱟᱱ ᱢᱩᱬᱩᱛ ᱦᱚᱨ ᱦᱟᱛᱟᱣ ᱢᱮ ᱾ ᱞᱤᱯᱷᱴ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ, ᱥᱴᱚᱨ ᱨᱩᱢ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ, ᱟᱨ ᱚᱱᱟ ᱦᱚᱨ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱡᱟᱦᱟᱸ ᱟᱢ ᱠᱷᱩᱞᱟᱹ ᱧᱮᱞ ᱟᱠᱟᱫᱟᱢ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ ᱾</string>
+    <string name="step_fire_movement_posture_prompt">ᱫᱷᱩᱸᱣᱟᱹ ᱵᱚᱦᱚᱜ ᱩᱥᱩᱞ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱪᱮᱫ ᱞᱮᱠᱟ ᱪᱟᱞᱟᱣᱟᱢ?</string>
+    <string name="step_fire_movement_posture_remedy">ᱞᱟᱛᱟᱨ ᱛᱮ ᱦᱮᱡ ᱠᱟᱛᱮ ᱨᱮᱸᱜᱮ ᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ ᱾ ᱥᱚᱯᱷᱟ ᱦᱚᱭ ᱦᱟᱥᱟ ᱱᱟᱜᱟᱢ ᱛᱟᱦᱮᱸᱱᱟ; ᱩᱱᱩᱫᱩᱜ ᱟᱨ ᱫᱷᱩᱸᱣᱟᱹ ᱩᱥᱩᱞ ᱥᱮᱡ ᱪᱟᱞᱟᱣᱟ ᱾</string>
+    <string name="step_fire_door_action_prompt">ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱚᱠᱛᱚ ᱢᱤᱫ ᱫᱩᱣᱟᱹᱨ ᱦᱚᱨ ᱛᱮ ᱪᱟᱞᱟᱣᱟᱢ ᱾ ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_fire_door_action_remedy">ᱛᱟᱭᱚᱢ ᱠᱷᱚᱱ ᱵᱚᱸᱫᱚ ᱢᱮ ᱾ ᱵᱚᱸᱫᱚ ᱫᱩᱣᱟᱹᱨ ᱟᱢᱟᱜ ᱛᱟᱭᱚᱢ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚ ᱦᱚᱲ ᱞᱟᱹᱜᱤᱫ ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱫᱷᱩᱸᱣᱟᱹ ᱟᱭᱟᱛᱟ ᱾</string>
+    <string name="step_fire_assembly_point_prompt">ᱟᱢ ᱵᱟᱦᱨᱮ ᱢᱮᱱᱟᱢᱟ ᱾ ᱡᱟᱨᱣᱟ ᱡᱟᱭᱜᱟ ᱧᱮᱞ ᱢᱮ ᱟᱨ ᱚᱱᱟ ᱨᱮ ᱧᱮᱞ ᱛᱷᱤᱨ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_fire_assembly_point_remedy">ᱪᱤᱱᱦᱟᱹᱠᱟᱱ ᱡᱟᱨᱣᱟ ᱡᱟᱭᱜᱟ ᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ ᱟᱨ ᱚᱱᱰᱮᱜᱮ ᱛᱟᱦᱮᱸᱱ ᱢᱮ ᱾ ᱞᱮᱠᱷᱟ ᱚᱱᱟ ᱚᱠᱛᱚ ᱜᱮ ᱠᱟᱹᱢᱤᱜᱼᱟ ᱡᱚᱠᱷᱚᱱ ᱡᱟᱦᱟᱸᱭ ᱦᱚᱸ ᱮᱴᱟᱜ ᱡᱟᱭᱜᱟ ᱵᱟᱝ ᱪᱟᱞᱟᱜᱼᱟ ᱾</string>
+    <string name="step_fire_headcount_prompt">ᱡᱟᱨᱣᱟ ᱡᱟᱭᱜᱟ ᱨᱮ ᱪᱮᱫ ᱦᱩᱭ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ? ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱞᱟᱹᱜᱩ ᱦᱩᱭᱩᱜᱼᱟ ᱚᱱᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="step_fire_headcount_remedy">ᱢᱟᱨᱥᱟᱞ ᱛᱮ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱟᱨ ᱡᱟᱦᱟᱸᱭ ᱵᱟᱹᱱᱩᱜ ᱠᱷᱟᱱ ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱾ ᱡᱤᱱᱤᱥ ᱞᱟᱹᱜᱤᱫ ᱛᱤᱥ ᱦᱚᱸ ᱵᱷᱤᱛᱨᱤ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱢᱮ ᱾</string>
+
+    <string name="opt_raise_alarm">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ</string>
+    <string name="opt_fight_fire_first">ᱞᱟᱦᱟ ᱟᱴᱠᱟᱣ ᱨᱮᱭᱟᱜ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ</string>
+    <string name="opt_find_supervisor">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱯᱟᱱᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ</string>
+    <string name="opt_photograph_it">ᱨᱤᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱛᱟᱥᱣᱤᱨ ᱦᱟᱛᱟᱣ ᱢᱮ</string>
+    <string name="opt_ext_co2">ᱠᱟᱨᱵᱚᱱ ᱰᱟᱭᱚᱠᱥᱟᱭᱰ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ</string>
+    <string name="opt_ext_water">ᱫᱟᱜ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ</string>
+    <string name="opt_ext_foam">ᱯᱷᱚᱢ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ</string>
+    <string name="opt_ext_dry_powder">ᱨᱩᱠᱷᱟᱹ ᱜᱩᱰᱟᱹ ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ</string>
+    <string name="opt_pass_pull">ᱯᱤᱱ ᱚᱲᱚᱸᱜ ᱢᱮ</string>
+    <string name="opt_pass_aim">ᱡᱟᱲ ᱨᱮ ᱱᱤᱥᱟᱱ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+    <string name="opt_pass_squeeze">ᱞᱤᱵᱷᱚᱨ ᱚᱛᱟ ᱢᱮ</string>
+    <string name="opt_pass_sweep">ᱡᱚᱡᱚᱢ ᱞᱮᱡᱟᱝ ᱟᱨᱦᱚᱸ ᱢᱮ</string>
+    <string name="opt_exit_primary">ᱪᱤᱱᱦᱟᱹᱠᱟᱱ ᱚᱰᱚᱠ ᱦᱚᱨ</string>
+    <string name="opt_exit_blocked">ᱵᱚᱸᱫᱚ ᱫᱩᱣᱟᱹᱨ</string>
+    <string name="opt_lift_door">ᱞᱤᱯᱷᱴ</string>
+    <string name="opt_store_room">ᱥᱴᱚᱨ ᱨᱩᱢ</string>
+    <string name="opt_crawl_low">ᱞᱟᱛᱟᱨ ᱛᱮ ᱨᱮᱸᱜᱮ ᱢᱮ</string>
+    <string name="opt_walk_upright">ᱥᱚᱡᱮ ᱛᱮᱸᱜᱚ ᱠᱟᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ</string>
+    <string name="opt_run_fast">ᱡᱮᱛᱮᱠ ᱞᱚᱜᱚᱱ ᱦᱩᱭᱩᱜᱼᱟ ᱱᱤᱨ ᱢᱮ</string>
+    <string name="opt_stand_and_wait">ᱛᱮᱸᱜᱚ ᱠᱟᱛᱮ ᱜᱚᱲᱚ ᱨᱟᱦᱟ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="opt_close_door_behind">ᱛᱟᱭᱚᱢ ᱠᱷᱚᱱ ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="opt_leave_door_open">ᱮᱴᱟᱜ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱷᱩᱞᱟᱹ ᱵᱟᱰ ᱢᱮ</string>
+    <string name="opt_wedge_door_open">ᱡᱟᱦᱟᱸ ᱟᱴᱠᱟᱣ ᱠᱟᱛᱮ ᱠᱷᱩᱞᱟᱹ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="opt_lock_door">ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+    <string name="opt_assembly_marker">ᱡᱟᱨᱣᱟ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱪᱤᱱᱦᱟᱹ</string>
+    <string name="opt_main_gate">ᱢᱩᱬᱩᱛ ᱜᱮᱴ</string>
+    <string name="opt_vehicle_park">ᱜᱟᱰᱤ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ</string>
+    <string name="opt_report_to_marshal">ᱢᱟᱨᱥᱟᱞ ᱛᱮ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_report_missing_persons">ᱵᱟᱹᱱᱩᱜ ᱦᱚᱲ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_return_for_belongings">ᱡᱤᱱᱤᱥ ᱞᱟᱹᱜᱤᱫ ᱨᱩᱣᱟᱹᱲ ᱢᱮ</string>
+    <string name="opt_re_enter_to_help">ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱷᱤᱛᱨᱤ ᱨᱩᱣᱟᱹᱲ ᱢᱮ</string>
+
+    <string name="step_gas_recognise_zone_prompt">ᱚᱱᱟ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱩᱫᱩᱜ ᱢᱮ ᱡᱟᱦᱟᱸ ᱨᱮ ᱯᱚᱨᱢᱤᱴ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱵᱚᱞᱚ ᱵᱟᱝ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="step_gas_recognise_zone_remedy">ᱪᱤᱱᱦᱟᱹᱠᱟᱱ ᱜᱮᱥ ᱡᱟᱭᱜᱟ ᱾ ᱦᱚᱨ, ᱥᱤᱲᱤ ᱥᱮ ᱴᱩᱞᱵᱚᱠᱥ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱵᱟᱝ ᱠᱟᱱᱟ; ᱪᱤᱱᱦᱟᱹ ᱜᱮ ᱠᱟᱛᱷᱟ ᱩᱫᱩᱜᱟ ᱾</string>
+    <string name="step_gas_first_action_prompt">ᱟᱢᱟᱜ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱢᱮᱛᱷᱮᱱ ᱨᱮᱭᱟᱜ ᱟᱞᱟᱨᱢ ᱮᱢᱮᱫᱟ ᱾ ᱞᱟᱦᱟ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_gas_first_action_remedy">ᱛᱟᱭᱚᱢ ᱨᱩᱣᱟᱹᱲ ᱢᱮ ᱟᱨ ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ ᱾ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱝ ᱪᱟᱞᱟᱣ ᱢᱮ, ᱟᱨ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱡᱚᱞᱚᱭ ᱥᱮ ᱵᱚᱸᱫᱚ ᱵᱟᱝ ᱢᱮ ᱾</string>
+    <string name="step_gas_ppe_select_prompt">ᱟᱢ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱚᱞᱚᱭᱮᱫᱟᱢ ᱾ ᱡᱟᱦᱟᱸ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱚᱱᱟ ᱡᱚᱛᱚ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="step_gas_ppe_select_remedy">ᱥᱟᱸᱥ ᱭᱟᱹᱱ, ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱟᱨ ᱞᱟᱭᱯᱷᱞᱟᱭᱱ ᱥᱟᱶ ᱦᱟᱨᱱᱮᱥ ᱾ ᱫᱷᱩᱲᱤ ᱨᱮᱭᱟᱜ ᱢᱟᱥᱠ ᱜᱮᱥ ᱨᱮ ᱡᱟᱦᱟᱸ ᱵᱟᱝ ᱠᱚᱨᱟᱣᱟ ᱾</string>
+    <string name="step_gas_entry_sequence_prompt">ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱚᱞᱚ ᱨᱮᱭᱟᱜ ᱴᱷᱮᱜ ᱠᱨᱚᱢ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_gas_entry_sequence_remedy">ᱯᱚᱨᱢᱤᱴ, ᱟᱭᱥᱚᱞᱮᱴ, ᱦᱚᱭ ᱟᱭᱩᱨ, ᱦᱚᱭ ᱡᱟᱸᱪ, ᱵᱟᱦᱨᱮ ᱨᱮ ᱧᱮᱞᱦᱚᱲ ᱫᱚᱦᱚ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱵᱚᱞᱚ ᱢᱮ ᱾ ᱱᱚᱶᱟ ᱠᱨᱚᱢ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾</string>
+    <string name="step_gas_contact_interval_prompt">ᱧᱮᱞᱦᱚᱲ ᱟᱨ ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚᱭᱟᱜ ᱦᱚᱲ ᱛᱟᱞᱟ ᱨᱮ ᱛᱤᱱᱟᱹᱜ ᱛᱟᱲᱟᱢ ᱠᱟᱛᱷᱟ ᱦᱩᱭ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ?</string>
+    <string name="step_gas_contact_interval_remedy">ᱞᱟᱦᱟᱛᱮ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱠᱟᱛᱷᱟ ᱨᱟᱹᱯᱩᱫ ᱠᱷᱟᱱ ᱵᱚᱞᱚ ᱛᱷᱤᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="step_gas_rescue_decision_prompt">ᱟᱢᱟᱜ ᱜᱟᱛᱮ ᱵᱷᱤᱛᱨᱤ ᱩᱰᱩᱜ ᱮᱱᱟᱭ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_gas_rescue_decision_remedy">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ ᱟᱨ ᱨᱮᱥᱠᱭᱩ ᱴᱤᱢ ᱠᱚᱭᱚᱜ ᱢᱮ ᱾ ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱰᱷᱮᱨ ᱜᱚᱡᱚᱜ ᱚᱱᱟ ᱦᱚᱲ ᱨᱮᱭᱟᱜ ᱦᱩᱭᱩᱜᱼᱟ ᱡᱟᱦᱟᱸᱭ ᱵᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱵᱚᱞᱚ ᱮᱱᱟᱭ ᱾</string>
+    <string name="step_gas_ventilation_check_prompt">ᱦᱚᱭ ᱯᱟᱸᱠᱷᱟ ᱯᱟᱱᱛᱮ ᱢᱮ ᱟᱨ ᱚᱱᱟ ᱨᱮ ᱧᱮᱞ ᱛᱷᱤᱨ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_gas_ventilation_check_remedy">ᱵᱷᱚᱨᱥᱟ ᱞᱟᱦᱟ ᱯᱚᱠᱟ ᱢᱮ ᱡᱮ ᱯᱟᱸᱠᱷᱟ ᱥᱟᱹᱨᱤ ᱛᱮ ᱪᱟᱞᱟᱜ ᱠᱟᱱᱟ ᱾ ᱵᱚᱸᱫᱚ ᱯᱟᱸᱠᱷᱟ ᱪᱟᱞᱟᱜ ᱯᱟᱸᱠᱷᱟ ᱞᱮᱠᱟᱜᱮ ᱧᱮᱞᱚᱜᱼᱟ ᱾</string>
+    <string name="step_buddy_periodic_check_prompt">ᱟᱢᱟᱜ ᱜᱟᱛᱮ ᱠᱩᱠᱞᱤᱭᱮᱫᱟᱭ ᱡᱮ ᱟᱢ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱢᱟ ᱥᱮ ᱵᱟᱝ ᱾ ᱨᱩᱣᱟᱹᱲ ᱮᱢ ᱢᱮ ᱾</string>
+    <string name="step_buddy_periodic_check_remedy">ᱡᱚᱛᱚ ᱡᱟᱸᱪ ᱨᱮᱭᱟᱜ ᱨᱩᱣᱟᱹᱲ ᱛᱚᱨᱚᱱᱛᱮ ᱮᱢ ᱢᱮ ᱾ ᱪᱩᱯ ᱛᱟᱦᱮᱸᱱ ᱟᱯᱟᱛᱠᱟᱞ ᱞᱮᱠᱟ ᱞᱮᱠᱷᱟᱜᱼᱟ, ᱟᱨ ᱚᱱᱟ ᱴᱷᱤᱠ ᱦᱚᱸ ᱠᱟᱱᱟ ᱾</string>
+    <string name="step_buddy_distress_response_prompt">ᱟᱢᱟᱜ ᱜᱟᱛᱮ ᱨᱩᱣᱟᱹᱲ ᱮᱢ ᱵᱚᱸᱫᱚ ᱠᱮᱫᱟᱭ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_buddy_distress_response_remedy">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ ᱟᱨ ᱵᱟᱦᱨᱮ ᱠᱷᱚᱱ ᱞᱟᱭᱯᱷᱞᱟᱭᱱ ᱚᱲᱚᱸᱜ ᱢᱮ ᱾ ᱵᱷᱤᱛᱨᱤ ᱵᱟᱝ ᱵᱚᱞᱚ ᱢᱮ ᱾</string>
+
+    <string name="opt_gas_zone_marker">ᱪᱤᱱᱦᱟᱹᱠᱟᱱ ᱜᱮᱥ ᱡᱟᱭᱜᱟ</string>
+    <string name="opt_gas_walkway">ᱦᱚᱨ</string>
+    <string name="opt_gas_ladder">ᱥᱤᱲᱤ</string>
+    <string name="opt_gas_toolbox">ᱴᱩᱞᱵᱚᱠᱥ</string>
+    <string name="opt_withdraw_and_alarm">ᱛᱟᱭᱚᱢ ᱨᱩᱣᱟᱹᱲ ᱢᱮ ᱟᱨ ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ</string>
+    <string name="opt_continue_working">ᱠᱟᱹᱢᱤ ᱠᱚᱨᱟᱣ ᱛᱟᱦᱮᱸᱱ ᱢᱮ</string>
+    <string name="opt_switch_on_lights">ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱭᱴ ᱡᱚᱞᱚᱭ ᱢᱮ</string>
+    <string name="opt_open_more_valves">ᱥᱚᱯᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱚᱨ ᱵᱷᱟᱞᱵᱷ ᱠᱷᱩᱞᱟᱹ ᱢᱮ</string>
+    <string name="opt_ppe_scba">ᱟᱡ ᱛᱮ ᱛᱟᱦᱮᱸᱱ ᱥᱟᱸᱥ ᱭᱟᱹᱱ</string>
+    <string name="opt_ppe_gas_detector">ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ</string>
+    <string name="opt_ppe_harness_lifeline">ᱞᱟᱭᱯᱷᱞᱟᱭᱱ ᱥᱟᱶ ᱦᱟᱨᱱᱮᱥ</string>
+    <string name="opt_ppe_dust_mask">ᱫᱷᱩᱲᱤ ᱢᱟᱥᱠ</string>
+    <string name="opt_ppe_cotton_cloth">ᱢᱚᱸᱦᱟᱸ ᱨᱮ ᱠᱤᱛᱟᱹᱵ ᱠᱤᱪᱨᱤᱡ</string>
+    <string name="opt_ppe_earplugs">ᱞᱩᱛᱩᱨ ᱯᱞᱟᱜ</string>
+    <string name="opt_cs_permit">ᱵᱚᱞᱚ ᱯᱚᱨᱢᱤᱴ ᱦᱟᱛᱟᱣ ᱢᱮ</string>
+    <string name="opt_cs_isolate">ᱡᱟᱭᱜᱟ ᱟᱭᱥᱚᱞᱮᱴ ᱢᱮ</string>
+    <string name="opt_cs_ventilate">ᱦᱚᱭ ᱟᱭᱩᱨ ᱢᱮ</string>
+    <string name="opt_cs_test_atmosphere">ᱦᱚᱭ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_cs_station_attendant">ᱵᱟᱦᱨᱮ ᱨᱮ ᱧᱮᱞᱦᱚᱲ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="opt_cs_enter">ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱢᱮ</string>
+    <string name="opt_contact_continuous">ᱞᱟᱦᱟᱛᱮ</string>
+    <string name="opt_contact_every_15_min">ᱡᱚᱛᱚ ᱜᱮᱞᱢᱚᱬᱮ ᱢᱤᱱᱤᱴ</string>
+    <string name="opt_contact_every_hour">ᱡᱚᱛᱚ ᱴᱟᱲᱟᱝ</string>
+    <string name="opt_contact_only_if_called">ᱠᱷᱟᱹᱞᱤ ᱡᱚᱠᱷᱚᱱ ᱩᱱᱠᱩ ᱠᱚᱭᱚᱜᱟ</string>
+    <string name="opt_signal_alarm_and_call_rescue">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ ᱟᱨ ᱨᱮᱥᱠᱭᱩ ᱠᱚᱭᱚᱜ ᱢᱮ</string>
+    <string name="opt_enter_immediately">ᱛᱚᱨᱚᱱᱛᱮ ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱢᱮ</string>
+    <string name="opt_enter_with_dust_mask">ᱫᱷᱩᱲᱤ ᱢᱟᱥᱠ ᱞᱟᱜᱟᱣ ᱠᱟᱛᱮ ᱵᱚᱞᱚ ᱢᱮ</string>
+    <string name="opt_pull_victim_by_hand">ᱛᱤ ᱮᱢ ᱠᱟᱛᱮ ᱵᱟᱦᱨᱮ ᱚᱲᱚᱸᱜ ᱢᱮ</string>
+    <string name="opt_vent_fan">ᱦᱚᱭ ᱯᱟᱸᱠᱷᱟ</string>
+    <string name="opt_vent_water_pump">ᱫᱟᱜ ᱯᱟᱢᱯ</string>
+    <string name="opt_vent_winch">ᱣᱤᱸᱪ</string>
+    <string name="opt_buddy_ok_signal">ᱠᱟᱡᱤ ᱢᱮ ᱡᱮ ᱟᱢ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱢᱟ</string>
+    <string name="opt_buddy_do_nothing">ᱡᱟᱦᱟᱸ ᱵᱟᱝ ᱠᱚᱨᱟᱣ ᱢᱮ</string>
+    <string name="opt_buddy_ignore">ᱫᱷᱭᱟᱱ ᱵᱟᱝ ᱮᱢ ᱠᱟᱛᱮ ᱠᱟᱹᱢᱤ ᱛᱟᱦᱮᱸᱱ ᱢᱮ</string>
+    <string name="opt_verbal_ok_from_mate">ᱮᱴᱟᱜ ᱡᱟᱦᱟᱸᱭ ᱨᱮᱭᱟᱜ ᱨᱩᱣᱟᱹᱲ ᱨᱟᱦᱟ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="opt_raise_alarm_do_not_enter">ᱟᱞᱟᱨᱢ ᱵᱚᱡᱟᱣ ᱢᱮ ᱟᱨ ᱵᱟᱦᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱢᱮ</string>
+    <string name="opt_buddy_pull_lifeline_hard">ᱵᱟᱦᱨᱮ ᱠᱷᱚᱱ ᱞᱟᱭᱯᱷᱞᱟᱭᱱ ᱚᱲᱚᱸᱜ ᱢᱮ</string>
+    <string name="opt_buddy_enter_to_pull_out">ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱠᱟᱛᱮ ᱵᱟᱦᱨᱮ ᱚᱲᱚᱸᱜ ᱢᱮ</string>
+    <string name="opt_buddy_go_find_supervisor">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱯᱟᱱᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ</string>
+
+    <string name="step_loto_identify_hazard_prompt">ᱱᱚᱶᱟ ᱢᱮᱥᱤᱱ ᱨᱮᱭᱟᱜ ᱚᱱᱟ ᱦᱟᱹᱴᱤᱧ ᱩᱫᱩᱜ ᱢᱮ ᱡᱟᱦᱟᱸ ᱟᱢᱟᱜ ᱛᱤ ᱤᱫᱤᱭᱟ ᱾</string>
+    <string name="step_loto_identify_hazard_remedy">ᱚᱛᱟᱭ ᱡᱟᱭᱜᱟ, ᱡᱟᱦᱟᱸ ᱨᱮ ᱵᱟᱨ ᱦᱤᱲᱤᱡ ᱦᱟᱹᱴᱤᱧ ᱢᱮᱞᱟᱣᱚᱜᱼᱟ ᱾ ᱜᱟᱨᱰ ᱚᱱᱟᱜᱮ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱜᱟᱣ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="step_loto_sequence_prompt">ᱞᱚᱠᱟᱣᱴ ᱨᱮᱭᱟᱜ ᱴᱷᱮᱜ ᱠᱨᱚᱢ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_loto_sequence_remedy">ᱠᱷᱚᱵᱚᱨ ᱮᱢ, ᱵᱚᱸᱫᱚ, ᱟᱭᱥᱚᱞᱮᱴ, ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣ, ᱡᱚᱢᱟ ᱛᱟᱠᱚᱛ ᱚᱰᱚᱠ, ᱥᱩᱱ ᱛᱟᱠᱚᱛ ᱡᱟᱸᱪ ᱾ ᱡᱟᱸᱪ ᱨᱮᱭᱟᱜ ᱴᱷᱮᱜᱮ ᱦᱚᱲ ᱠᱚ ᱵᱟᱰᱟᱭᱟ ᱾</string>
+    <string name="step_loto_key_control_prompt">ᱟᱢᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱨᱮᱭᱟᱜ ᱪᱟᱵᱷᱤ ᱡᱟᱦᱟᱸᱭ ᱫᱚᱦᱚᱭᱟ?</string>
+    <string name="step_loto_key_control_remedy">ᱡᱚᱛᱚ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱟᱡᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣᱟ ᱟᱨ ᱟᱡᱟᱜ ᱪᱟᱵᱷᱤ ᱫᱚᱦᱚᱭᱟ ᱾ ᱟᱢ ᱵᱟᱹᱜᱤ ᱟᱢ ᱛᱮ ᱡᱟᱦᱟᱸᱭ ᱦᱚᱸ ᱚᱲᱚᱸᱜ ᱵᱟᱝ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="step_loto_conveyor_jam_prompt">ᱠᱚᱱᱵᱷᱮᱭᱚᱨ ᱡᱟᱢ ᱮᱱᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_loto_conveyor_jam_remedy">ᱵᱚᱸᱫᱚ ᱢᱮ, ᱟᱭᱥᱚᱞᱮᱴ ᱢᱮ, ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱡᱟᱢ ᱠᱷᱩᱞᱟᱹ ᱢᱮ ᱾ ᱪᱟᱞᱟᱜ ᱵᱮᱞᱴ ᱨᱮ ᱛᱤᱥ ᱦᱚᱸ ᱛᱤ ᱵᱟᱝ ᱮᱢ ᱢᱮ ᱾</string>
+    <string name="step_loto_guard_missing_prompt">ᱢᱮᱥᱤᱱ ᱨᱮᱭᱟᱜ ᱜᱟᱨᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_loto_guard_missing_remedy">ᱵᱚᱸᱫᱚ ᱢᱮ ᱟᱨ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱾ ᱜᱟᱨᱰ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱢᱮᱥᱤᱱ ᱵᱟᱝ ᱪᱟᱞᱟᱜᱼᱟ, ᱥᱤᱯᱷᱴ ᱨᱮᱭᱟᱜ ᱴᱟᱨᱜᱮᱴ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱛᱟᱦᱮᱸᱱ ᱠᱷᱟᱱ ᱦᱚᱸ ᱾</string>
+
+    <string name="opt_nip_point">ᱚᱛᱟᱭ ᱡᱟᱭᱜᱟ</string>
+    <string name="opt_loto_walkway">ᱦᱚᱨ</string>
+    <string name="opt_loto_pipe_run">ᱯᱟᱭᱯ ᱞᱟᱭᱱ</string>
+    <string name="opt_loto_guard">ᱜᱟᱨᱰ ᱟᱡ ᱛᱮ</string>
+    <string name="opt_loto_notify">ᱡᱚᱛᱚ ᱦᱚᱲ ᱛᱮ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_loto_shutdown">ᱢᱮᱥᱤᱱ ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="opt_loto_isolate">ᱛᱟᱠᱚᱛ ᱨᱮᱭᱟᱜ ᱡᱟᱭᱜᱟ ᱟᱭᱥᱚᱞᱮᱴ ᱢᱮ</string>
+    <string name="opt_loto_lock">ᱟᱢᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+    <string name="opt_loto_dissipate">ᱡᱚᱢᱟ ᱛᱟᱠᱚᱛ ᱚᱰᱚᱠ ᱢᱮ</string>
+    <string name="opt_loto_verify_zero">ᱥᱩᱱ ᱛᱟᱠᱚᱛ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_each_worker_own_lock">ᱡᱚᱛᱚ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱟᱡᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱜᱟᱣᱟ</string>
+    <string name="opt_supervisor_holds_all_keys">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱡᱚᱛᱚ ᱪᱟᱵᱷᱤ ᱫᱚᱦᱚᱭᱟ</string>
+    <string name="opt_key_in_panel_door">ᱪᱟᱵᱷᱤ ᱯᱮᱱᱮᱞ ᱫᱩᱣᱟᱹᱨ ᱨᱮ ᱛᱟᱦᱮᱸᱱᱟ</string>
+    <string name="opt_no_lock_just_tag">ᱴᱮᱜ ᱜᱮ ᱠᱟᱹᱢᱤᱜᱼᱟ, ᱠᱟᱹᱴᱷᱤ ᱵᱟᱝ</string>
+    <string name="opt_stop_isolate_then_clear">ᱵᱚᱸᱫᱚ, ᱟᱭᱥᱚᱞᱮᱴ, ᱠᱟᱹᱴᱷᱤ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱠᱷᱩᱞᱟᱹ ᱢᱮ</string>
+    <string name="opt_clear_while_running">ᱪᱟᱞᱟᱜ ᱚᱠᱛᱚ ᱠᱷᱩᱞᱟᱹ ᱢᱮ</string>
+    <string name="opt_use_bar_while_running">ᱪᱟᱞᱟᱜ ᱚᱠᱛᱚ ᱥᱟᱨᱤᱭᱟ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_increase_speed">ᱨᱚᱯᱷᱛᱟᱨ ᱵᱟᱹᱲᱛᱤ ᱠᱟᱛᱮ ᱚᱲᱚᱸᱜ ᱢᱮ</string>
+    <string name="opt_stop_and_report_guard">ᱵᱚᱸᱫᱚ ᱢᱮ ᱟᱨ ᱵᱟᱹᱱᱩᱜ ᱜᱟᱨᱰ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_run_carefully_without_guard">ᱜᱟᱨᱰ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱩᱥᱤᱭᱟᱨ ᱛᱮ ᱪᱟᱞᱟᱣ ᱢᱮ</string>
+    <string name="opt_finish_shift_then_report">ᱥᱤᱯᱷᱴ ᱪᱟᱵᱟ ᱠᱟᱛᱮ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="opt_tape_the_crack">ᱠᱷᱩᱞᱟᱹ ᱡᱟᱭᱜᱟ ᱨᱮ ᱴᱮᱯ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+
+    <string name="step_ppe_task_match_prompt">ᱟᱢ ᱥᱴᱤᱞ ᱨᱮ ᱮᱸᱜᱚᱞ ᱜᱨᱟᱭᱸᱰᱚᱨ ᱪᱟᱞᱟᱣᱮᱫᱟᱢ ᱾ ᱡᱟᱦᱟᱸ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱚᱱᱟ ᱡᱚᱛᱚ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="step_ppe_task_match_remedy">ᱦᱮᱞᱢᱮᱴ, ᱯᱷᱮᱥ ᱥᱤᱞᱰ, ᱛᱤ ᱠᱤᱪᱨᱤᱡ ᱟᱨ ᱞᱩᱛᱩᱨ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱾ ᱜᱨᱟᱭᱸᱰᱚᱨ ᱱᱟᱜᱟᱢ ᱟᱠᱟᱲ ᱠᱤᱪᱨᱤᱡ ᱠᱟᱹᱴᱩᱵ ᱠᱚ ᱤᱫᱤᱭᱟ ᱾</string>
+    <string name="step_height_anchor_point_prompt">ᱚᱱᱟ ᱮᱸᱠᱚᱨ ᱩᱫᱩᱜ ᱢᱮ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱦᱟᱨᱱᱮᱥ ᱡᱚᱲᱟᱣ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
+    <string name="step_height_anchor_point_remedy">ᱩᱰᱩᱜ ᱨᱮᱭᱟᱜ ᱵᱚᱡᱷᱟ ᱥᱟᱦᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱱᱟᱣᱟᱠᱟᱱ ᱰᱷᱟᱸᱪᱟ ᱮᱸᱠᱚᱨ ᱾ ᱯᱟᱭᱯ, ᱥᱤᱲᱤ ᱥᱮ ᱥᱠᱮᱯᱷᱚᱞᱰ ᱨᱮᱞᱤᱝ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱾</string>
+    <string name="step_harness_inspection_sequence_prompt">ᱦᱟᱨᱱᱮᱥ ᱡᱟᱸᱪ ᱨᱮᱭᱟᱜ ᱴᱷᱮᱜ ᱠᱨᱚᱢ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_harness_inspection_sequence_remedy">ᱞᱮᱵᱚᱞ, ᱯᱟᱴᱟ, ᱥᱤᱞᱟᱭ, ᱵᱟᱠᱚᱞ, ᱞᱮᱱᱭᱟᱨᱰ ᱾ ᱞᱮᱵᱚᱞ ᱵᱟᱝ ᱯᱟᱲᱦᱟᱣ ᱠᱷᱟᱱ ᱦᱟᱨᱱᱮᱥ ᱵᱮᱵᱷᱟᱨ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱠᱟᱱᱟ ᱾</string>
+    <string name="step_ladder_angle_prompt">ᱴᱮᱠᱟᱣᱟᱠᱟᱱ ᱥᱤᱲᱤ ᱚᱠᱟ ᱰᱷᱟᱞ ᱨᱮ ᱫᱚᱦᱚ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ?</string>
+    <string name="step_ladder_angle_remedy">ᱡᱚᱛᱚ ᱯᱩᱱ ᱩᱥᱩᱞ ᱨᱮ ᱢᱤᱫ ᱵᱟᱦᱨᱮ ᱾ ᱟᱹᱰᱤ ᱥᱚᱡᱮ ᱛᱟᱭᱚᱢ ᱩᱨᱩᱜᱼᱟ; ᱟᱹᱰᱤ ᱛᱮᱨᱮᱲ ᱦᱟᱨᱟᱲᱚᱜᱼᱟ ᱾</string>
+    <string name="step_ppe_defective_item_prompt">ᱟᱢᱟᱜ ᱦᱟᱨᱱᱮᱥ ᱨᱮᱭᱟᱜ ᱯᱟᱴᱟ ᱨᱮ ᱢᱤᱫ ᱠᱟᱴ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_ppe_defective_item_remedy">ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ ᱵᱤᱜᱟᱲ ᱚᱱᱟ ᱵᱮᱵᱷᱟᱨ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾ ᱯᱟᱴᱟ ᱨᱮ ᱢᱤᱫ ᱠᱟᱴ ᱨᱮᱭᱟᱜ ᱢᱟᱱᱮ ᱯᱩᱨᱟᱹ ᱦᱟᱨᱱᱮᱥ ᱪᱟᱵᱟ ᱮᱱᱟ ᱾</string>
+
+    <string name="opt_ppe_grind_helmet">ᱦᱮᱞᱢᱮᱴ</string>
+    <string name="opt_ppe_face_shield">ᱯᱷᱮᱥ ᱥᱤᱞᱰ</string>
+    <string name="opt_ppe_grind_gloves">ᱛᱤ ᱠᱤᱪᱨᱤᱡ</string>
+    <string name="opt_ppe_grind_earmuffs">ᱞᱩᱛᱩᱨ ᱨᱩᱠᱷᱤᱭᱟᱹ</string>
+    <string name="opt_ppe_helmet">ᱠᱷᱟᱹᱞᱤ ᱦᱮᱞᱢᱮᱴ</string>
+    <string name="opt_ppe_loose_scarf">ᱢᱚᱸᱦᱟᱸ ᱨᱮ ᱜᱟᱢᱪᱷᱟ</string>
+    <string name="opt_ppe_flip_flops">ᱠᱷᱩᱞᱟᱹ ᱡᱩᱛᱟᱹ</string>
+    <string name="opt_anchor_structural">ᱢᱟᱱᱟᱣᱟᱠᱟᱱ ᱰᱷᱟᱸᱪᱟ ᱮᱸᱠᱚᱨ</string>
+    <string name="opt_anchor_pipe">ᱢᱤᱫ ᱯᱟᱭᱯ</string>
+    <string name="opt_anchor_ladder">ᱥᱤᱲᱤ ᱨᱮᱭᱟᱜ ᱰᱟᱸᱰᱟ</string>
+    <string name="opt_anchor_scaffold_rail">ᱥᱠᱮᱯᱷᱚᱞᱰ ᱨᱮᱞᱤᱝ</string>
+    <string name="opt_harness_check_label">ᱞᱮᱵᱚᱞ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_harness_check_webbing">ᱯᱟᱴᱟ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_harness_check_stitching">ᱥᱤᱞᱟᱭ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_harness_check_hardware">ᱵᱟᱠᱚᱞ ᱟᱨ ᱰᱤᱼᱨᱤᱝ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_harness_check_lanyard">ᱞᱮᱱᱭᱟᱨᱰ ᱟᱨ ᱥᱚᱠ ᱮᱵᱡᱚᱨᱵᱚᱨ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_ladder_one_in_four">ᱯᱩᱱ ᱩᱥᱩᱞ ᱨᱮ ᱢᱤᱫ ᱵᱟᱦᱨᱮ</string>
+    <string name="opt_ladder_one_in_eight">ᱤᱨᱟᱹᱞ ᱩᱥᱩᱞ ᱨᱮ ᱢᱤᱫ ᱵᱟᱦᱨᱮ</string>
+    <string name="opt_ladder_one_in_one">ᱯᱩᱱᱮᱭᱟᱭ ᱜᱮᱞ ᱢᱚᱬᱮ ᱰᱤᱜᱨᱤ</string>
+    <string name="opt_ladder_vertical">ᱜᱟᱨᱟ ᱨᱮ ᱴᱮᱠᱟᱣ ᱠᱟᱛᱮ ᱥᱚᱡᱮ</string>
+    <string name="opt_replace_defective_ppe">ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="opt_use_for_one_shift">ᱠᱷᱟᱹᱞᱤ ᱱᱚᱶᱟ ᱥᱤᱯᱷᱴ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱢᱮ</string>
+    <string name="opt_swap_with_colleague">ᱜᱟᱛᱮ ᱨᱮᱭᱟᱜ ᱦᱟᱨᱱᱮᱥ ᱥᱟᱶ ᱵᱚᱫᱚᱞ ᱢᱮ</string>
+
+    <string name="step_elec_shock_first_action_prompt">ᱢᱤᱫ ᱜᱟᱛᱮ ᱛᱮ ᱡᱷᱟᱴᱠᱟ ᱮᱦᱚᱵ ᱟᱠᱟᱱᱟ ᱟᱨ ᱩᱱᱤ ᱵᱟᱹᱜᱤ ᱵᱟᱝ ᱫᱟᱲᱮᱭᱮᱫᱟᱭ ᱾ ᱞᱟᱦᱟ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_elec_shock_first_action_remedy">ᱞᱟᱦᱟ ᱥᱟᱯᱞᱟᱭ ᱵᱚᱸᱫᱚ ᱢᱮ ᱾ ᱠᱟᱨᱮᱸᱴ ᱡᱚᱞᱚᱭ ᱛᱟᱦᱮᱸᱱ ᱚᱠᱛᱚ ᱩᱱᱤ ᱡᱩᱢᱤᱫ ᱠᱷᱟᱱ ᱵᱟᱨ ᱦᱚᱲ ᱦᱟᱹᱥᱩᱣᱟᱜᱼᱟ ᱾</string>
+    <string name="step_elec_cable_damage_prompt">ᱚᱱᱟ ᱩᱫᱩᱜ ᱢᱮ ᱡᱟᱦᱟᱸ ᱡᱩᱢᱤᱫ ᱵᱟᱝ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="step_elec_cable_damage_remedy">ᱵᱤᱜᱟᱲ ᱠᱮᱵᱚᱞ ᱾ ᱠᱷᱩᱞᱟᱹ ᱡᱟᱦᱟᱸ ᱛᱟᱨ ᱡᱤᱭᱚᱱ ᱞᱮᱠᱟ ᱞᱮᱠᱷᱟ ᱢᱮ ᱡᱟᱦᱟᱸ ᱫᱷᱟᱹᱵᱤᱡ ᱜᱟᱨᱟᱱ ᱵᱟᱝ ᱯᱚᱠᱟ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="step_first_response_sequence_prompt">ᱥᱟᱯᱞᱟᱭ ᱵᱚᱸᱫᱚ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱩᱱᱤ ᱵᱮᱦᱚᱥ ᱠᱟᱱᱟᱭ ᱾ ᱟᱢᱟᱜ ᱠᱟᱹᱢᱤ ᱠᱨᱚᱢ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="step_first_response_sequence_remedy">ᱡᱚᱠᱷᱚᱢ, ᱨᱩᱣᱟᱹᱲ, ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱨᱩᱭ, ᱦᱚᱭ ᱦᱚᱨ, ᱥᱟᱸᱥ, ᱠᱚᱲᱟᱢ ᱚᱛᱟ ᱾ ᱞᱟᱦᱟ ᱡᱚᱠᱷᱚᱢ ᱡᱟᱸᱪ ᱠᱚᱨᱟᱣ ᱟᱢ ᱛᱮ ᱡᱤᱭᱚᱱ ᱫᱚᱦᱚᱭᱟ ᱾</string>
+    <string name="step_elec_permit_to_work_prompt">ᱵᱤᱡᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱠᱟᱹᱢᱤ ᱞᱟᱦᱟ ᱪᱮᱫ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ?</string>
+    <string name="step_elec_permit_to_work_remedy">ᱯᱚᱨᱢᱤᱴ ᱟᱨ ᱯᱚᱠᱟᱭᱟᱠᱟᱱ ᱟᱭᱥᱚᱞᱮᱥᱚᱱ ᱾ ᱠᱚᱢ ᱵᱷᱚᱞᱴᱮᱡ ᱨᱮᱭᱟᱜ ᱢᱟᱱᱮ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾</string>
+    <string name="step_burn_first_aid_prompt">ᱢᱤᱫ ᱜᱟᱛᱮ ᱨᱮᱭᱟᱜ ᱛᱤ ᱨᱮ ᱵᱤᱡᱞᱤ ᱛᱮ ᱡᱚᱞᱚᱭ ᱟᱠᱟᱱᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱠᱚᱨᱟᱣᱟᱢ?</string>
+    <string name="step_burn_first_aid_remedy">ᱵᱟᱨ ᱜᱮᱞ ᱢᱤᱱᱤᱴ ᱥᱚᱯᱷᱟ ᱫᱟᱜ ᱛᱮ ᱨᱟᱹᱲᱟ ᱢᱮ ᱾ ᱵᱚᱨᱚᱯᱷ ᱵᱟᱝ, ᱥᱩᱱᱩᱢ ᱵᱟᱝ, ᱞᱮᱯ ᱵᱟᱝ, ᱯᱷᱩᱴᱠᱟ ᱵᱟᱝ ᱯᱷᱟᱴᱟᱣ ᱢᱮ ᱾</string>
+
+    <string name="opt_isolate_supply_first">ᱞᱟᱦᱟ ᱥᱟᱯᱞᱟᱭ ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="opt_throw_water">ᱩᱱᱤ ᱨᱮ ᱫᱟᱜ ᱞᱟᱲᱟᱣ ᱢᱮ</string>
+    <string name="opt_run_for_help_first">ᱞᱟᱦᱟ ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱱᱤᱨ ᱢᱮ</string>
+    <string name="opt_damaged_cable">ᱵᱤᱜᱟᱲ ᱠᱮᱵᱚᱞ</string>
+    <string name="opt_elec_lv_panel">ᱵᱚᱸᱫᱚ ᱯᱮᱱᱮᱞ</string>
+    <string name="opt_elec_pipe_run">ᱯᱟᱭᱯ ᱞᱟᱭᱱ</string>
+    <string name="opt_elec_toolbox">ᱴᱩᱞᱵᱚᱠᱥ</string>
+    <string name="opt_fr_check_danger">ᱡᱚᱠᱷᱚᱢ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_fr_check_response">ᱨᱩᱣᱟᱹᱲ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_fr_shout_for_help">ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱨᱩᱭ ᱢᱮ</string>
+    <string name="opt_fr_open_airway">ᱦᱚᱭ ᱦᱚᱨ ᱠᱷᱩᱞᱟᱹ ᱢᱮ</string>
+    <string name="opt_fr_check_breathing">ᱥᱟᱸᱥ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="opt_fr_start_compressions">ᱠᱚᱲᱟᱢ ᱚᱛᱟ ᱮᱦᱚᱵ ᱢᱮ</string>
+    <string name="opt_permit_and_isolation">ᱯᱚᱨᱢᱤᱴ ᱟᱨ ᱯᱚᱠᱟᱭᱟᱠᱟᱱ ᱟᱭᱥᱚᱞᱮᱥᱚᱱ</string>
+    <string name="opt_no_permit_needed_lv">ᱠᱚᱢ ᱵᱷᱚᱞᱴᱮᱡ ᱨᱮ ᱯᱚᱨᱢᱤᱴ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ</string>
+    <string name="opt_work_live_carefully">ᱡᱚᱞᱚᱭ ᱛᱟᱦᱮᱸᱱ ᱚᱠᱛᱚ ᱦᱩᱥᱤᱭᱟᱨ ᱛᱮ ᱠᱟᱹᱢᱤ ᱢᱮ</string>
+    <string name="opt_cool_with_water_20min">ᱵᱟᱨ ᱜᱮᱞ ᱢᱤᱱᱤᱴ ᱥᱚᱯᱷᱟ ᱫᱟᱜ ᱛᱮ ᱨᱟᱹᱲᱟ ᱢᱮ</string>
+    <string name="opt_apply_ice_directly">ᱵᱚᱨᱚᱯᱷ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+    <string name="opt_apply_oil_or_paste">ᱥᱩᱱᱩᱢ ᱥᱮ ᱞᱮᱯ ᱞᱟᱜᱟᱣ ᱢᱮ</string>
+    <string name="opt_burst_the_blister">ᱯᱷᱩᱴᱠᱟ ᱯᱷᱟᱴᱟᱣ ᱢᱮ</string>
+    <string name="opt_cover_with_cloth">ᱠᱤᱪᱨᱤᱡ ᱛᱮ ᱰᱟᱠᱟ ᱠᱟᱛᱮ ᱠᱟᱹᱢᱤ ᱛᱟᱦᱮᱸᱱ ᱢᱮ</string>
+    <string name="opt_wait_and_watch">ᱪᱮᱫ ᱦᱩᱭᱩᱜᱼᱟ ᱚᱱᱟ ᱧᱮᱞ ᱛᱟᱦᱮᱸᱱ ᱢᱮ</string>
+
+    <string name="voice_cmd_one">ᱢᱤᱫ</string>
+    <string name="voice_cmd_two">ᱵᱟᱨ</string>
+    <string name="voice_cmd_three">ᱯᱮ</string>
+    <string name="voice_cmd_four">ᱯᱩᱱ</string>
+    <string name="voice_cmd_left">ᱞᱮᱡᱟᱝ</string>
+    <string name="voice_cmd_right">ᱡᱚᱡᱚᱢ</string>
+    <string name="voice_cmd_straight">ᱥᱚᱡᱮ</string>
+    <string name="voice_cmd_yes">ᱦᱮᱸ</string>
+    <string name="voice_cmd_no">ᱵᱟᱝ</string>
+    <string name="voice_cmd_back">ᱛᱟᱭᱚᱢ</string>
+    <string name="voice_cmd_next">ᱢᱟᱲᱟᱝ</string>
+    <string name="voice_cmd_stop">ᱛᱷᱤᱨ</string>
+    <string name="voice_cmd_exit">ᱚᱰᱚᱠ</string>
+    <string name="voice_cmd_fire">ᱥᱮᱸᱜᱮᱞ</string>
+    <string name="voice_cmd_gas">ᱜᱮᱥ</string>
+    <string name="voice_cmd_mask">ᱢᱟᱥᱠ</string>
+    <string name="voice_cmd_buddy">ᱜᱟᱛᱮ</string>
+    <string name="voice_cmd_help">ᱜᱚᱲᱚ</string>
+    <string name="voice_cmd_repeat">ᱫᱚᱦᱲᱟ</string>
+
+    <string name="hazard_cat_exposed_wiring">ᱠᱷᱩᱞᱟᱹ ᱛᱟᱨ</string>
+    <string name="hazard_cat_blocked_exit">ᱵᱚᱸᱫᱚ ᱚᱰᱚᱠ ᱦᱚᱨ</string>
+    <string name="hazard_cat_missing_extinguisher">ᱟᱴᱠᱟᱣ ᱭᱟᱹᱱ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="hazard_cat_missing_guard">ᱢᱮᱥᱤᱱ ᱜᱟᱨᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="hazard_cat_gas_smell">ᱜᱮᱥ ᱨᱮᱭᱟᱜ ᱥᱟᱶ</string>
+    <string name="hazard_cat_water_accumulation">ᱡᱚᱢᱟ ᱫᱟᱜ</string>
+    <string name="hazard_cat_roof_support">ᱪᱷᱟᱛ ᱴᱮᱠᱟᱣ ᱨᱮ ᱜᱚᱲᱚᱬ</string>
+    <string name="hazard_cat_spill">ᱞᱟᱲᱟᱣᱟᱠᱟᱱ ᱡᱤᱱᱤᱥ</string>
+    <string name="hazard_cat_damaged_ppe">ᱵᱤᱜᱟᱲ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱭᱟᱹᱱ</string>
+    <string name="hazard_cat_unsafe_act">ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱝ ᱠᱟᱹᱢᱤ</string>
+    <string name="hazard_cat_other">ᱚᱨ ᱡᱟᱦᱟᱸ</string>
+
+    <string name="hazard_sev_low">ᱠᱚᱢ</string>
+    <string name="hazard_sev_medium">ᱛᱟᱞᱟ</string>
+    <string name="hazard_sev_high">ᱵᱟᱹᱲᱛᱤ</string>
+    <string name="hazard_sev_critical">ᱟᱹᱰᱤ ᱡᱚᱠᱷᱚᱢ</string>
+
+</resources>

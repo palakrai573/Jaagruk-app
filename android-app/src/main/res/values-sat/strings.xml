@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Santali (sat) UI strings, written in Ol Chiki.
+
+  Santali is why the voice-enrolment feature exists. No speech engine supports it — not Vosk, not Whisper, not
+  Google's on-device ASR — and it has roughly seven million speakers concentrated in exactly the districts this
+  app is built for. Every other design decision about literacy and voice follows from that fact.
+
+  Two things stated plainly rather than left implicit:
+
+    1. **These translations need review by a native Santali speaker familiar with mine-site vocabulary before a
+       field pilot.** They are complete and the app is fully usable in Santali, but wording quality is a
+       different question from functional coverage, and claiming otherwise would be dishonest.
+    2. Where Santali has no settled term for a piece of industrial equipment, the word people actually use on
+       site is transliterated into Ol Chiki rather than invented. That is what Santali-medium safety material
+       does, and a coined word nobody recognises is worse than a borrowed one everybody does.
+
+  Ol Chiki glyphs come from Noto Sans Ol Chiki, shipped by AOSP since Android 10, which is one of the reasons
+  minSdk is 29.
+-->
+<resources>
+
+    <string name="app_name">ᱡᱟᱜᱨᱩᱠ</string>
+
+    <string name="signin_tagline">ᱠᱟᱹᱢᱤ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱛᱟᱞᱤᱢ ᱟᱨ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ</string>
+    <string name="signin_search_hint">ᱧᱩᱛᱩᱢ ᱥᱮ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱢᱵᱚᱨ ᱛᱮ ᱯᱟᱱᱛᱮ ᱢᱮ</string>
+    <string name="signin_no_workers">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱴᱩᱞ ᱠᱷᱚᱱ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="signin_no_site">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱡᱟᱦᱟᱸ ᱡᱟᱭᱜᱟ ᱥᱟᱶ ᱵᱟᱝ ᱥᱮᱞᱮᱫᱟᱠᱟᱱᱟ ᱾ ᱛᱟᱞᱤᱢ ᱦᱩᱭᱩᱜᱼᱟ; ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="signin_queued_records">%1$d ᱨᱮᱠᱚᱰ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ, ᱟᱯᱞᱚᱰ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱵᱟᱝ ᱟᱫᱟᱜᱮᱱᱟ ᱾</string>
+    <string name="signin_pin_not_set">ᱯᱤᱱ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱥᱮᱴ ᱦᱩᱭ ᱟᱠᱟᱱᱟ</string>
+    <string name="signin_enter_pin">ᱥᱤᱯᱷᱴ ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱯᱤᱱ ᱮᱢ ᱢᱮ</string>
+    <string name="signin_choose_pin">4 ᱠᱷᱚᱱ 8 ᱟᱸᱠ ᱨᱮᱭᱟᱜ ᱯᱤᱱ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾ ᱱᱚᱶᱟ ᱠᱷᱟᱹᱞᱤ ᱟᱢ ᱵᱟᱲᱟᱭᱟᱢ ᱾</string>
+    <string name="signin_pin_label">ᱯᱤᱱ</string>
+    <string name="signin_locked_out">ᱛᱮᱦᱮᱸᱡ %1$d ᱥᱮᱠᱮᱸᱰ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱚᱸᱫᱚ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="signin_wrong_pin">ᱯᱤᱱ ᱵᱷᱩᱞ ᱠᱟᱱᱟ ᱾ ᱵᱚᱸᱫᱚ ᱦᱩᱭ ᱞᱟᱦᱟ %1$d ᱛᱟᱲᱟᱢ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="signin_unknown_worker">ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="signin_pin_not_saved">ᱱᱚᱶᱟ ᱯᱤᱱ ᱵᱟᱝ ᱡᱚᱮᱛ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="signin_pin_too_short">ᱯᱤᱱ ᱠᱚᱢ ᱠᱟᱛᱮ %1$d ᱟᱸᱠ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="signin_pin_too_long">ᱯᱤᱱ ᱰᱷᱮᱨ ᱠᱟᱛᱮ %1$d ᱟᱸᱠ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="signin_pin_not_digits">ᱯᱤᱱ ᱨᱮ ᱠᱷᱟᱹᱞᱤ ᱟᱸᱠ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="signin_pin_too_guessable">ᱱᱚᱶᱟ ᱯᱤᱱ ᱦᱟᱲᱟᱜ ᱛᱮ ᱵᱟᱲᱟᱭ ᱦᱩᱭᱩᱜᱼᱟ ᱾ 1234, 0000 ᱥᱮ ᱢᱤᱫᱴᱮᱱ ᱟᱸᱠ ᱵᱟᱝ ᱮᱢ ᱢᱮ ᱾</string>
+    <string name="signin_supervisor_title">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱥᱟᱭᱤᱱᱼᱤᱱ</string>
+    <string name="signin_supervisor_explainer">ᱱᱚᱶᱟ ᱞᱟᱹᱜᱤᱫ ᱱᱮᱴᱶᱟᱨᱠ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱛᱮᱭᱟᱨ ᱟᱨ ᱨᱮᱠᱚᱰ ᱠᱩᱞ ᱞᱟᱹᱜᱤᱫ ᱾ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="signin_username">ᱭᱩᱡᱚᱨᱱᱮᱢ</string>
+    <string name="signin_password">ᱯᱟᱥᱣᱟᱨᱰ</string>
+    <string name="signin_bad_credentials">ᱭᱩᱡᱚᱨᱱᱮᱢ ᱥᱮ ᱯᱟᱥᱣᱟᱨᱰ ᱵᱷᱩᱞ ᱠᱟᱱᱟ ᱾</string>
+    <string name="signin_rate_limited">ᱰᱷᱮᱨ ᱛᱟᱲᱟᱢ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱛᱟᱭᱚᱢ ᱫᱚᱦᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾</string>
+    <string name="signin_failed_code">ᱥᱟᱭᱤᱱᱼᱤᱱ ᱵᱟᱝ ᱦᱩᱭ ᱮᱱᱟ (%1$d) ᱾</string>
+    <string name="signin_empty_session">ᱥᱟᱨᱵᱷᱟᱨ ᱠᱷᱚᱱ ᱨᱩᱣᱟᱹᱲ ᱦᱮᱡ ᱮᱱᱟ ᱢᱮᱱᱠᱷᱟᱱ ᱥᱮᱥᱚᱱ ᱵᱟᱝ ᱧᱟᱢ ᱮᱱᱟ ᱾</string>
+    <string name="signin_offline">ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+
+    <string name="home_no_site">ᱡᱟᱦᱟᱸ ᱡᱟᱭᱜᱟ ᱵᱟᱝ ᱥᱮᱞᱮᱫᱟᱠᱟᱱᱟ</string>
+    <string name="home_needs_attention">ᱫᱷᱭᱟᱱ ᱞᱟᱹᱠᱛᱤ</string>
+    <string name="home_ready_modules">ᱛᱮᱭᱟᱨ</string>
+    <string name="home_queued_records">%1$d ᱨᱮᱠᱚᱰ ᱟᱯᱞᱚᱰ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾ ᱟᱢᱟᱜ ᱛᱟᱞᱤᱢ ᱞᱟᱦᱟ ᱠᱷᱚᱱ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="home_rejected_records">%1$d ᱨᱮᱠᱚᱰ ᱥᱟᱨᱵᱷᱟᱨ ᱵᱟᱝ ᱦᱟᱛᱟᱣ ᱠᱮᱫᱟ ᱟᱨ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ ᱾ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱠᱚ ᱩᱫᱩᱜ ᱢᱮ ᱾</string>
+    <string name="home_clock_skew">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱴᱟᱲᱟᱝ ᱞᱚᱜᱚᱱ %1$d ᱢᱤᱱᱤᱴ ᱵᱷᱩᱞ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ ᱢᱟᱦᱟᱸ ᱨᱮ ᱪᱤᱱᱦᱟᱹ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="home_resume_title">ᱵᱟᱝ ᱪᱟᱵᱟᱠᱟᱱ ᱰᱨᱤᱞ</string>
+    <string name="home_resume_body">ᱢᱤᱫ ᱰᱨᱤᱞ ᱛᱟᱞᱟ ᱨᱮ ᱛᱷᱤᱨ ᱮᱱᱟ ᱾ ᱡᱟᱦᱟᱸ ᱨᱩᱣᱟᱹᱲ ᱮᱢ ᱟᱠᱟᱫᱟᱢ ᱚᱱᱟ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾ ᱛᱮᱭᱟᱨ ᱦᱩᱭᱮᱱ ᱠᱷᱟᱱ ᱢᱚᱰᱭᱩᱞ ᱫᱚᱦᱲᱟ ᱮᱦᱚᱵ ᱢᱮ, ᱥᱮ ᱱᱚᱶᱟ ᱚᱰᱚᱠ ᱢᱮ ᱾</string>
+    <string name="home_refreshers_due">%1$d ᱢᱚᱰᱭᱩᱞ ᱨᱮ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾</string>
+    <string name="home_valid_but_stale">ᱠᱟᱜᱚᱡ ᱨᱮ ᱛᱮᱦᱮᱸᱡ ᱦᱚᱸ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱟᱢᱟᱜ ᱛᱮᱭᱟᱨᱤ ᱠᱚᱢ ᱮᱱᱟ ᱾ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱠᱚᱨᱟᱣ ᱢᱮ ᱾</string>
+    <string name="home_module_no_bespoke_ar">ᱯᱩᱨᱟᱹ ᱡᱟᱸᱪ; ᱱᱚᱶᱟ ᱢᱚᱰᱭᱩᱞ ᱨᱮ ᱥᱟᱫᱷᱟᱨᱚᱱ AR ᱡᱟᱭᱜᱟ ᱵᱮᱵᱷᱟᱨ ᱦᱩᱭᱩᱜᱼᱟ, ᱟᱞᱜᱮ ᱫᱤᱥᱟᱹ ᱵᱟᱝ ᱾</string>
+    <string name="home_other_actions">ᱮᱴᱟᱜ ᱠᱟᱹᱢᱤ</string>
+    <string name="home_sync_requested">ᱟᱯᱞᱚᱰ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱭᱚᱜ ᱮᱱᱟ ᱾ ᱱᱮᱴᱶᱟᱨᱠ ᱧᱟᱢ ᱠᱷᱟᱱ ᱮᱦᱚᱵᱚᱜᱼᱟ ᱾</string>
+
+    <string name="band_ready">ᱛᱮᱭᱟᱨ</string>
+    <string name="band_due">ᱚᱠᱛᱚ ᱦᱮᱡ ᱮᱱᱟ</string>
+    <string name="band_stale">ᱢᱟᱨᱮ</string>
+    <string name="band_expired">ᱪᱟᱵᱟ ᱮᱱᱟ</string>
+
+    <string name="action_required_none">ᱡᱟᱦᱟᱸ ᱵᱟᱰᱟᱭ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="action_required_refresher">ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ</string>
+    <string name="action_required_full">ᱯᱩᱨᱟᱹ ᱢᱚᱰᱭᱩᱞ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ</string>
+    <string name="action_required_never">ᱛᱤᱥ ᱦᱚᱸ ᱥᱚᱨᱴᱤᱯᱷᱟᱭ ᱵᱟᱝ ᱦᱩᱭ ᱟᱠᱟᱱᱟ</string>
+
+    <string name="action_sign_in">ᱥᱟᱭᱤᱱᱼᱤᱱ</string>
+    <string name="action_sign_out">ᱥᱟᱭᱤᱱᱼᱟᱣᱴ</string>
+    <string name="action_back">ᱛᱟᱭᱚᱢ</string>
+    <string name="action_cancel">ᱵᱟᱰ ᱢᱮ</string>
+    <string name="action_done">ᱪᱟᱵᱟ ᱮᱱᱟ</string>
+    <string name="action_save_pin">ᱯᱤᱱ ᱡᱚᱮᱛ ᱢᱮ</string>
+    <string name="action_verify">ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="action_verify_certificate">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="action_supervisor">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱴᱩᱞ</string>
+    <string name="action_report_hazard">ᱡᱚᱠᱷᱚᱢ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="action_my_certificates">ᱤᱧᱟᱜ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱠᱚ</string>
+    <string name="action_sync_now">ᱱᱤᱛᱚᱜ ᱟᱯᱞᱚᱰ ᱢᱮ</string>
+    <string name="action_start_module">ᱢᱚᱰᱭᱩᱞ ᱮᱦᱚᱵ ᱢᱮ</string>
+    <string name="action_start_refresher">ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱮᱦᱚᱵ ᱢᱮ</string>
+    <string name="action_full_module">ᱯᱩᱨᱟᱹ ᱢᱚᱰᱭᱩᱞ</string>
+    <string name="action_buddy_drill">ᱵᱟᱨ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱜᱟᱛᱮ ᱰᱨᱤᱞ</string>
+    <string name="action_practice">ᱛᱟᱞᱤᱢ (ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ)</string>
+    <string name="action_discard_run">ᱵᱟᱝ ᱪᱟᱵᱟᱠᱟᱱ ᱰᱨᱤᱞ ᱚᱰᱚᱠ ᱢᱮ</string>
+    <string name="action_show_qr">QR ᱩᱫᱩᱜ ᱢᱮ</string>
+    <string name="action_scan">ᱥᱠᱮᱱ ᱢᱮ</string>
+    <string name="action_stop_scanning">ᱥᱠᱮᱱ ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="action_allow_camera">ᱠᱮᱢᱮᱨᱟ ᱨᱟᱹᱡᱤ ᱢᱮ</string>
+    <string name="action_allow_microphone">ᱢᱟᱭᱠ ᱨᱟᱹᱡᱤ ᱢᱮ</string>
+    <string name="action_allow_nearby">ᱱᱟᱜᱟᱢ ᱯᱷᱚᱱ ᱠᱚ ᱯᱟᱱᱛᱮ ᱨᱟᱹᱡᱤ ᱢᱮ</string>
+    <string name="action_check_identity">ᱯᱟᱹᱦᱪᱟᱱ ᱡᱟᱸᱪ ᱢᱮ</string>
+
+    <string name="cd_info">ᱠᱷᱚᱵᱚᱨ</string>
+    <string name="cd_warning">ᱦᱚᱥᱤᱭᱟᱨ</string>
+    <string name="cd_stop">ᱛᱷᱤᱨ ᱢᱮ</string>
+    <string name="cd_readiness_bar">ᱛᱮᱭᱟᱨᱤ %1$d ᱯᱨᱚᱛᱤᱥᱚᱛ</string>
+    <string name="cd_voice_listening">ᱟᱲᱟᱝ ᱦᱩᱠᱩᱢ ᱠᱚ ᱟᱸᱡᱚᱢ ᱠᱟᱱᱟ</string>
+    <string name="cd_ar_marker">ᱫᱤᱥᱟᱹ ᱨᱮ ᱨᱩᱣᱟᱹᱲ ᱨᱮᱭᱟᱜ ᱪᱤᱱᱦᱟᱹ</string>
+    <string name="cd_turn_left">ᱪᱤᱱᱦᱟᱹ ᱞᱮᱡᱟᱝ ᱥᱮᱡ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱞᱮᱡᱟᱝ ᱥᱮᱡ ᱛᱮ ᱨᱟᱨᱟᱜ ᱢᱮ ᱾</string>
+    <string name="cd_turn_right">ᱪᱤᱱᱦᱟᱹ ᱡᱚᱡᱚᱢ ᱥᱮᱡ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱡᱚᱡᱚᱢ ᱥᱮᱡ ᱛᱮ ᱨᱟᱨᱟᱜ ᱢᱮ ᱾</string>
+    <string name="cd_certificate_qr">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ QR ᱠᱳᱰ</string>
+
+    <string name="drill_step_of">ᱴᱷᱮᱜ %1$d / %2$d</string>
+    <string name="drill_unknown_scenario">ᱱᱚᱶᱟ ᱰᱨᱤᱞ ᱱᱚᱶᱟ ᱮᱯ ᱨᱮᱭᱟᱜ ᱞᱤᱥᱴᱤ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="drill_needs_buddy">ᱱᱚᱶᱟ ᱰᱨᱤᱞ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱨ ᱞᱮᱠᱟᱱ ᱯᱷᱚᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱜᱟᱛᱮ ᱰᱨᱤᱞ ᱥᱠᱨᱤᱱ ᱠᱷᱚᱱ ᱮᱦᱚᱵ ᱢᱮ ᱾</string>
+    <string name="drill_confirm_selection">ᱵᱟᱪᱷᱟᱣ ᱯᱚᱠᱟ ᱢᱮ</string>
+    <string name="drill_confirm_order">ᱱᱚᱶᱟ ᱠᱨᱚᱢ ᱯᱚᱠᱟ ᱢᱮ</string>
+    <string name="drill_select_something">ᱞᱟᱦᱟ ᱠᱚᱢ ᱠᱟᱛᱮ ᱢᱤᱫ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="drill_timed_out">ᱚᱱᱟ ᱴᱷᱮᱜ ᱨᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱪᱟᱵᱟ ᱮᱱᱟ ᱾</string>
+    <string name="drill_stop">ᱰᱨᱤᱞ ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="drill_resume">ᱟᱭᱩᱨ ᱢᱮ</string>
+    <string name="drill_paused_title">ᱛᱷᱤᱨ ᱟᱠᱟᱱᱟ</string>
+    <string name="drill_paused_not_counted">ᱛᱷᱤᱨ ᱚᱠᱛᱚ ᱟᱢᱟᱜ ᱵᱤᱨᱩᱫᱷ ᱨᱮ ᱵᱟᱝ ᱞᱮᱠᱷᱟᱜᱼᱟ ᱾ ᱟᱡᱟᱨᱟᱡ ᱛᱮ ᱠᱚᱨᱟᱣ ᱢᱮ ᱾</string>
+    <string name="drill_paused_tracking">ᱛᱷᱤᱨ: ᱠᱮᱢᱮᱨᱟ ᱫᱤᱥᱟᱹ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱫᱟᱲᱮᱭᱮᱫᱟ ᱾</string>
+    <string name="drill_paused_backgrounded">ᱛᱷᱤᱨ: ᱟᱢ ᱮᱯ ᱚᱰᱚᱠ ᱟᱠᱟᱫᱟᱢ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ ᱾</string>
+    <string name="drill_ar_gave_up">ᱱᱚᱰᱮ AR ᱵᱟᱝ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱰᱨᱤᱞ ᱛᱟᱥᱣᱤᱨ ᱠᱚ ᱛᱮ ᱟᱭᱩᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="drill_voice_unclear">ᱡᱟᱦᱟᱸ ᱟᱸᱡᱚᱢ ᱮᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱥᱚᱯᱷᱟ ᱵᱟᱝ ᱾ ᱫᱚᱦᱲᱟ ᱠᱟᱡᱤ ᱢᱮ ᱾</string>
+    <string name="drill_voice_not_applicable">ᱱᱚᱶᱟ ᱦᱩᱠᱩᱢ ᱱᱚᱶᱟ ᱴᱷᱮᱜ ᱨᱮ ᱵᱟᱝ ᱠᱟᱹᱢᱤᱜᱼᱟ ᱾</string>
+    <string name="drill_help_hint">ᱟᱢᱟᱜ ᱨᱩᱣᱟᱹᱲ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ ᱠᱟᱡᱤ ᱢᱮ, ᱥᱮ ᱚᱱᱟ ᱚᱛᱟ ᱢᱮ ᱾ ᱠᱩᱠᱞᱤ ᱫᱚᱦᱲᱟ ᱟᱸᱡᱚᱢ ᱞᱟᱹᱜᱤᱫ \"ᱫᱚᱦᱲᱟ\" ᱠᱟᱡᱤ ᱢᱮ ᱾</string>
+
+    <string name="ar_hint_none"></string>
+    <string name="ar_hint_too_dark">ᱰᱷᱮᱨ ᱧᱩᱛ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱦᱮᱰᱞᱮᱢᱯ ᱡᱚᱞᱚᱭ ᱢᱮ ᱥᱮ ᱢᱟᱨᱥᱟᱞ ᱡᱟᱭᱜᱟ ᱛᱮ ᱦᱮᱡ ᱢᱮ ᱾</string>
+    <string name="ar_hint_too_fast">ᱯᱷᱚᱱ ᱰᱷᱮᱨ ᱞᱚᱜᱟᱱ ᱠᱟᱛᱮ ᱦᱤᱲᱤᱡᱚᱜ ᱠᱟᱱᱟ ᱾ ᱟᱭᱟᱛ ᱢᱮ ᱾</string>
+    <string name="ar_hint_no_texture">ᱜᱟᱨᱟ ᱥᱮ ᱢᱮᱥᱤᱱ ᱥᱮᱡ ᱛᱮ ᱩᱫᱩᱜ ᱢᱮ, ᱠᱷᱟᱹᱞᱤ ᱦᱟᱥᱟ ᱥᱮᱡ ᱵᱟᱝ ᱾</string>
+    <string name="ar_hint_look_around">ᱯᱷᱚᱱ ᱟᱭᱟᱛ ᱛᱮ ᱡᱚᱡᱚᱢ ᱞᱮᱡᱟᱝ ᱨᱟᱨᱟᱜ ᱢᱮ ᱾</string>
+    <string name="ar_hint_camera_blocked">ᱠᱮᱢᱮᱨᱟ ᱰᱟᱠᱟᱣ ᱟᱠᱟᱱᱟ ᱥᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="ar_hint_recovering">ᱫᱤᱥᱟᱹ ᱫᱚᱦᱲᱟ ᱯᱟᱱᱛᱮ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱸᱱ ᱢᱮ ᱾</string>
+
+    <string name="result_not_found">ᱚᱱᱟ ᱰᱨᱤᱞ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱞ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="result_passed">ᱯᱟᱥ</string>
+    <string name="result_not_passed">ᱯᱟᱥ ᱵᱟᱝ</string>
+    <string name="result_score">ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="result_median_latency">ᱥᱟᱫᱷᱟᱨᱚᱱ ᱛᱮ ᱴᱷᱤᱠ ᱠᱚᱨᱟᱣ ᱚᱠᱛᱚ</string>
+    <string name="result_hesitation">ᱨᱩᱣᱟᱹᱲ ᱠᱚ ᱟᱢ ᱵᱟᱲᱟᱭ ᱠᱟᱫᱮᱭᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ %1$d ᱯᱨᱚᱛᱤᱥᱚᱛ ᱴᱷᱮᱜ ᱨᱮ ᱟᱢ ᱛᱷᱤᱨ ᱮᱱᱟᱢ ᱾ ᱥᱟᱹᱨᱤ ᱫᱚᱵᱟᱣ ᱨᱮ ᱱᱚᱶᱟ ᱛᱷᱤᱨ ᱡᱚᱠᱷᱚᱢ ᱠᱟᱱᱟ ᱾ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱠᱚᱨᱟᱣ ᱢᱮ ᱾</string>
+    <string name="result_aborted">ᱰᱨᱤᱞ ᱛᱟᱞᱟ ᱨᱮ ᱪᱟᱵᱟ ᱮᱱᱟ (%1$s) ᱾ ᱡᱟᱦᱟᱸ ᱠᱚᱨᱟᱣ ᱟᱠᱟᱫᱟᱢ ᱚᱱᱟ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱚᱱᱟ ᱠᱷᱚᱱ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="result_certificate_issued">ᱠᱨᱚᱢ %1$d ᱨᱮ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱛᱮᱭᱟᱨ ᱮᱱᱟ ᱾ ᱱᱚᱶᱟ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱟᱹᱢᱤᱜᱼᱟ ᱾</string>
+    <string name="result_certificate_pending">ᱯᱟᱥ ᱮᱱᱟᱢ ᱾ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱛᱮᱭᱟᱨ ᱠᱚᱨᱟᱣ ᱠᱷᱟᱱ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="result_void_guessing">ᱰᱷᱮᱨ ᱨᱩᱣᱟᱹᱲ ᱚᱱᱟ ᱞᱮᱠᱟ ᱞᱚᱜᱚᱱ ᱦᱮᱡ ᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱩᱡᱩᱦᱟᱨ ᱦᱚᱸ ᱵᱟᱝ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱱᱚᱶᱟ ᱛᱟᱲᱟᱢ ᱵᱟᱝ ᱞᱮᱠᱷᱟᱜᱼᱟ ᱾</string>
+    <string name="result_void_solo_buddy">ᱱᱚᱶᱟ ᱰᱨᱤᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱹᱨᱤ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱮᱠᱞᱟ ᱠᱚᱨᱟᱣ ᱠᱷᱟᱱ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="result_void_generic">ᱱᱚᱶᱟ ᱛᱟᱲᱟᱢ ᱵᱟᱝ ᱴᱷᱤᱠ ᱢᱮᱱᱛᱮ ᱟᱞᱜᱟ ᱫᱚᱦᱚ ᱮᱱᱟ ᱾</string>
+    <string name="result_review_title">ᱱᱚᱶᱟ ᱠᱚ ᱨᱮ ᱫᱷᱭᱟᱱ ᱮᱢ ᱢᱮ</string>
+    <string name="result_review_body">ᱱᱚᱶᱟ ᱚᱱᱟ ᱴᱷᱮᱜ ᱠᱚ ᱠᱟᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱵᱷᱩᱞ ᱦᱩᱭ ᱮᱱᱟ ᱥᱮ ᱟᱢ ᱛᱷᱤᱨ ᱮᱱᱟᱢ ᱾</string>
+    <string name="result_step_correct">ᱴᱷᱤᱠ</string>
+    <string name="result_step_wrong">ᱵᱷᱩᱞ</string>
+    <string name="result_step_timing">ᱟᱢ %1$d ᱢᱤᱞᱤᱼᱥᱮᱠᱮᱸᱰ ᱞᱟᱹᱜᱤᱛ ᱠᱮᱫᱟᱢ; ᱛᱟᱞᱤᱢ ᱦᱩᱭᱟᱠᱟᱱ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱞᱚᱜᱚᱱ %2$d ᱞᱟᱹᱜᱤᱛᱟ</string>
+
+    <string name="certificates_title">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱠᱚ</string>
+    <string name="certificates_none">ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱢᱚᱰᱭᱩᱞ ᱯᱟᱥ ᱠᱟᱛᱮ ᱧᱟᱢ ᱢᱮ ᱾</string>
+    <string name="certificates_seq_and_score">ᱠᱨᱚᱢ %1$d · %2$d%%</string>
+    <string name="certificates_not_uploaded">ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱟᱯᱞᱚᱰ ᱵᱟᱝ ᱦᱩᱭ ᱟᱠᱟᱱᱟ ᱾ ᱱᱚᱶᱟ ᱛᱮᱦᱮᱸᱡ ᱦᱚᱸ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱡᱟᱸᱪ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="certificates_offline_note">ᱱᱚᱶᱟ ᱠᱳᱰ ᱨᱮ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱟᱡ ᱛᱮ ᱢᱮᱱᱟᱜᱼᱟ, ᱡᱟᱦᱟᱸ ᱱᱚᱢᱵᱚᱨ ᱵᱟᱝ ᱾ ᱡᱟᱸᱪᱤᱭᱟᱹ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱡᱟᱸᱪ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="certificates_site">ᱡᱟᱭᱜᱟ</string>
+    <string name="certificates_sequence">ᱠᱨᱚᱢ</string>
+    <string name="certificates_score">ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="certificates_key_epoch">ᱠᱟᱹᱴᱷᱤ ᱚᱠᱛᱚ</string>
+    <string name="certificates_record_hash">ᱨᱮᱠᱚᱰ ᱦᱮᱥ</string>
+    <string name="certificates_text_form">ᱚᱞ ᱨᱩᱯ (ᱠᱳᱰ ᱵᱤᱜᱟᱲ ᱠᱷᱟᱱ ᱵᱮᱵᱷᱟᱨ ᱢᱮ)</string>
+
+    <string name="flag_buddy">ᱵᱟᱨ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱜᱟᱛᱮ ᱰᱨᱤᱞ</string>
+    <string name="flag_site_scanned">ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱥᱠᱮᱱ ᱦᱩᱭᱟᱠᱟᱱ ᱫᱤᱥᱟᱹ ᱨᱮ ᱛᱟᱞᱤᱢ</string>
+    <string name="flag_refresher">ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ</string>
+    <string name="flag_hesitation">ᱛᱷᱤᱨ ᱚᱞ ᱟᱠᱟᱱᱟ</string>
+    <string name="flag_assisted">ᱟᱲᱟᱝ ᱥᱮ ᱛᱤ ᱪᱤᱱᱦᱟᱹ ᱛᱮ ᱨᱩᱣᱟᱹᱲ</string>
+
+    <string name="verify_title">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="verify_offline_note">ᱱᱚᱶᱟ ᱡᱟᱸᱪ ᱯᱩᱨᱟᱹ ᱛᱮ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱦᱩᱭᱩᱜᱼᱟ ᱾ ᱱᱮᱴᱶᱟᱨᱠ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="verify_camera_needed">ᱠᱳᱰ ᱥᱠᱮᱱ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱢᱮᱨᱟ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱞᱟᱛᱟᱨ ᱨᱮ ᱚᱞ ᱨᱩᱯ ᱦᱚᱸ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
+    <string name="verify_manual_title">ᱠᱳᱰ ᱚᱞ ᱢᱮ</string>
+    <string name="verify_manual_hint">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ ᱚᱞ ᱞᱟᱴᱷᱟ ᱥᱮ ᱚᱞ ᱢᱮ</string>
+    <string name="verify_details_title">ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="verify_site">ᱡᱟᱭᱜᱟ: %1$s</string>
+    <string name="verify_sequence">ᱠᱨᱚᱢ: %1$d</string>
+    <string name="verify_score">ᱱᱚᱢᱵᱚᱨ: %1$d%%</string>
+    <string name="verify_worker_hash">ᱠᱟᱹᱢᱤᱭᱟᱹ ᱦᱮᱥ: %1$s…</string>
+    <string name="verify_confirm_identity">ᱯᱚᱠᱟ ᱢᱮ ᱡᱮ ᱱᱚᱶᱟ ᱚᱱᱟᱜᱮ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱠᱟᱱᱟᱭ</string>
+    <string name="verify_worker_id_hint">ᱠᱟᱨᱰ ᱨᱮ ᱚᱞᱟᱠᱟᱱ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="verify_identity_match">ᱢᱮᱞᱟᱣ ᱠᱟᱱᱟ ᱾ ᱱᱚᱶᱟ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱚᱱᱟᱜᱮ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱢᱵᱚᱨ ᱨᱮᱭᱟᱜ ᱠᱟᱱᱟ ᱾</string>
+    <string name="verify_identity_mismatch">ᱚᱱᱟ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱢᱵᱚᱨ ᱥᱟᱶ ᱵᱟᱝ ᱢᱮᱞᱟᱣ ᱮᱫᱟ ᱾</string>
+
+    <string name="verify_status_verified">ᱡᱟᱸᱪ ᱪᱟᱵᱟ, ᱴᱷᱤᱠ</string>
+    <string name="verify_status_signature_only">ᱫᱚᱥᱛᱚᱠᱚᱛ ᱴᱷᱤᱠ</string>
+    <string name="verify_status_unknown_site">ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱵᱟᱝ ᱵᱟᱲᱟᱭᱟᱜᱼᱟ</string>
+    <string name="verify_status_bad_signature">ᱫᱚᱥᱛᱚᱠᱚᱛ ᱵᱷᱩᱞ</string>
+    <string name="verify_status_broken_link">ᱡᱚᱲᱟᱣ ᱨᱟᱹᱯᱩᱫ ᱟᱠᱟᱱᱟ</string>
+    <string name="verify_status_malformed">ᱱᱚᱶᱟ ᱡᱟᱜᱨᱩᱠ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ ᱠᱟᱱᱟ</string>
+    <string name="verify_status_sequence_gap">ᱛᱟᱞᱟ ᱨᱮᱭᱟᱜ ᱨᱮᱠᱚᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+
+    <string name="verify_explain_verified">ᱫᱚᱥᱛᱚᱠᱚᱛ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱨᱮᱠᱚᱰ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱡᱚᱲᱟᱣ ᱥᱟᱶ ᱴᱷᱤᱠ ᱡᱚᱲᱟᱣ ᱠᱟᱱᱟ ᱾</string>
+    <string name="verify_explain_signature_only">ᱫᱚᱥᱛᱚᱠᱚᱛ ᱥᱟᱹᱨᱤ ᱠᱟᱱᱟ ᱾ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱚᱱᱟ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱲᱟᱣ ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱡᱚᱲᱟᱣ ᱵᱟᱝ ᱡᱟᱸᱪ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="verify_explain_unknown_site">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱚᱱᱟ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱠᱷᱩᱞᱟᱹ ᱠᱟᱹᱴᱷᱤ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱢᱤᱫ ᱛᱟᱲᱟᱢ ᱥᱤᱸᱠ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱡᱟᱸᱪ ᱢᱮ ᱾</string>
+    <string name="verify_explain_bad_signature">ᱵᱷᱤᱛᱨᱤ ᱨᱮᱭᱟᱜ ᱠᱟᱛᱷᱟ ᱵᱚᱫᱚᱞ ᱟᱠᱟᱱᱟ, ᱥᱮ ᱵᱷᱩᱞ ᱠᱟᱹᱴᱷᱤ ᱛᱮ ᱫᱚᱥᱛᱚᱠᱚᱛ ᱦᱩᱭ ᱟᱠᱟᱱᱟ ᱾ ᱱᱚᱶᱟ ᱵᱟᱝ ᱦᱟᱛᱟᱣ ᱢᱮ ᱾</string>
+    <string name="verify_explain_broken_link">ᱱᱚᱶᱟ ᱨᱮᱠᱚᱰ ᱞᱟᱦᱟ ᱨᱮᱠᱚᱰ ᱥᱟᱶ ᱵᱟᱝ ᱡᱚᱲᱟᱣ ᱮᱫᱟ ᱾ ᱱᱚᱶᱟ ᱛᱤ ᱮᱢ ᱨᱮᱭᱟᱜ ᱪᱤᱱᱦᱟᱹ ᱠᱟᱱᱟ, ᱠᱚᱢᱛᱤ ᱨᱮᱭᱟᱜ ᱵᱟᱝ ᱾</string>
+    <string name="verify_explain_malformed">ᱱᱚᱶᱟ ᱠᱳᱰ ᱡᱟᱜᱨᱩᱠ ᱨᱮᱭᱟᱜ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾</string>
+    <string name="verify_explain_sequence_gap">ᱫᱚᱥᱛᱚᱠᱚᱛ ᱟᱨ ᱡᱚᱲᱟᱣ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱛᱟᱞᱟ ᱨᱮᱭᱟᱜ ᱛᱤᱱᱟᱹᱜ ᱨᱮᱠᱚᱰ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+
+    <string name="hazard_title">ᱡᱚᱠᱷᱚᱢ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ</string>
+    <string name="hazard_offline_note">ᱛᱚᱨᱚᱱᱛᱮ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱡᱚᱮᱛᱚᱜᱼᱟ ᱾ ᱛᱟᱭᱚᱢ ᱟᱯᱞᱚᱰ ᱦᱩᱭᱩᱜᱼᱟ; ᱥᱤᱜᱱᱟᱞ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="hazard_what">ᱟᱢ ᱪᱮᱫ ᱧᱮᱞ ᱠᱮᱫᱟᱢ?</string>
+    <string name="hazard_how_bad">ᱛᱤᱱᱟᱹᱜ ᱡᱚᱠᱷᱚᱢ ᱠᱟᱱᱟ?</string>
+    <string name="hazard_where">ᱚᱠᱟ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ?</string>
+    <string name="hazard_zone_hint">ᱡᱟᱭᱜᱟ ᱥᱮ ᱪᱤᱱᱦᱟᱹ, ᱡᱮᱞᱮᱠᱟ 3 ᱱᱚᱨᱛᱷ, ᱠᱚᱱᱵᱷᱮᱭᱚᱨ ᱦᱮᱰ ᱱᱟᱜᱟᱢ</string>
+    <string name="hazard_note">ᱚᱨ ᱡᱟᱦᱟᱸ ᱠᱟᱡᱤ ᱞᱟᱹᱠᱛᱤ?</string>
+    <string name="hazard_note_hint">ᱟᱢᱟᱜ ᱤᱪᱷᱟᱹ ᱨᱮ ᱚᱞ ᱢᱮ</string>
+    <string name="hazard_record_voice">ᱟᱲᱟᱝ ᱛᱮ ᱠᱟᱡᱤ ᱢᱮ</string>
+    <string name="hazard_rerecord_voice">ᱫᱚᱦᱲᱟ ᱨᱮᱠᱚᱰ ᱢᱮ</string>
+    <string name="hazard_stop_recording">ᱵᱚᱸᱫᱚ ᱢᱮ (%1$d ᱥᱮ)</string>
+    <string name="hazard_submit">ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱢᱮ</string>
+    <string name="hazard_mic_permission">ᱟᱲᱟᱝ ᱛᱮ ᱠᱟᱡᱤ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱭᱠ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱟᱲᱟᱝ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
+    <string name="hazard_recorder_unavailable">ᱨᱮᱠᱚᱰᱟᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱟᱲᱟᱝ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱢᱮ ᱾</string>
+    <string name="hazard_voice_too_short">ᱚᱱᱟ ᱨᱮᱠᱚᱰᱤᱝ ᱰᱷᱮᱨ ᱦᱩᱰᱤᱧ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ, ᱵᱟᱝ ᱫᱚᱦᱚ ᱮᱱᱟ ᱾</string>
+    <string name="hazard_rate_limited">ᱞᱟᱦᱟ %2$d ᱢᱤᱱᱤᱴ ᱨᱮ %1$d ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱠᱩᱞ ᱞᱟᱦᱟ ᱛᱤᱱᱟᱹᱜ ᱚᱠᱛᱚ ᱛᱷᱤᱨ ᱢᱮ ᱾</string>
+    <string name="hazard_invalid">ᱱᱚᱶᱟ ᱠᱷᱚᱵᱚᱨ ᱵᱟᱝ ᱠᱩᱞ ᱦᱩᱭ ᱮᱱᱟ: %1$s</string>
+
+    <string name="supervisor_title">ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱴᱩᱞ</string>
+    <string name="supervisor_not_signed_in">ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱵᱟᱝ ᱠᱟᱱᱟ</string>
+    <string name="supervisor_site_key_title">ᱡᱟᱭᱜᱟ ᱫᱚᱥᱛᱚᱠᱚᱛ ᱠᱟᱹᱴᱷᱤ</string>
+    <string name="supervisor_site_key_explainer">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮ ᱚᱱᱟ ᱠᱟᱹᱴᱷᱤ ᱛᱮ ᱫᱚᱥᱛᱚᱠᱚᱛ ᱮᱢᱟ ᱡᱟᱦᱟᱸ ᱠᱷᱟᱹᱞᱤ ᱱᱚᱰᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱢᱤᱫ ᱛᱟᱲᱟᱢ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾ ᱵᱚᱫᱚᱞ ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱱᱟᱶᱟ ᱚᱠᱛᱚ ᱥᱟᱶ ᱦᱩᱭᱩᱜᱼᱟ, ᱯᱷᱚᱱ ᱠᱷᱚᱱ ᱛᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱾</string>
+    <string name="supervisor_site_id_hint">ᱡᱟᱭᱜᱟ ᱟᱭᱰᱤ, ᱡᱮᱞᱮᱠᱟ JH-DHN-001</string>
+    <string name="supervisor_site_id_required">ᱞᱟᱦᱟ ᱡᱟᱭᱜᱟ ᱟᱭᱰᱤ ᱮᱢ ᱢᱮ ᱾</string>
+    <string name="supervisor_generate_key">ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="supervisor_key_created">ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱛᱮᱭᱟᱨ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱟᱯᱞᱚᱰ ᱨᱮ ᱥᱟᱨᱵᱷᱟᱨ ᱫᱷᱟᱹᱵᱤᱡ ᱥᱮᱴᱮᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="supervisor_key_exists">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱞᱟᱦᱟ ᱠᱷᱚᱱ ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱮᱴᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱡᱚᱲᱟᱣ ᱵᱟᱨᱭᱟ ᱨᱮ ᱦᱟᱹᱴᱤᱧᱚᱜᱼᱟ ᱾</string>
+    <string name="supervisor_key_failed">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱠᱟᱹᱴᱷᱤ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="supervisor_key_present">%1$s ᱨᱮᱭᱟᱜ ᱠᱟᱹᱴᱷᱤ ᱢᱮᱱᱟᱜᱼᱟ, ᱚᱠᱛᱚ %2$d</string>
+
+    <string name="supervisor_readiness_title">ᱥᱤᱯᱷᱴ ᱨᱮᱭᱟᱜ ᱛᱮᱭᱟᱨᱤ</string>
+    <string name="supervisor_valid_but_stale">%1$d ᱠᱟᱹᱢᱤᱭᱟᱹᱼᱢᱚᱰᱭᱩᱞ ᱠᱟᱜᱚᱡ ᱨᱮ ᱴᱷᱤᱠ ᱢᱮᱱᱠᱷᱟᱱ ᱠᱟᱹᱢᱤ ᱨᱮ ᱢᱟᱨᱮ ᱠᱟᱱᱟ ᱾ ᱞᱟᱦᱟ ᱱᱚᱶᱟ ᱠᱚ ᱧᱮᱞ ᱢᱮ ᱾</string>
+
+    <string name="supervisor_chain_title">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱠᱷᱟᱛᱟ</string>
+    <string name="supervisor_chain_summary">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ %1$d ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ, ᱡᱚᱲᱟᱣ ᱨᱮᱭᱟᱜ ᱴᱩᱴᱤ ᱠᱨᱚᱢ %2$d ᱨᱮ ᱾</string>
+    <string name="supervisor_audit_chain">ᱡᱚᱲᱟᱣ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="supervisor_chain_clean">%1$d ᱨᱮᱠᱚᱰ ᱡᱟᱸᱪ ᱮᱱᱟ ᱾ ᱡᱚᱛᱚ ᱡᱚᱲᱟᱣ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="supervisor_chain_problem">ᱠᱨᱚᱢ %1$d ᱠᱷᱚᱱ ᱛᱟᱭᱚᱢ ᱨᱮᱭᱟᱜ ᱨᱮᱠᱚᱰ ᱵᱟᱝ ᱡᱚᱲᱟᱣ ᱮᱫᱟ ᱾ ᱱᱚᱶᱟ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ; ᱨᱮᱠᱚᱰ ᱠᱚ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ, ᱢᱮᱴᱟᱣ ᱵᱟᱝ ᱟᱠᱟᱱᱟ ᱾</string>
+
+    <string name="supervisor_ar_title">ᱡᱟᱭᱜᱟ AR ᱥᱠᱮᱱ</string>
+    <string name="supervisor_anchor_count">%1$d ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ</string>
+    <string name="supervisor_cloud_anchors_on">ᱠᱞᱟᱣᱰ ᱮᱸᱠᱚᱨ ᱥᱮᱴ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱥᱠᱮᱱ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱨᱮ ᱦᱚᱸ ᱠᱟᱹᱢᱤᱜᱼᱟ ᱾</string>
+    <string name="supervisor_cloud_anchors_off">ᱱᱚᱶᱟ ᱵᱤᱞᱰ ᱨᱮ ᱠᱞᱟᱣᱰ ᱮᱸᱠᱚᱨ ᱠᱟᱹᱴᱷᱤ ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱥᱠᱮᱱ ᱠᱷᱟᱹᱞᱤ ᱱᱚᱶᱟ ᱥᱮᱥᱚᱱ ᱫᱷᱟᱹᱵᱤᱡ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱰᱨᱤᱞ ᱠᱚ ᱟᱭᱩᱨᱚᱜᱼᱟ; ᱛᱟᱭᱚᱢ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱭᱜᱟ ᱵᱮᱵᱷᱟᱨ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="supervisor_scan_site">ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ ᱢᱮ</string>
+
+    <string name="supervisor_voice_title">ᱟᱲᱟᱝ ᱦᱩᱠᱩᱢ ᱠᱚ</string>
+    <string name="supervisor_voice_explainer">ᱡᱟᱦᱟᱸ ᱡᱟᱭᱜᱟ ᱨᱮ ᱢᱤᱫ ᱛᱟᱲᱟᱢ ᱦᱩᱠᱩᱢ ᱠᱟᱛᱷᱟ ᱠᱚ ᱨᱮᱠᱚᱰ ᱢᱮ, ᱚᱱᱟᱜᱮ ᱯᱟᱹᱨᱥᱤ ᱨᱮ ᱡᱟᱦᱟᱸ ᱱᱚᱰᱮ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱠᱚ ᱨᱚᱲᱟ ᱾ ᱥᱟᱱᱛᱟᱲᱤ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ, ᱪᱮᱫᱟᱜ ᱥᱮ ᱡᱟᱦᱟᱸ ᱥᱯᱤᱪ ᱤᱸᱡᱤᱱ ᱦᱚᱸ ᱚᱱᱟ ᱵᱟᱝ ᱵᱩᱡᱷᱟᱹᱣᱟ ᱾</string>
+    <string name="supervisor_enrol_voice">ᱦᱩᱠᱩᱢ ᱠᱟᱛᱷᱟ ᱨᱮᱠᱚᱰ ᱢᱮ</string>
+
+    <string name="supervisor_sync_title">ᱟᱯᱞᱚᱰ</string>
+    <string name="supervisor_sync_summary">%1$d ᱵᱟᱰᱟᱭᱮᱫᱟ, %2$d ᱵᱟᱝ ᱦᱟᱛᱟᱣ ᱮᱱᱟ ᱟᱨ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="supervisor_never_synced">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱥᱟᱨᱵᱷᱟᱨ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱥᱮᱴᱮᱨ ᱮᱱᱟ ᱾ ᱚᱱᱟ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱚᱛᱚ ᱱᱚᱰᱮᱜᱮ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="supervisor_sync_requested">ᱟᱯᱞᱚᱰ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱭᱚᱜ ᱮᱱᱟ ᱾</string>
+
+    <string name="supervisor_relay_title">ᱨᱮᱠᱚᱰ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱛᱮ ᱮᱢ ᱢᱮ</string>
+    <string name="supervisor_relay_explainer">ᱚᱱᱟ ᱨᱮᱠᱚᱰ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱸ ᱞᱟᱛᱟᱨ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱵᱟᱝ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱚᱱᱟ ᱠᱚ ᱩᱯᱨᱩᱢ ᱤᱫᱤᱭᱟ ᱾ ᱦᱚᱨ ᱨᱮ ᱡᱟᱦᱟᱸ ᱵᱟᱝ ᱵᱚᱫᱚᱞ ᱦᱩᱭᱩᱜᱼᱟ: ᱡᱚᱛᱚ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮ ᱫᱚᱥᱛᱚᱠᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="supervisor_relay_progress">%1$d ᱠᱩᱞ ᱮᱱᱟ, %2$d ᱧᱟᱢ ᱮᱱᱟ</string>
+    <string name="supervisor_relay_collect">ᱨᱮᱠᱚᱰ ᱵᱟᱦᱨᱮ ᱤᱫᱤ ᱢᱮ</string>
+    <string name="supervisor_relay_offer">ᱨᱮᱠᱚᱰ ᱮᱢ ᱢᱮ</string>
+    <string name="supervisor_relay_stop">ᱵᱚᱸᱫᱚ ᱢᱮ</string>
+    <string name="supervisor_relay_collecting">ᱚᱱᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱨᱟᱦᱟ ᱧᱮᱞ ᱠᱟᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱮᱢ ᱞᱟᱹᱜᱤᱫ ᱨᱮᱠᱚᱰ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="supervisor_relay_offering">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱨᱮᱠᱚᱰ ᱱᱟᱜᱟᱢ ᱯᱷᱚᱱ ᱛᱮ ᱮᱢᱚᱜ ᱠᱟᱱᱟ ᱾</string>
+
+    <string name="supervisor_diagnostics_title">ᱡᱟᱸᱪ ᱠᱷᱚᱵᱚᱨ</string>
+    <string name="supervisor_device_id">ᱰᱤᱵᱷᱟᱭᱥ</string>
+    <string name="supervisor_device_registered">ᱚᱞ ᱦᱩᱭᱟᱠᱟᱱᱟ</string>
+    <string name="supervisor_clock_skew">ᱴᱟᱲᱟᱝ ᱨᱮᱭᱟᱜ ᱯᱷᱟᱨᱟᱠ</string>
+    <string name="supervisor_worker_count">ᱠᱟᱹᱢᱤᱭᱟᱹ ᱠᱚ</string>
+    <string name="supervisor_site_scanned">ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ</string>
+    <string name="supervisor_pin_reset">%1$s ᱨᱮᱭᱟᱜ ᱯᱤᱱ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱨᱮ ᱩᱱᱠᱩ ᱱᱟᱶᱟ ᱵᱟᱪᱷᱟᱣᱟ ᱾</string>
+    <string name="supervisor_worker_unknown">%1$s ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+
+    <string name="sitescan_title">ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ ᱢᱮ</string>
+    <string name="sitescan_instruction">ᱥᱟᱹᱨᱤ ᱡᱤᱱᱤᱥ ᱥᱟᱢᱟᱝ ᱨᱮ, ᱵᱟᱨ ᱢᱤᱴᱚᱨ ᱥᱟᱶᱛᱮ ᱛᱮᱸᱜᱚ ᱠᱟᱛᱮ ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱠᱚ ᱨᱮᱭᱟᱜ ᱰᱨᱤᱞ ᱨᱮ ᱥᱟᱹᱨᱤ ᱡᱟᱭᱜᱟ ᱵᱮᱵᱷᱟᱨ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
+    <string name="sitescan_progress">%2$d ᱠᱷᱚᱱ %1$d ᱢᱩᱬᱩᱛ ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱮᱱᱟ</string>
+    <string name="sitescan_no_camera">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱠᱮᱢᱮᱨᱟ ᱨᱮᱭᱟᱜ ᱦᱚᱨ ᱵᱟᱝ ᱠᱟᱹᱢᱤᱭᱮᱫᱟ, ᱚᱱᱟᱛᱮ ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="sitescan_needs_arcore">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ARCore ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱪᱤᱱᱦᱟᱹ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱟᱝ ᱛᱷᱤᱨ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱰᱨᱤᱞ ᱠᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱭᱜᱟ ᱥᱟᱶ ᱟᱭᱩᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="sitescan_not_placed">ᱵᱟᱝ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ</string>
+    <string name="sitescan_placed_cloud">ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ ᱟᱨ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱥᱟᱶ ᱦᱟᱹᱴᱤᱧ ᱟᱠᱟᱱᱟ</string>
+    <string name="sitescan_placed_session">ᱠᱷᱟᱹᱞᱤ ᱱᱚᱶᱟ ᱥᱮᱥᱚᱱ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ</string>
+    <string name="sitescan_place">ᱱᱚᱰᱮ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="sitescan_replace">ᱱᱚᱰᱮ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="sitescan_placed_ok">ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱮᱱᱟ ᱾</string>
+    <string name="sitescan_place_failed">ᱱᱚᱶᱟ ᱪᱤᱱᱦᱟᱹ ᱵᱟᱝ ᱫᱚᱦᱚ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱟᱭᱟᱛ ᱛᱮ ᱦᱤᱲᱤᱡ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾</string>
+    <string name="sitescan_clear_all">ᱡᱚᱛᱚ ᱪᱤᱱᱦᱟᱹ ᱚᱰᱚᱠ ᱢᱮ</string>
+    <string name="sitescan_cleared">ᱡᱚᱛᱚ ᱪᱤᱱᱦᱟᱹ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱫᱚᱦᱲᱟ ᱥᱠᱮᱱ ᱫᱷᱟᱹᱵᱤᱡ ᱰᱨᱤᱞ ᱠᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱭᱜᱟ ᱵᱮᱵᱷᱟᱨ ᱠᱚᱨᱟᱣᱟ ᱾</string>
+
+    <string name="target_exit_primary">ᱢᱩᱬᱩᱛ ᱚᱰᱚᱠ ᱦᱚᱨ</string>
+    <string name="target_exit_secondary">ᱮᱴᱟᱜ ᱚᱰᱚᱠ ᱦᱚᱨ</string>
+    <string name="target_assembly_point">ᱡᱟᱨᱣᱟ ᱡᱟᱭᱜᱟ</string>
+    <string name="target_extinguisher_station">ᱥᱮᱸᱜᱮᱞ ᱟᱴᱠᱟᱣ ᱡᱟᱭᱜᱟ</string>
+    <string name="target_fire_alarm_point">ᱥᱮᱸᱜᱮᱞ ᱟᱞᱟᱨᱢ</string>
+    <string name="target_gas_zone">ᱜᱮᱥ ᱡᱚᱠᱷᱚᱢ ᱡᱟᱭᱜᱟ</string>
+    <string name="target_vent_fan">ᱦᱚᱭ ᱯᱟᱸᱠᱷᱟ</string>
+    <string name="target_confined_space_entry">ᱵᱚᱸᱫᱚ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱵᱚᱞᱚ ᱦᱚᱨ</string>
+    <string name="target_isolator_switch">ᱟᱭᱥᱚᱞᱮᱴᱚᱨ ᱥᱣᱤᱪ</string>
+    <string name="target_machine_nip_point">ᱢᱮᱥᱤᱱ ᱨᱮᱭᱟᱜ ᱚᱛᱟᱭ ᱡᱟᱭᱜᱟ</string>
+    <string name="target_refuge_chamber">ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚᱴᱷᱟ</string>
+    <string name="target_anchor_point_valid">ᱢᱟᱱᱟᱣᱟᱠᱟᱱ ᱦᱟᱨᱱᱮᱥ ᱮᱸᱠᱚᱨ</string>
+    <string name="target_damaged_cable">ᱵᱤᱜᱟᱲ ᱠᱮᱵᱚᱞ</string>
+    <string name="target_generic">ᱪᱤᱱᱦᱟᱹ</string>
+
+    <string name="voiceenroll_title">ᱦᱩᱠᱩᱢ ᱠᱟᱛᱷᱟ ᱨᱮᱠᱚᱰ ᱢᱮ</string>
+    <string name="voiceenroll_explainer">ᱡᱚᱛᱚ ᱠᱟᱛᱷᱟ ᱵᱟᱨ ᱛᱟᱲᱟᱢ ᱠᱟᱡᱤ ᱢᱮ ᱾ ᱡᱚᱮᱛ ᱞᱟᱦᱟ ᱵᱟᱨᱭᱟ ᱨᱮᱠᱚᱰᱤᱝ ᱢᱮᱞᱟᱣᱚᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱠᱷᱚᱸᱠᱷᱚᱸ ᱥᱮ ᱨᱟᱹᱯᱩᱫ ᱠᱟᱛᱷᱟ ᱛᱟᱭᱚᱢ ᱵᱷᱩᱞ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱛᱮᱭᱟᱨᱟ ᱾</string>
+    <string name="voiceenroll_progress">%1$d ᱠᱟᱛᱷᱟ ᱨᱮᱠᱚᱰ ᱮᱱᱟ; ᱟᱲᱟᱝ ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ %2$d ᱞᱟᱹᱠᱛᱤᱜᱼᱟ</string>
+    <string name="voiceenroll_mic_needed">ᱦᱩᱠᱩᱢ ᱠᱟᱛᱷᱟ ᱨᱮᱠᱚᱰ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱭᱠ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="voiceenroll_recordings">%2$d ᱠᱷᱚᱱ %1$d ᱨᱮᱠᱚᱰᱤᱝ</string>
+    <string name="voiceenroll_record">ᱨᱮᱠᱚᱰ ᱢᱮ</string>
+    <string name="voiceenroll_rerecord">ᱫᱚᱦᱲᱟ ᱨᱮᱠᱚᱰ ᱢᱮ</string>
+    <string name="voiceenroll_speak_now">ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱢᱮ…</string>
+    <string name="voiceenroll_take">ᱱᱤᱛᱚᱜ ᱠᱟᱡᱤ ᱢᱮ — ᱨᱮᱠᱚᱰᱤᱝ %1$d</string>
+    <string name="voiceenroll_saved">%1$d ᱨᱮᱠᱚᱰᱤᱝ ᱡᱚᱮᱛ ᱮᱱᱟ ᱾</string>
+    <string name="voiceenroll_accepted">ᱦᱟᱛᱟᱣ ᱮᱱᱟ ᱾</string>
+    <string name="voiceenroll_inconsistent">ᱚᱱᱟ ᱵᱟᱨᱭᱟ ᱨᱮᱠᱚᱰᱤᱝ ᱢᱤᱫᱴᱮᱱ ᱞᱮᱠᱟ ᱵᱟᱝ ᱟᱸᱡᱚᱢ ᱮᱱᱟ ᱾ ᱵᱟᱨᱭᱟ ᱛᱟᱲᱟᱢ ᱚᱱᱟᱜᱮ ᱠᱟᱛᱷᱟ ᱠᱟᱡᱤ ᱢᱮ ᱾</string>
+    <string name="voiceenroll_too_short">ᱢᱤᱫ ᱨᱮᱠᱚᱰᱤᱝ ᱰᱷᱮᱨ ᱦᱩᱰᱤᱧ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ ᱾ ᱥᱚᱯᱷᱟ ᱛᱮ ᱠᱟᱡᱤ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾</string>
+    <string name="voiceenroll_not_enough">ᱯᱩᱨᱟᱹ ᱨᱮᱠᱚᱰᱤᱝ ᱵᱟᱝ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="voiceenroll_mic_failed">ᱢᱟᱭᱠ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="voiceenroll_not_yet_usable">ᱠᱚᱢ ᱠᱟᱛᱮ %1$d ᱠᱟᱛᱷᱟ ᱨᱮᱠᱚᱰ ᱦᱩᱭ ᱫᱷᱟᱹᱵᱤᱡ ᱟᱲᱟᱝ ᱨᱮᱭᱟᱜ ᱦᱚᱨ ᱩᱠᱩᱭᱟ ᱾ ᱟᱠᱚᱨᱤᱡ ᱢᱟᱭᱠ ᱵᱟᱹᱱᱩᱜ ᱠᱷᱚᱱ ᱦᱚᱸ ᱵᱟᱹᱲᱤᱡ ᱠᱟᱱᱟ ᱾</string>
+
+    <string name="buddy_title">ᱵᱟᱨ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱜᱟᱛᱮ ᱰᱨᱤᱞ</string>
+    <string name="buddy_explainer">ᱵᱟᱨᱭᱟ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱶᱟ ᱥᱠᱨᱤᱱ ᱠᱷᱚᱞᱟᱭ ᱢᱟ ᱾ ᱯᱷᱚᱱ ᱠᱚ ᱵᱞᱩᱴᱩᱛᱷ ᱟᱨ ᱶᱟᱭᱼᱯᱷᱟᱭ ᱰᱟᱭᱨᱮᱠᱴ ᱛᱮ ᱢᱤᱫ ᱮᱴᱟᱜ ᱯᱟᱱᱛᱮ ᱞᱮᱱᱟ — ᱤᱱᱴᱚᱨᱱᱮᱴ ᱥᱮ ᱥᱤᱜᱱᱟᱞ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="buddy_paired_with">%1$s ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱮᱱᱟ</string>
+    <string name="buddy_role_host">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱰᱨᱤᱞ ᱟᱭᱩᱨᱟ</string>
+    <string name="buddy_role_guest">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱥᱟᱶ ᱛᱮ ᱪᱟᱞᱟᱜᱼᱟ</string>
+    <string name="buddy_peer_stale">ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱪᱩᱯ ᱮᱱᱟ ᱾ ᱱᱟᱜᱟᱢ ᱦᱮᱡ ᱢᱮ ᱾</string>
+    <string name="buddy_transport_problem">ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱫᱷᱟᱹᱵᱤᱡ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱥᱮᱴᱮᱨ ᱞᱮᱱᱟ ᱾ ᱱᱚᱶᱟ ᱥᱠᱨᱤᱱ ᱠᱷᱩᱞᱟᱹ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+
+    <string name="buddy_phase_idle">ᱵᱟᱝ ᱮᱦᱚᱵ ᱮᱱᱟ</string>
+    <string name="buddy_phase_handshake">ᱜᱟᱛᱮ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱱ ᱯᱟᱱᱛᱮ ᱠᱟᱱᱟ</string>
+    <string name="buddy_phase_ready">ᱡᱚᱲᱟᱣ ᱮᱱᱟ</string>
+    <string name="buddy_phase_countdown">ᱢᱤᱫᱛᱮ ᱮᱦᱚᱵᱚᱜ ᱠᱟᱱᱟ</string>
+    <string name="buddy_phase_running">ᱰᱨᱤᱞ ᱪᱟᱞᱟᱜ ᱠᱟᱱᱟ</string>
+    <string name="buddy_phase_distress">ᱟᱢᱟᱜ ᱜᱟᱛᱮ ᱛᱮ ᱜᱚᱲᱚ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ</string>
+    <string name="buddy_phase_result">ᱯᱷᱚᱞ ᱢᱮᱞᱟᱣ ᱠᱟᱱᱟ</string>
+    <string name="buddy_phase_complete">ᱪᱟᱵᱟ ᱮᱱᱟ</string>
+    <string name="buddy_phase_aborted">ᱛᱷᱤᱨ ᱮᱱᱟ</string>
+
+    <string name="buddy_explain_idle">ᱨᱟᱹᱡᱤ ᱮᱢ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱱᱟᱜᱟᱢ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="buddy_explain_handshake">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱛᱤᱱᱟᱹᱜ ᱢᱤᱴᱚᱨ ᱵᱷᱤᱛᱨᱤ ᱫᱚᱦᱚ ᱢᱮ ᱾</string>
+    <string name="buddy_explain_ready">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱢᱤᱫᱴᱮᱱ ᱰᱨᱤᱞ ᱨᱮ ᱨᱟᱹᱡᱤ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱛᱤᱱᱟᱹᱜ ᱚᱠᱛᱚ ᱛᱟᱭᱚᱢ ᱮᱦᱚᱵᱚᱜᱼᱟ ᱾</string>
+    <string name="buddy_explain_countdown">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱢᱤᱫᱴᱮᱱ ᱚᱠᱛᱚ ᱨᱮ ᱮᱦᱚᱵᱚᱜᱼᱟ ᱾</string>
+    <string name="buddy_explain_running">ᱰᱨᱤᱞ ᱢᱤᱫᱛᱮ ᱪᱟᱵᱟᱭ ᱢᱮ ᱾</string>
+    <string name="buddy_explain_distress">ᱱᱤᱛᱚᱜ ᱠᱟᱹᱢᱤ ᱮᱦᱚᱵ ᱢᱮ ᱾ ᱟᱢᱟᱜ ᱨᱩᱣᱟᱹᱲ ᱚᱠᱛᱚ ᱢᱟᱯ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ ᱾</string>
+    <string name="buddy_explain_result">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱟᱠᱚᱣᱟᱜ ᱱᱚᱢᱵᱚᱨ ᱦᱟᱹᱴᱤᱧ ᱠᱟᱱᱟ ᱾</string>
+    <string name="buddy_explain_complete">ᱵᱟᱨᱭᱟ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱪᱟᱵᱟ ᱠᱮᱫᱟ ᱾ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮ ᱚᱞᱚᱜᱼᱟ ᱡᱮ ᱱᱚᱶᱟ ᱥᱟᱹᱨᱤ ᱵᱟᱨ ᱦᱚᱲ ᱨᱮᱭᱟᱜ ᱰᱨᱤᱞ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ ᱾</string>
+    <string name="buddy_explain_aborted">ᱰᱨᱤᱞ ᱛᱷᱤᱨ ᱮᱱᱟ ᱾ ᱡᱟᱦᱟᱸ ᱟᱢ ᱠᱚᱨᱟᱣ ᱟᱠᱟᱫᱟᱢ ᱚᱱᱟ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾</string>
+
+    <string name="buddy_abort_peer_lost">ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱥᱟᱸᱜᱤᱧ ᱪᱟᱞᱟᱣ ᱮᱱᱟ ᱾ ᱟᱢᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="buddy_abort_version">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱨᱮ ᱮᱯ ᱨᱮᱭᱟᱜ ᱟᱞᱜᱟ ᱵᱷᱟᱨᱥᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱵᱟᱨᱭᱟ ᱟᱯᱰᱮᱴ ᱢᱮ ᱾</string>
+    <string name="buddy_abort_same_worker">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱤᱫᱴᱮᱱ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱠᱟᱱᱟᱭ ᱾ ᱜᱟᱛᱮ ᱰᱨᱤᱞ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱨ ᱦᱚᱲ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+    <string name="buddy_abort_scenario">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱟᱞᱜᱟ ᱰᱨᱤᱞ ᱵᱟᱪᱷᱟᱣ ᱠᱮᱫᱟ ᱾</string>
+    <string name="buddy_abort_cancelled">ᱟᱢ ᱰᱨᱤᱞ ᱛᱷᱤᱨ ᱠᱮᱫᱟᱢ ᱾</string>
+    <string name="buddy_abort_peer_cancelled">ᱮᱴᱟᱜ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱰᱨᱤᱞ ᱛᱷᱤᱨ ᱠᱮᱫᱟᱭ ᱾</string>
+    <string name="buddy_abort_malformed">ᱵᱟᱨᱭᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱡᱚᱲᱟᱣ ᱰᱷᱮᱨ ᱠᱚᱢᱡᱚᱨ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ, ᱚᱱᱟᱛᱮ ᱟᱭᱩᱨ ᱵᱟᱝ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="buddy_abort_handshake_timeout">ᱯᱷᱚᱱ ᱠᱚ ᱚᱠᱛᱚ ᱨᱮ ᱨᱟᱹᱡᱤ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ ᱾ ᱱᱟᱜᱟᱢ ᱦᱮᱡ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾</string>
+    <string name="buddy_abort_result_timeout">ᱯᱷᱚᱞ ᱵᱟᱝ ᱦᱟᱹᱴᱤᱧ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱟᱢᱟᱜ ᱛᱟᱲᱟᱢ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ ᱾</string>
+
+    <string name="nearby_rationale_bluetooth">ᱡᱟᱜᱨᱩᱠ ᱛᱮ ᱱᱟᱜᱟᱢ ᱯᱷᱚᱱ ᱯᱟᱱᱛᱮ ᱨᱮᱭᱟᱜ ᱨᱟᱹᱡᱤ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱡᱟᱦᱟᱸᱛᱮ ᱟᱢᱟᱜ ᱯᱷᱚᱱ ᱜᱟᱛᱮ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱱ ᱥᱟᱶ ᱥᱚᱡᱮ ᱡᱚᱲᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="nearby_rationale_location">ᱮᱱᱰᱨᱚᱭᱰ ᱨᱮᱭᱟᱜ ᱱᱚᱶᱟ ᱵᱷᱟᱨᱥᱚᱱ ᱨᱮ ᱱᱟᱜᱟᱢ ᱯᱷᱚᱱ ᱯᱟᱱᱛᱮ ᱞᱟᱹᱜᱤᱫ ᱞᱚᱠᱮᱥᱚᱱ ᱨᱟᱹᱡᱤ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱡᱟᱜᱨᱩᱠ ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ ᱵᱟᱝ ᱚᱞᱟ ᱾</string>
+
+    <string name="refresher_channel_name">ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱨᱮᱭᱟᱜ ᱮᱥᱮᱫ</string>
+    <string name="refresher_channel_description">ᱛᱤᱱᱨᱮ ᱦᱩᱰᱤᱧ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱚᱱᱟ ᱚᱠᱛᱚ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱛᱮ ᱮᱥᱮᱫ ᱮᱢᱟ ᱾</string>
+    <string name="refresher_due_title">%1$s — ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ</string>
+    <plurals name="refresher_due_body">
+        <item quantity="one">%1$d ᱢᱚᱰᱭᱩᱞ ᱨᱮ ᱦᱩᱰᱤᱧ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾</item>
+        <item quantity="other">%1$d ᱢᱚᱰᱭᱩᱞ ᱨᱮ ᱦᱩᱰᱤᱧ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾</item>
+    </plurals>
+
+</resources>

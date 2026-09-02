@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+
+  /* A visible focus ring on every interactive element. A site officer working from a keyboard, or
+     anyone using a screen reader, needs to know where they are. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-offset-2 ring-sky-600;
+  }
+
+  table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  th {
+    @apply bg-slate-100 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600;
+  }
+
+  td {
+    @apply border-t border-slate-200 px-3 py-2 align-middle;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .card-header {
+    @apply flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-4 py-3;
+  }
+
+  .card-title {
+    @apply text-sm font-semibold text-slate-800;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[2.25rem] items-center justify-center gap-2 rounded-md border px-3 py-1.5
+      text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn border-sky-700 bg-sky-700 text-white hover:bg-sky-800;
+  }
+
+  .btn-secondary {
+    @apply btn border-slate-300 bg-white text-slate-700 hover:bg-slate-100;
+  }
+
+  .btn-danger {
+    @apply btn border-red-700 bg-red-700 text-white hover:bg-red-800;
+  }
+
+  .input {
+    @apply min-h-[2.25rem] w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm
+      placeholder:text-slate-400;
+  }
+
+  .label {
+    @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .mono {
+    @apply font-mono text-xs;
+  }
+}
+
+/* Leaflet needs an explicit height on its container or the map renders zero pixels tall. */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}

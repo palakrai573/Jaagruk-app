@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Only needed when DATABASE_URL points at PostgreSQL. Kept separate so a wheel build failure
+# for psycopg cannot stop anyone from running the backend on SQLite.
+psycopg[binary]==3.2.3

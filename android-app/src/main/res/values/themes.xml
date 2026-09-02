@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The activity theme exists only to hand over cleanly to Compose.
+
+  Colour, typography and every visual decision live in `ui/theme/Theme.kt`. Duplicating them here would give
+  two sources of truth that drift, and the one that shows during the first frame is the one nobody tests.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Jaagruk" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!--
+          Deliberately dark: the app is used underground and in headlamp light far more often than in an
+          office, and a white flash between splash and first frame is genuinely unpleasant in the dark.
+        -->
+        <item name="android:windowBackground">@color/jaagruk_surface_dark</item>
+    </style>
+
+    <!--
+      Splash theme, from androidx.core.splashscreen. The window background matches the Compose surface exactly
+      so the handover is invisible rather than a visible colour jump.
+    -->
+    <style name="Theme.Jaagruk.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/jaagruk_surface_dark</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Jaagruk</item>
+    </style>
+
+</resources>

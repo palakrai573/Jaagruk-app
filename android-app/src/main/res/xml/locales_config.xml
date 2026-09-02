@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The languages this app is actually translated into.
+
+  On Android 13+ this makes Jaagruk appear in the system per-app language picker, which matters on a shared
+  site handset that changes hands between workers during a shift.
+
+  `sat` is Santali, written in Ol Chiki. Tagged without the `Olck` script subtag on purpose: a script subtag
+  makes some devices fail to match the resource folder and fall back to English, which would hit precisely the
+  users who can least afford it.
+
+  Ol Chiki glyphs come from Noto Sans Ol Chiki, which AOSP has shipped since Android 10. That is one of the
+  reasons `minSdk` is 29 rather than lower: on Android 9 the Santali strings would render as empty boxes, and
+  a UI of empty boxes is worse than English.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="hi" />
+    <locale android:name="sat" />
+</locale-config>

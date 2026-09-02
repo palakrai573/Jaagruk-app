@@ -1,0 +1,79 @@
+# ---------- Gradle / Android ----------
+.gradle/
+build/
+*/build/
+local.properties
+captures/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.jks
+*.keystore
+!debug.keystore
+release/
+.kotlin/
+
+# ---------- IDE ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+!.vscode/extensions.json
+*.swp
+*~
+
+# ---------- Python / backend ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+# SQLite's write-ahead log and shared-memory sidecars. Transient, machine specific, and useless without the
+# database file itself -- which is already ignored above.
+*.db-shm
+*.db-wal
+*.sqlite3-shm
+*.sqlite3-wal
+backend/media_store/
+backend/.env
+
+# ---------- Node / dashboard ----------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Tooling ----------
+tools/_gradle_dist/
+tools/_android_sdk/
+*.log
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Secrets ----------
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+!docs/**/*.pem
