@@ -266,6 +266,23 @@
     <string name="supervisor_pin_reset">%1$s का पिन हटा दिया गया। अगले साइन-इन पर वे नया चुनेंगे।</string>
     <string name="supervisor_worker_unknown">%1$s इस फ़ोन में नहीं है।</string>
 
+    <string name="supervisor_worker_enrol_title">कर्मचारी जोड़ें</string>
+    <string name="supervisor_worker_enrol_explainer">नेटवर्क हो या न हो, इस फ़ोन पर कर्मचारी दर्ज करें। पहली बार साइन-इन करते समय वे अपना पिन खुद चुनेंगे, इसलिए आप उसे कभी नहीं देखेंगे। रिकॉर्ड अगले अपलोड पर सर्वर तक पहुँच जाएँगे।</string>
+    <string name="supervisor_worker_id_hint">कार्ड पर लिखा कर्मचारी आईडी, जैसे %1$s</string>
+    <string name="supervisor_worker_name_hint">पूरा नाम</string>
+    <string name="supervisor_worker_language">इस कर्मचारी की भाषा</string>
+    <string name="supervisor_worker_pictogram">केवल चित्र मोड (बिना पाठ)</string>
+    <string name="supervisor_enrol_worker">कर्मचारी जोड़ें</string>
+    <string name="supervisor_worker_registered">%1$s जोड़ दिए गए। वे अभी साइन-इन कर सकते हैं और पिन चुनेंगे।</string>
+    <string name="supervisor_worker_exists">%1$s पहले से इस फ़ोन पर हैं।</string>
+    <string name="supervisor_worker_id_required">उनके कार्ड पर छपा कर्मचारी आईडी दर्ज करें।</string>
+    <string name="supervisor_worker_id_format">कर्मचारी आईडी %1$s जैसा होना चाहिए — राज्य, ज़िला, साइट संख्या, फिर W और पाँच अंक।</string>
+    <string name="supervisor_worker_name_required">कर्मचारी का पूरा नाम दर्ज करें।</string>
+    <string name="supervisor_worker_name_short">यह नाम पूरे नाम के लिए बहुत छोटा है।</string>
+    <string name="supervisor_worker_needs_site">पहले साइट कुंजी बनाएँ। कर्मचारी किसी साइट के अंतर्गत दर्ज होता है, और साइट आईडी उनके हर प्रमाणपत्र का हिस्सा है।</string>
+    <string name="supervisor_workers_pending_upload">इस फ़ोन पर %1$d जोड़े गए, सर्वर तक पहुँचना बाकी</string>
+    <string name="supervisor_workers_all_uploaded">इस फ़ोन का हर कर्मचारी सर्वर पर है</string>
+
     <string name="sitescan_title">यह साइट स्कैन करें</string>
     <string name="sitescan_instruction">असली वस्तु के सामने, दो मीटर दूर खड़े होकर उसका निशान लगाएँ। फिर कर्मचारियों के अभ्यास में असली जगह इस्तेमाल होगी।</string>
     <string name="sitescan_progress">%2$d में से %1$d मुख्य निशान लगे</string>

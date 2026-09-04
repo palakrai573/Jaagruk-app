@@ -69,6 +69,28 @@ interface WorkerDao {
 
     @Query("SELECT COUNT(*) FROM workers WHERE pinHash IS NOT NULL")
     suspend fun countWithPin(): Int
+
+    /**
+     * Workers enrolled on this handset that the server has never seen.
+     *
+     * Oldest first, so a site that enrolled a shift's worth of contractors offline reconciles in the
+     * order they actually arrived. The PIN is deliberately not part of this: it is a local secret and
+     * has no business travelling to the server.
+     */
+    @Query("SELECT * FROM workers WHERE serverSynced = 0 ORDER BY registeredAtSec LIMIT :limit")
+    suspend fun notYetOnServer(limit: Int): List<WorkerEntity>
+
+    @Query("SELECT COUNT(*) FROM workers WHERE serverSynced = 0")
+    suspend fun countNotYetOnServer(): Int
+
+    /**
+     * Marks a worker as present on the server.
+     *
+     * Only flips the flag. Rewriting the whole row would clobber a PIN the worker set between the
+     * upload starting and this returning.
+     */
+    @Query("UPDATE workers SET serverSynced = 1 WHERE workerId = :workerId")
+    suspend fun markServerSynced(workerId: String)
 }
 
 @Dao

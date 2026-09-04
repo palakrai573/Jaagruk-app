@@ -274,6 +274,23 @@
     <string name="supervisor_pin_reset">%1$s ᱨᱮᱭᱟᱜ ᱯᱤᱱ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱨᱮ ᱩᱱᱠᱩ ᱱᱟᱶᱟ ᱵᱟᱪᱷᱟᱣᱟ ᱾</string>
     <string name="supervisor_worker_unknown">%1$s ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
 
+    <string name="supervisor_worker_enrol_title">ᱠᱟᱹᱢᱤᱛᱮᱛ ᱥᱮᱞᱮᱫ ᱢᱮ</string>
+    <string name="supervisor_worker_enrol_explainer">ᱱᱮᱴᱣᱟᱨᱠ ᱢᱮᱱᱟᱜᱼᱟ ᱥᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱱᱚᱛᱮ ᱢᱮ ᱾ ᱯᱩᱭᱞᱩ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱨᱮ ᱩᱱᱠᱩ ᱟᱡ ᱛᱮ ᱯᱤᱱ ᱵᱟᱪᱷᱟᱣᱟ, ᱚᱱᱟᱛᱮ ᱟᱢ ᱚᱱᱟ ᱵᱟᱝ ᱧᱮᱞᱟᱢ ᱾ ᱨᱮᱠᱚᱰ ᱠᱚ ᱮᱴᱟᱜ ᱟᱯᱞᱚᱰ ᱨᱮ ᱥᱟᱨᱵᱷᱟᱨ ᱛᱮ ᱥᱮᱴᱮᱨᱟ ᱾</string>
+    <string name="supervisor_worker_id_hint">ᱠᱟᱰ ᱨᱮ ᱚᱞ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱟᱭᱰᱤ, ᱡᱮᱞᱠᱟ %1$s</string>
+    <string name="supervisor_worker_name_hint">ᱯᱩᱨᱟᱹ ᱧᱩᱛᱩᱢ</string>
+    <string name="supervisor_worker_language">ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱨᱮᱭᱟᱜ ᱯᱟᱹᱨᱥᱤ</string>
+    <string name="supervisor_worker_pictogram">ᱮ᱊ᱮᱛ ᱪᱤᱛᱟᱹᱨ ᱢᱚᱰ (ᱚᱠᱛᱚ ᱵᱟᱹᱱᱩᱜ)</string>
+    <string name="supervisor_enrol_worker">ᱠᱟᱹᱢᱤᱛᱮᱛ ᱥᱮᱞᱮᱫ ᱢᱮ</string>
+    <string name="supervisor_worker_registered">%1$s ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾ ᱩᱱᱠᱩ ᱱᱤᱛᱚᱜ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱟᱨ ᱯᱤᱱ ᱵᱟᱪᱷᱟᱣᱟ ᱾</string>
+    <string name="supervisor_worker_exists">%1$s ᱞᱟᱦᱟ ᱠᱷᱚᱱ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="supervisor_worker_id_required">ᱩᱱᱠᱩ ᱨᱮᱭᱟᱜ ᱠᱟᱰ ᱨᱮ ᱚᱞ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱟᱭᱰᱤ ᱚᱞ ᱢᱮ ᱾</string>
+    <string name="supervisor_worker_id_format">ᱠᱟᱹᱢᱤᱛᱮᱛ ᱟᱭᱰᱤ %1$s ᱞᱮᱠᱟ ᱦᱩᱭᱩᱜ ᱞᱟᱹᱠᱛᱤ — ᱨᱟᱡ, ᱡᱤᱞᱟ, ᱡᱟᱭᱜᱟ ᱞᱮᱠᱷᱟ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ W ᱟᱨ ᱢᱚᱲᱮ ᱞᱮᱠᱷᱟ ᱾</string>
+    <string name="supervisor_worker_name_required">ᱠᱟᱹᱢᱤᱛᱮᱛ ᱨᱮᱭᱟᱜ ᱯᱩᱨᱟᱹ ᱧᱩᱛᱩᱢ ᱚᱞ ᱢᱮ ᱾</string>
+    <string name="supervisor_worker_name_short">ᱱᱚᱶᱟ ᱧᱩᱛᱩᱢ ᱯᱩᱨᱟᱹ ᱧᱩᱛᱩᱢ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱦᱩᱰᱤᱧᱼᱟ ᱾</string>
+    <string name="supervisor_worker_needs_site">ᱯᱩᱭᱞᱩ ᱡᱟᱭᱜᱟ ᱠᱩᱸᱡᱤ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱢᱤᱫᱴᱟᱹᱝ ᱡᱟᱭᱜᱟ ᱛᱮ ᱱᱚᱛᱚᱜᱼᱟ, ᱟᱨ ᱡᱟᱭᱜᱟ ᱟᱭᱰᱤ ᱩᱱᱠᱩ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ ᱦᱟᱹᱴᱤᱧᱼᱟ ᱾</string>
+    <string name="supervisor_workers_pending_upload">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ %1$d ᱥᱮᱞᱮᱫ ᱮᱱᱟ, ᱥᱟᱨᱵᱷᱟᱨ ᱛᱮ ᱥᱮᱴᱮᱨ ᱵᱟᱠᱤ</string>
+    <string name="supervisor_workers_all_uploaded">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ</string>
+
     <string name="sitescan_title">ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ ᱢᱮ</string>
     <string name="sitescan_instruction">ᱥᱟᱹᱨᱤ ᱡᱤᱱᱤᱥ ᱥᱟᱢᱟᱝ ᱨᱮ, ᱵᱟᱨ ᱢᱤᱴᱚᱨ ᱥᱟᱶᱛᱮ ᱛᱮᱸᱜᱚ ᱠᱟᱛᱮ ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱠᱚ ᱨᱮᱭᱟᱜ ᱰᱨᱤᱞ ᱨᱮ ᱥᱟᱹᱨᱤ ᱡᱟᱭᱜᱟ ᱵᱮᱵᱷᱟᱨ ᱦᱩᱭᱩᱜᱼᱟ ᱾</string>
     <string name="sitescan_progress">%2$d ᱠᱷᱚᱱ %1$d ᱢᱩᱬᱩᱛ ᱪᱤᱱᱦᱟᱹ ᱫᱚᱦᱚ ᱮᱱᱟ</string>

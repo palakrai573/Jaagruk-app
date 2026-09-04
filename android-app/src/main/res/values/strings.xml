@@ -308,6 +308,24 @@
     <string name="supervisor_pin_reset">PIN cleared for %1$s. They will choose a new one at next sign-in.</string>
     <string name="supervisor_worker_unknown">%1$s is not on this device.</string>
 
+    <!-- Offline worker enrolment. The path that makes a handset with no uplink usable at all. -->
+    <string name="supervisor_worker_enrol_title">Add a worker</string>
+    <string name="supervisor_worker_enrol_explainer">Enrol a worker on this phone, with or without a network. They choose their own PIN the first time they sign in, so you never see it. Records reach the server on the next upload.</string>
+    <string name="supervisor_worker_id_hint">Worker ID from the card, e.g. %1$s</string>
+    <string name="supervisor_worker_name_hint">Full name</string>
+    <string name="supervisor_worker_language">Language for this worker</string>
+    <string name="supervisor_worker_pictogram">Picture-only mode (no text)</string>
+    <string name="supervisor_enrol_worker">Add worker</string>
+    <string name="supervisor_worker_registered">%1$s added. They can sign in now and will choose a PIN.</string>
+    <string name="supervisor_worker_exists">%1$s is already on this phone.</string>
+    <string name="supervisor_worker_id_required">Enter the worker ID printed on their card.</string>
+    <string name="supervisor_worker_id_format">The worker ID must look like %1$s — state, district, site number, then W and five digits.</string>
+    <string name="supervisor_worker_name_required">Enter the worker\'s full name.</string>
+    <string name="supervisor_worker_name_short">That name is too short to be a full name.</string>
+    <string name="supervisor_worker_needs_site">Generate the site key first. A worker is enrolled against a site, and the site ID is part of every certificate they earn.</string>
+    <string name="supervisor_workers_pending_upload">%1$d added on this phone, waiting to reach the server</string>
+    <string name="supervisor_workers_all_uploaded">Every worker on this phone is on the server</string>
+
     <!-- ==================================================================
          Site scan
          ================================================================== -->

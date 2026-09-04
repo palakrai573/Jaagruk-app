@@ -179,6 +179,12 @@ android {
         // a missing content description or an untranslated string is a worker who cannot proceed.
         fatal += setOf("ContentDescription", "MissingTranslation")
         disable += setOf("GradleDependency", "ObsoleteLintCustomCheck")
+        // Lint's own Kotlin analysis crashes on this module's test sources with
+        // `LLFirModuleLazyDeclarationResolver` — a bug in lint's use of the Kotlin analysis API,
+        // reproducible on the Compose UI test source set and unrelated to anything it would report.
+        // No coverage is lost: every check that matters here is about shipped UI, and the test
+        // sources are not shipped. The tests themselves run in their own task and gate the build.
+        ignoreTestSources = true
         htmlReport = true
         textReport = true
     }
@@ -280,13 +286,23 @@ dependencies {
     implementation(libs.zxing.core)
 
     // --- test -------------------------------------------------------------
+    // Robolectric rather than an instrumented device for the Android-side suite. The load-bearing
+    // logic is already covered by :core on a plain JVM; what these tests add is the wiring — Room
+    // queries actually running, view models driving real repositories, and screens composing
+    // without throwing. All of that is reachable on the JVM, and a suite that needs an emulator is
+    // a suite that does not get run.
     testImplementation(libs.junit4)
     testImplementation(libs.truth)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.androidx.work.testing)
+    testImplementation(libs.androidx.test.junit)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.compose.ui.test.manifest)
 
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

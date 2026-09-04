@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -21,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jaagruk.safety.R
+import org.jaagruk.safety.data.repo.WorkerRepository
+import org.jaagruk.safety.ui.LocaleManager
 import org.jaagruk.safety.ui.components.BannerTone
 import org.jaagruk.safety.ui.components.GloveButton
 import org.jaagruk.safety.ui.components.GloveOutlinedButton
@@ -114,6 +118,115 @@ fun SupervisorScreen(
                         onClick = viewModel::generateSiteKey,
                         enabled = !state.busy,
                         modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+        }
+
+        // Worker enrolment. Placed immediately after the site key because that is the order it has
+        // to happen in: a worker is enrolled against a site, and the site id is signed into every
+        // certificate they earn.
+        item {
+            SectionCard {
+                Text(
+                    text = stringResource(R.string.supervisor_worker_enrol_title),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = stringResource(R.string.supervisor_worker_enrol_explainer),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(10.dp))
+
+                if (!state.canEnrolWorkers) {
+                    StatusBanner(
+                        text = stringResource(R.string.supervisor_worker_needs_site),
+                        tone = BannerTone.WARNING,
+                        pictogramDescription = stringResource(R.string.cd_warning),
+                    )
+                } else {
+                    OutlinedTextField(
+                        value = state.newWorkerId,
+                        onValueChange = viewModel::setNewWorkerId,
+                        label = {
+                            Text(
+                                stringResource(
+                                    R.string.supervisor_worker_id_hint,
+                                    WorkerRepository.WORKER_ID_EXAMPLE,
+                                ),
+                            )
+                        },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = state.newWorkerName,
+                        onValueChange = viewModel::setNewWorkerName,
+                        label = { Text(stringResource(R.string.supervisor_worker_name_hint)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = stringResource(R.string.supervisor_worker_language),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LocaleManager.supported.forEach { tag ->
+                            if (tag == state.newWorkerLanguage) {
+                                GloveButton(
+                                    text = LocaleManager.endonym(tag),
+                                    onClick = { viewModel.setNewWorkerLanguage(tag) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            } else {
+                                GloveOutlinedButton(
+                                    text = LocaleManager.endonym(tag),
+                                    onClick = { viewModel.setNewWorkerLanguage(tag) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.supervisor_worker_pictogram),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Switch(
+                            checked = state.newWorkerPictogramMode,
+                            onCheckedChange = viewModel::setNewWorkerPictogramMode,
+                        )
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+                    GloveButton(
+                        text = stringResource(R.string.supervisor_enrol_worker),
+                        onClick = viewModel::registerWorker,
+                        enabled = !state.busy,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = if (state.workersNotOnServer > 0) {
+                            stringResource(
+                                R.string.supervisor_workers_pending_upload,
+                                state.workersNotOnServer,
+                            )
+                        } else {
+                            stringResource(R.string.supervisor_workers_all_uploaded)
+                        },
+                        style = MaterialTheme.typography.labelMedium,
                     )
                 }
             }

@@ -65,8 +65,20 @@ class VerifyViewModel @Inject constructor(
         _state.value = _state.value.copy(scanning = !_state.value.scanning)
     }
 
+    /**
+     * Upper-cased, because the hash in the certificate is over the canonical id.
+     *
+     * Worker ids are upper-case everywhere they are stored — the server enforces it and enrolment
+     * normalises to it — and [AttestationCodec.workerIdHash] hashes the exact bytes it is given. An
+     * inspector who typed the id off the card in lower case would otherwise get "does not match" for
+     * a perfectly genuine certificate, which is the worst possible failure for this screen: it
+     * accuses the worker rather than the keyboard.
+     */
     fun setCandidateWorkerId(value: String) {
-        _state.value = _state.value.copy(candidateWorkerId = value.trim(), identityMatches = null)
+        _state.value = _state.value.copy(
+            candidateWorkerId = value.trim().uppercase(),
+            identityMatches = null,
+        )
     }
 
     fun verifyManualEntry() = verify(_state.value.manualEntry)

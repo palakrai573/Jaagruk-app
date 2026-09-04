@@ -18,9 +18,12 @@ import org.jaagruk.safety.data.db.WorkerEntity
  * not.
  *
  * A worker can also be registered on the device with no connectivity at all. The row is marked
- * `serverSynced = false`, queued, and reconciled on the next bootstrap. A contractor arriving on
- * shift must be trainable immediately; making them wait for the uplink would mean they work
- * uncertified instead.
+ * `serverSynced = false` and [notYetOnServer] hands it to `SyncWorker`, which posts it the moment
+ * there is an uplink and then flips the flag. A contractor arriving on shift must be trainable
+ * immediately; making them wait for the uplink would mean they work uncertified instead.
+ *
+ * The PIN never travels. It is set on the handset, verified on the handset, and is not part of the
+ * upload — the server has no business holding it and could not check it offline anyway.
  */
 class WorkerRepository(
     private val database: JaagrukDatabase,
@@ -50,7 +53,22 @@ class WorkerRepository(
 
         data class AlreadyExists(val worker: WorkerEntity) : RegisterResult
 
-        data class Invalid(val reason: String) : RegisterResult
+        data class Invalid(val problem: Problem) : RegisterResult
+    }
+
+    /**
+     * Why a registration was refused.
+     *
+     * An enum rather than a message string so the reason survives the trip to the UI layer and is
+     * shown in the supervisor's own language. A repository that returned English prose would make
+     * every enrolment error untranslatable, which on this project is a functional defect.
+     */
+    enum class Problem {
+        EMPTY_ID,
+        BAD_ID_FORMAT,
+        EMPTY_NAME,
+        NAME_TOO_SHORT,
+        NO_SITE,
     }
 
     /**
@@ -67,28 +85,26 @@ class WorkerRepository(
         preferredLanguage: String,
         pictogramMode: Boolean,
     ): RegisterResult {
-        val trimmedId = workerId.trim()
+        // Upper-cased before anything else, because the server upper-cases too and the worker id is
+        // hashed into every certificate this worker earns. A row stored as typed would hash to a
+        // different value than the canonical id an inspector reads off the physical card, and the
+        // identity check on a scanned certificate would fail for a worker who did nothing wrong.
+        val trimmedId = workerId.trim().uppercase()
         val trimmedName = fullName.trim()
 
-        if (trimmedId.isEmpty()) return RegisterResult.Invalid("worker id must not be empty")
-        // The floor mirrors the server's own validation. Rejecting here means a supervisor is told
-        // at the point of entry rather than discovering a 422 on the next sync, days later.
-        if (trimmedId.length < MIN_WORKER_ID_LENGTH) {
-            return RegisterResult.Invalid(
-                "worker id must be at least $MIN_WORKER_ID_LENGTH characters " +
-                    "(site prefix plus serial, as printed on the card)",
-            )
+        if (trimmedId.isEmpty()) return RegisterResult.Invalid(Problem.EMPTY_ID)
+        // The same pattern the server enforces, character for character. Anything looser means a
+        // supervisor enrols somebody the server will reject with a 422 on every future sync — and
+        // because a 422 is a definite verdict rather than a retryable one, that worker's uploads
+        // would be abandoned rather than retried.
+        if (!WORKER_ID_PATTERN.matches(trimmedId)) {
+            return RegisterResult.Invalid(Problem.BAD_ID_FORMAT)
         }
-        if (trimmedId.length > MAX_WORKER_ID_LENGTH) {
-            return RegisterResult.Invalid("worker id is longer than $MAX_WORKER_ID_LENGTH characters")
+        if (trimmedName.isEmpty()) return RegisterResult.Invalid(Problem.EMPTY_NAME)
+        if (trimmedName.length < MIN_NAME_LENGTH) {
+            return RegisterResult.Invalid(Problem.NAME_TOO_SHORT)
         }
-        if (!trimmedId.all { it.isLetterOrDigit() || it == '-' || it == '/' }) {
-            return RegisterResult.Invalid(
-                "worker id may contain only letters, digits, '-' and '/'",
-            )
-        }
-        if (trimmedName.isEmpty()) return RegisterResult.Invalid("name must not be empty")
-        if (siteId.isBlank()) return RegisterResult.Invalid("this device is not enrolled to a site")
+        if (siteId.isBlank()) return RegisterResult.Invalid(Problem.NO_SITE)
 
         workers.find(trimmedId)?.let { return RegisterResult.AlreadyExists(it) }
 
@@ -157,9 +173,36 @@ class WorkerRepository(
     suspend fun hasPin(workerId: String): Boolean =
         workers.find(workerId)?.pinHash?.isNotBlank() == true
 
+    // -----------------------------------------------------------------------
+    // Reconciliation with the server
+    // -----------------------------------------------------------------------
+
+    /** Workers enrolled offline on this handset that the server has never seen. */
+    suspend fun notYetOnServer(limit: Int = UPLOAD_BATCH): List<WorkerEntity> =
+        workers.notYetOnServer(limit)
+
+    suspend fun countNotYetOnServer(): Int = workers.countNotYetOnServer()
+
+    suspend fun markServerSynced(workerId: String) = workers.markServerSynced(workerId)
+
     companion object {
-        /** Matches `worker_id` validation in `backend/app/schemas.py`. */
-        const val MIN_WORKER_ID_LENGTH: Int = 8
-        const val MAX_WORKER_ID_LENGTH: Int = 32
+        /**
+         * The worker id format, mirroring `WORKER_ID_PATTERN` in `backend/app/schemas.py`.
+         *
+         * State code, district code, three-digit site serial, then `W` and a five-digit worker
+         * serial — `JH-DHN-001-W00042`. It is the number already printed on the worker's card,
+         * which is what an inspector reads and hashes to confirm a scanned certificate, so the app
+         * must not invent its own shape for it.
+         */
+        val WORKER_ID_PATTERN = Regex("^[A-Z]{2}-[A-Z0-9]{2,6}-[0-9]{3}-W[0-9]{5}$")
+
+        /** An example in the exact accepted shape, for the hint under the field. */
+        const val WORKER_ID_EXAMPLE: String = "JH-DHN-001-W00042"
+
+        /** Mirrors `full_name` min_length in `backend/app/schemas.py`. */
+        const val MIN_NAME_LENGTH: Int = 2
+
+        /** How many offline enrolments to push per sync pass. */
+        const val UPLOAD_BATCH: Int = 25
     }
 }

@@ -14,6 +14,7 @@ import org.jaagruk.safety.data.db.SyncQueueEntity
 import org.jaagruk.safety.data.keys.SiteKeyStore
 import org.jaagruk.safety.data.repo.AssessmentRepository
 import org.jaagruk.safety.data.repo.SiteRepository
+import org.jaagruk.safety.data.repo.WorkerRepository
 import org.jaagruk.safety.sync.api.AssessmentUpload
 import org.jaagruk.safety.sync.api.CertificateUpload
 import org.jaagruk.safety.sync.api.DeviceRegisterRequest
@@ -24,6 +25,7 @@ import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.sync.api.SyncBatchRequest
 import org.jaagruk.safety.sync.api.SyncBatchResponse
 import org.jaagruk.safety.sync.api.SyncItemResult
+import org.jaagruk.safety.sync.api.WorkerRegisterRequest
 import retrofit2.Response
 import java.io.IOException
 import java.util.UUID
@@ -69,6 +71,7 @@ class SyncWorker @AssistedInject constructor(
     private val certificateDao = database.certificateDao()
     private val runDao = database.assessmentRunDao()
     private val hazardDao = database.hazardTagDao()
+    private val workerDao = database.workerDao()
 
     override suspend fun doWork(): Result {
         if (!connectivity.current().isOnline) {
@@ -89,6 +92,11 @@ class SyncWorker @AssistedInject constructor(
 
         return try {
             ensureDeviceRegistered()
+
+            // Before the queue, not after. A certificate or an assessment naming a worker the server
+            // has never heard of is rejected — retryably, so the device would keep re-sending it
+            // forever while the roster row that would have fixed it sat in the database untouched.
+            pushOfflineEnrolments()
 
             var uploaded = 0
             var pass = 0
@@ -122,6 +130,74 @@ class SyncWorker @AssistedInject constructor(
     }
 
     private suspend fun pendingCount(): Int = queue.ready(Long.MAX_VALUE, 1_000).size
+
+    /**
+     * Hands over workers enrolled on this handset while it had no uplink.
+     *
+     * Not part of the batch queue, and deliberately so. The queue exists to carry *records of things
+     * that happened* — a run, a certificate, a hazard — under an idempotency key, and it abandons an
+     * item after a definite server verdict. A roster row is not that kind of record: it is state that
+     * should converge, so the right behaviour on a conflict is "the server already has it, move on"
+     * rather than "abandon it".
+     *
+     * The PIN is not sent. It never leaves the handset.
+     *
+     * A single failure here does not fail the pass. The records in the queue are worth more than the
+     * roster row, and a worker whose row is late still trains, is scored and gets a signed
+     * certificate — the row catches up on the next pass.
+     */
+    private suspend fun pushOfflineEnrolments() {
+        val pending = workerDao.notYetOnServer(WorkerRepository.UPLOAD_BATCH)
+        if (pending.isEmpty()) return
+
+        for (worker in pending) {
+            val response = try {
+                api.registerWorker(
+                    WorkerRegisterRequest(
+                        id = worker.workerId,
+                        siteId = worker.siteId,
+                        fullName = worker.fullName,
+                        preferredLanguage = worker.preferredLanguage,
+                        pictogramMode = worker.pictogramMode,
+                    ),
+                )
+            } catch (e: IOException) {
+                // No uplink mid-pass. Leave the flag alone and stop trying this time round.
+                Log.i(TAG, "worker enrolment upload deferred: ${e.message}")
+                return
+            }
+
+            when {
+                response.isSuccessful -> {
+                    workerDao.markServerSynced(worker.workerId)
+                    Log.i(TAG, "enrolled ${worker.workerId} on the server")
+                }
+
+                // Already there. That is the desired end state, so record it as done rather than
+                // re-posting the same row on every pass for the life of the handset.
+                response.code() == HTTP_CONFLICT -> {
+                    workerDao.markServerSynced(worker.workerId)
+                }
+
+                // A definite refusal: the id or the name is not something the server will accept.
+                // Left unsynced and logged rather than retried forever or silently dropped — the
+                // supervisor screen shows the outstanding count, which is what surfaces it.
+                response.code() in 400..499 -> {
+                    Log.w(
+                        TAG,
+                        "server refused worker ${worker.workerId} with ${response.code()}; " +
+                            "left for a supervisor to correct",
+                    )
+                }
+
+                // 5xx or anything else: server-side and transient. Try again next pass.
+                else -> {
+                    Log.i(TAG, "worker enrolment deferred, server said ${response.code()}")
+                    return
+                }
+            }
+        }
+    }
 
     /** Raised for conditions where retrying later is right and the queue must be preserved. */
     private class RetryableSyncFailure(message: String) : Exception(message)

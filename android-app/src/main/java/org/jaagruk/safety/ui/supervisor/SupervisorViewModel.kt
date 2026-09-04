@@ -22,6 +22,7 @@ import org.jaagruk.safety.sync.SyncStatusProvider
 import org.jaagruk.safety.sync.TimeSyncTracker
 import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.sync.nearby.NearbyGossipService
+import org.jaagruk.safety.ui.LocaleManager
 import org.jaagruk.safety.ui.components.UiMessage
 import javax.inject.Inject
 
@@ -76,7 +77,15 @@ class SupervisorViewModel @Inject constructor(
         val busy: Boolean = false,
         val message: UiMessage? = null,
         val siteIdInput: String = "",
-    )
+        val workersNotOnServer: Int = 0,
+        val newWorkerId: String = "",
+        val newWorkerName: String = "",
+        val newWorkerLanguage: String = LocaleManager.HINDI,
+        val newWorkerPictogramMode: Boolean = false,
+    ) {
+        /** Enrolment needs a site: the id is hashed into every certificate the worker earns. */
+        val canEnrolWorkers: Boolean get() = !siteId.isNullOrBlank()
+    }
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
@@ -124,12 +133,138 @@ class SupervisorViewModel @Inject constructor(
                 neverSynced = timeSync.hasNeverSynced(),
                 readiness = retention.siteReadinessSummary(roster.map { it.workerId }),
                 siteIdInput = siteId.orEmpty(),
+                workersNotOnServer = workers.countNotYetOnServer(),
             )
         }
     }
 
     fun setSiteIdInput(value: String) {
         _state.value = _state.value.copy(siteIdInput = value.trim().uppercase())
+    }
+
+    // -----------------------------------------------------------------------
+    // Offline worker enrolment
+    // -----------------------------------------------------------------------
+
+    /**
+     * Upper-cased as the supervisor types.
+     *
+     * The server upper-cases the id and the id is hashed into every certificate, so the canonical
+     * form has to be what gets stored. Doing it in the field rather than silently on save means the
+     * supervisor sees the id exactly as it will be recorded and can check it against the card.
+     */
+    fun setNewWorkerId(value: String) {
+        _state.value = _state.value.copy(newWorkerId = value.trim().uppercase())
+    }
+
+    fun setNewWorkerName(value: String) {
+        _state.value = _state.value.copy(newWorkerName = value)
+    }
+
+    fun setNewWorkerLanguage(tag: String) {
+        _state.value = _state.value.copy(newWorkerLanguage = tag)
+    }
+
+    fun setNewWorkerPictogramMode(enabled: Boolean) {
+        _state.value = _state.value.copy(newWorkerPictogramMode = enabled)
+    }
+
+    /**
+     * Enrols a worker on this handset, with or without connectivity.
+     *
+     * This is the path that makes a fresh handset usable at a site with no uplink. Without it the
+     * roster only ever arrives from the server, so a phone that has never had signal shows an empty
+     * worker picker and nobody can train at all — which would defeat the point of an offline-first
+     * app. The row is queued for upload and reconciled when a network appears.
+     *
+     * The worker does not get a PIN here. They choose it themselves at first sign-in, so the
+     * supervisor never knows it and cannot have a certificate issued in their name.
+     */
+    fun registerWorker() {
+        val current = _state.value
+        val siteId = current.siteId
+        if (siteId.isNullOrBlank()) {
+            _state.value = current.copy(
+                message = UiMessage.error(R.string.supervisor_worker_needs_site),
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            _state.value = _state.value.copy(busy = true, message = null)
+            val result = workers.register(
+                workerId = current.newWorkerId,
+                siteId = siteId,
+                fullName = current.newWorkerName,
+                preferredLanguage = current.newWorkerLanguage,
+                pictogramMode = current.newWorkerPictogramMode,
+            )
+
+            when (result) {
+                is WorkerRepository.RegisterResult.Registered -> {
+                    // Asks for an upload rather than waiting for the periodic pass: a supervisor
+                    // enrolling somebody usually does have signal at that moment, and the roster
+                    // reaching the dashboard promptly is what a site officer expects.
+                    syncScheduler.requestSyncNow()
+                    _state.value = _state.value.copy(
+                        busy = false,
+                        newWorkerId = "",
+                        newWorkerName = "",
+                        newWorkerPictogramMode = false,
+                        message = UiMessage.success(
+                            R.string.supervisor_worker_registered,
+                            result.worker.fullName,
+                        ),
+                    )
+                    refresh()
+                }
+
+                is WorkerRepository.RegisterResult.AlreadyExists -> {
+                    _state.value = _state.value.copy(
+                        busy = false,
+                        message = UiMessage.warning(
+                            R.string.supervisor_worker_exists,
+                            result.worker.fullName,
+                        ),
+                    )
+                }
+
+                is WorkerRepository.RegisterResult.Invalid -> {
+                    _state.value = _state.value.copy(
+                        busy = false,
+                        message = problemMessage(result.problem),
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Maps a refusal to something readable.
+     *
+     * The repository returns an enum rather than prose precisely so this mapping exists here, where
+     * the string catalogue is, and the supervisor reads the reason in their own language.
+     */
+    private fun problemMessage(problem: WorkerRepository.Problem): UiMessage = when (problem) {
+        WorkerRepository.Problem.EMPTY_ID ->
+            UiMessage.error(R.string.supervisor_worker_id_required)
+
+        // Carries the example, because "the format is wrong" without showing the right shape leaves
+        // the supervisor guessing. The string takes a %1$s and would otherwise render it literally.
+        WorkerRepository.Problem.BAD_ID_FORMAT ->
+            UiMessage.error(
+                R.string.supervisor_worker_id_format,
+                WorkerRepository.WORKER_ID_EXAMPLE,
+            )
+
+        WorkerRepository.Problem.EMPTY_NAME ->
+            UiMessage.error(R.string.supervisor_worker_name_required)
+
+        WorkerRepository.Problem.NAME_TOO_SHORT ->
+            UiMessage.error(R.string.supervisor_worker_name_short)
+
+        WorkerRepository.Problem.NO_SITE ->
+            UiMessage.error(R.string.supervisor_worker_needs_site)
     }
 
     /**

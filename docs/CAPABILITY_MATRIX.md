@@ -74,6 +74,8 @@ live smoke test 56 checks.
 | Capability | Status | Notes |
 | --- | --- | --- |
 | Full training offline | **Built** | Drills, scoring, signing and verification all work with the radio off. |
+| Offline worker enrolment | **Built** | Supervisor tools enrol a worker on the handset with no uplink: `WorkerRepository.register` writes the row, `serverSynced = false`, and `SyncWorker.pushOfflineEnrolments` posts it when a network appears. Without this the roster only ever arrived from the server, so a handset that had never had signal showed an empty worker picker and nobody could train at all. The worker id is validated against the server's exact pattern and upper-cased, because it is hashed into every certificate they earn. |
+| Worker chooses their own PIN | **Built** | Enrolment sets no PIN. The worker picks one at first sign-in, so the supervisor never learns it and cannot have a certificate issued in the worker's name. The PIN is never uploaded. |
 | Durable outbound queue | **Built** | An entry is removed only on a server verdict: accepted, duplicate, or quarantined. A 5xx, a timeout or an unregistered device are retryable and never count toward abandonment. |
 | Idempotent batch upload | **Built** | Replay-safe per batch and per item. |
 | Down-sync bootstrap | **Built** | Additive only. A bootstrap never deletes local rows, and the local chain head only moves forward — adopting a server head that is behind would reuse a sequence number. |

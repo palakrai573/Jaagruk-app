@@ -3,17 +3,18 @@
     Runs every check in the repository and prints one verdict.
 
 .DESCRIPTION
-    Six stages, in increasing cost order so a cheap failure is reported before an expensive one runs:
+    Seven stages, in increasing cost order so a cheap failure is reported before an expensive one runs:
 
       1. :core unit tests             - the load-bearing logic, on a plain JVM, no emulator
       2. Cross-language fixture parity - the same canonical bytes asserted from Kotlin and Python
       3. Backend tests                - FastAPI, SQLAlchemy, RBAC, sync, chain verification
       4. Dashboard type-check + build  - TypeScript and Vite
-      5. Android assemble + lint       - APK, plus MissingTranslation and ContentDescription as fatal
-      6. Live smoke test               - starts a real server and asserts 56 checks over HTTP
+      5. Android unit tests            - Robolectric: Room queries, view models, Compose rendering
+      6. Android assemble + lint       - APK, plus MissingTranslation and ContentDescription as fatal
+      7. Live smoke test               - starts a real server and asserts 56 checks over HTTP
 
-    Stage 5 is skipped automatically when no Android SDK is present. Everything else runs anywhere, which is
-    the point of keeping the logic in a plain Kotlin module.
+    Stages 5 and 6 are skipped automatically when no Android SDK is present. Everything else runs anywhere,
+    which is the point of keeping the logic in a plain Kotlin module.
 
 .PARAMETER SkipAndroid
     Skip the Android build even if an SDK is available. Useful on a slow machine.
@@ -136,6 +137,16 @@ try {
         }
     }
     $androidAvailable = $sdkDir -and (Test-Path -LiteralPath $sdkDir)
+
+    # Robolectric, so this needs the SDK but not a device. It covers what :core cannot: that the Room
+    # queries actually execute, that the view models drive the real repositories, and that the screens
+    # compose without throwing. Run before assemble so a broken flow is reported in seconds rather than
+    # after a five-minute lint pass.
+    Invoke-Stage -Name 'android unit tests' -LogFile 'android-test.log' `
+        -Skipped:($SkipAndroid -or -not $androidAvailable) `
+        -SkipReason $(if ($SkipAndroid) { 'requested with -SkipAndroid' } else { 'no Android SDK found' }) -Body {
+        & $gradlew --console=plain :android-app:testDebugUnitTest
+    }
 
     Invoke-Stage -Name 'android assemble and lint' -LogFile 'android.log' `
         -Skipped:($SkipAndroid -or -not $androidAvailable) `

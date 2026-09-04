@@ -8,7 +8,7 @@ Offline-first. Android 10+. No headset. Certificates that verify with no network
 
 `SIH problem statement 26041`
 
-**437** core tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **27 MB** APK
+**437** core tests · **53** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **27 MB** APK
 
 </div>
 
@@ -76,7 +76,8 @@ chain.
 </td><td width="50%" valign="top">
 
 **Works offline, then delivers.**
-Durable queue, idempotent upload, or peer-to-peer relay out of a shaft on a supervisor's handset.
+Durable queue, idempotent upload, or peer-to-peer relay out of a shaft on a supervisor's handset. A
+contractor arriving mid-shift is enrolled on the handset itself, with no uplink, and reconciles later.
 
 **Tracks readiness, not just certification.**
 Decay computed on read. No job that could have failed silently.
@@ -580,14 +581,14 @@ other 51 weeks of the year measurable.
 Measured on the universal release APK — compressed sizes as they ship:
 
 ```
-native libs (ARCore + MediaPipe + CameraX)  █████████████████████████████████▊   33.81 MB   76.6 %
-dex — ALL of our code + Compose + Room      ███████▋                              7.60 MB   17.2 %
+native libs (ARCore + MediaPipe + CameraX)  █████████████████████████████████▊   33.81 MB   76.5 %
+dex — ALL of our code + Compose + Room      ███████▋                              7.62 MB   17.2 %
 other (META-INF, signatures, manifests)     █▎                                    1.25 MB    2.8 %
 assets (scenario + pictogram data)          ▉                                     0.85 MB    1.9 %
-resources (569×3 strings, vectors)          ▌                                     0.44 MB    1.0 %
+resources (569×3 strings, vectors)          ▌                                     0.45 MB    1.0 %
 zip overhead (headers, alignment)           ▎                                     0.22 MB    0.5 %
                                                                                 ────────
-one █ = 1 MB                                                                     44.17 MB   528 entries
+one █ = 1 MB                                                                     44.20 MB   528 entries
 ```
 
 **Our own code is 17 % of the download.** The rest is third-party native AR and vision libraries. That framing
@@ -596,11 +597,11 @@ phone only downloads its own architecture.
 
 | Artifact | Size | Reduction |
 |---|---:|---|
-| debug, universal | 114.45 MB | baseline |
-| release, universal (R8 + resource shrink) | 44.17 MB | **−61 %** |
-| **release, arm64-v8a** — what most phones get | **27.41 MB** | **−76 %** |
-| release, armeabi-v7a | 21.05 MB | −82 % |
-| release, x86_64 (emulator) | 16.12 MB | −86 % |
+| debug, universal | 115.18 MB | baseline |
+| release, universal (R8 + resource shrink) | 44.20 MB | **−62 %** |
+| **release, arm64-v8a** — what most phones get | **27.45 MB** | **−76 %** |
+| release, armeabi-v7a | 21.09 MB | −82 % |
+| release, x86_64 (emulator) | 16.16 MB | −86 % |
 
 Two deliberate reductions beyond R8:
 
@@ -636,7 +637,8 @@ test runner itself reports, **stage wall-clock** additionally includes Gradle da
 | Cross-language fixture parity | 20 | — | 9.2 s |
 | Backend — `pytest` | **217** | — | 109.6 s |
 | Dashboard — `tsc` + `vite build` | — | — | 35.7 s |
-| Android — `assembleDebug` + `lintDebug` | 0 errors, 289 warnings | — | 304.3 s |
+| Android — Robolectric unit tests | **53**, 0 failures | 11.4 s | 1.9 s incremental |
+| Android — `assembleDebug` + `lintDebug` | 0 errors, 288 warnings | — | 304.3 s |
 | Live smoke — 56 HTTP checks, real server start/stop | 56 | — | 8.1 s |
 | **end to end** | | | **≈ 8 min 39 s** |
 
@@ -654,14 +656,15 @@ worth more than a thorough one that does not.
 |---|---:|---:|---|
 | `core/` main | 26 | 6,389 | all certification logic |
 | `core/` test | 20 | 5,878 | **0.92 test lines per source line** |
-| `android-app/` Kotlin | 79 | 19,245 | 11 screens, 3 AR controllers |
-| `android-app/` resources | 16 | 2,243 | 569 keys × 3 locales, verified equal |
+| `android-app/` Kotlin | 79 | 19,646 | 11 screens, 3 AR controllers |
+| `android-app/` tests | 5 | 1,044 | Robolectric: Room, view models, Compose |
+| `android-app/` resources | 16 | 2,295 | 569 keys × 3 locales, verified equal |
 | `backend/` app | 38 | 9,326 | 38 endpoints, 15 tables |
 | `backend/` tests | 9 | 3,512 | |
 | `dashboard/` src | 23 | 5,118 | 11 pages |
 | `docs/` | 8 | 1,623 | |
-| `tools/` | 5 | 912 | |
-| **total** | **224** | **54,246** | |
+| `tools/` | 5 | 923 | |
+| **total** | **229** | **55,754** | |
 
 ---
 
@@ -669,7 +672,7 @@ worth more than a thorough one that does not.
 
 ```
                          ┌─────────────────────────────────────────────┐
-  every save  ──────────▶│  :core  437 tests · 1.6 s · no emulator     │
+  every save  ──────────▶│  :core  437 tests · 1.27 s · no emulator    │
                          └─────────────────────┬───────────────────────┘
                                                ▼
                          ┌─────────────────────────────────────────────┐
@@ -683,7 +686,12 @@ worth more than a thorough one that does not.
                          └─────────────────────┬───────────────────────┘
                                                ▼
                          ┌─────────────────────────────────────────────┐
-  android ─────────────▶ │  assemble + lint · MissingTranslation and   │
+  android tests ───────▶ │  53 Robolectric tests · real Room queries · │
+                         │  view models · screens actually composed    │
+                         └─────────────────────┬───────────────────────┘
+                                               ▼
+                         ┌─────────────────────────────────────────────┐
+  android build ───────▶ │  assemble + lint · MissingTranslation and   │
                          │  ContentDescription are FATAL · 0 errors    │
                          └─────────────────────┬───────────────────────┘
                                                ▼
