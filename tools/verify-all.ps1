@@ -10,7 +10,7 @@
       3. Backend tests                - FastAPI, SQLAlchemy, RBAC, sync, chain verification
       4. Dashboard type-check + build  - TypeScript and Vite
       5. Android assemble + lint       - APK, plus MissingTranslation and ContentDescription as fatal
-      6. Live smoke test               - starts the server, exercises 42 routes end to end
+      6. Live smoke test               - starts a real server and asserts 56 checks over HTTP
 
     Stage 5 is skipped automatically when no Android SDK is present. Everything else runs anywhere, which is
     the point of keeping the logic in a plain Kotlin module.

@@ -21,7 +21,7 @@ live smoke test 56 checks.
 
 | Capability | Status | Notes |
 | --- | --- | --- |
-| Scenario model, 5 modules, 12 scenarios | **Built** | `core/catalog/ModuleCatalog.kt`. Module codes 1–5 frozen because they are signed into certificates. |
+| Scenario model, 5 modules, 11 scenarios | **Built** | `core/catalog/ModuleCatalog.kt`. Module codes 1–5 frozen because they are signed into certificates. |
 | Step timing from a monotonic clock | **Built** | Wall-clock deltas can go negative on a shared phone whose clock is corrected mid-shift. A negative decision latency would corrupt the one measurement this platform rests on. |
 | Weighted scoring, critical-step gating | **Built** | `ScoreCalculator`. Failing a critical step fails the module regardless of total score. |
 | Hesitation detection vs expert baseline | **Built** | `CORRECT_SLOW` is a distinct outcome, not a rounding of `CORRECT`. Surfaced as its own dashboard cohort. |
@@ -117,7 +117,7 @@ live smoke test 56 checks.
 
 | Capability | Status | Notes |
 | --- | --- | --- |
-| English, Hindi, Santali | **Built** | 570 keys in each locale, verified equal with no gaps and no extras. Santali is written in Ol Chiki. |
+| English, Hindi, Santali | **Built** | 569 keys in each locale, verified equal with no gaps and no extras. Santali is written in Ol Chiki. |
 | Translation quality | **Partial** | Hindi and Santali are complete and idiomatic enough to use, and both need review by a native speaker familiar with mine-site vocabulary before a field pilot. Coverage and quality are different claims. |
 | Per-app language switching | **Built** | On the sign-in screen, because a shared handset changes hands during a shift and the previous worker's language is not a sensible default. |
 | Ol Chiki rendering | **Built** | Noto Sans Ol Chiki has shipped in AOSP since Android 10, which is one of the reasons `minSdk` is 29. |
