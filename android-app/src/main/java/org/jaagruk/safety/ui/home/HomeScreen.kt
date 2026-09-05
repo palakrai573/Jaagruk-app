@@ -1,5 +1,10 @@
 ﻿package org.jaagruk.safety.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,8 +23,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jaagruk.core.assessment.AssessmentMode
@@ -60,8 +67,35 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(workerId) { viewModel.load(workerId) }
+
+    // Refresher reminders are a notification, and on Android 13+ a notification needs permission that
+    // has to be asked for. Nothing asked, so the reminder worker ran, found it could not post, and
+    // silently did nothing — which quietly disabled the spaced-refresher model on most phones in use.
+    val requestNotifications = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { viewModel.onNotificationPromptShown() }
+
+    LaunchedEffect(state.askForNotifications) {
+        if (!state.askForNotifications) return@LaunchedEffect
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            // Granted at install time below 33, so there is nothing to ask and nothing to remember
+            // beyond not asking again.
+            viewModel.onNotificationPromptShown()
+            return@LaunchedEffect
+        }
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) == PackageManager.PERMISSION_GRANTED
+        if (granted) {
+            viewModel.onNotificationPromptShown()
+        } else {
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     LazyColumn(
         modifier = Modifier

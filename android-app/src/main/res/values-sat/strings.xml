@@ -177,6 +177,17 @@
     <string name="verify_manual_title">ᱠᱳᱰ ᱚᱞ ᱢᱮ</string>
     <string name="verify_manual_hint">ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ ᱚᱞ ᱞᱟᱴᱷᱟ ᱥᱮ ᱚᱞ ᱢᱮ</string>
     <string name="verify_details_title">ᱵᱤᱵᱨᱚᱬ</string>
+
+    <string name="verify_server_title">ᱥᱟᱨᱵᱷᱟᱨ ᱠᱷᱚᱱ ᱟᱨᱦᱚᱸ ᱠᱟᱛᱷᱟ</string>
+    <string name="verify_server_explainer">ᱮᱛᱚᱦᱚᱵ ᱨᱮᱭᱟᱜ ᱴᱷᱟᱶ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱜᱮ ᱦᱩᱭ ᱟᱠᱟᱱᱟ ᱟᱨ ᱚᱱᱟ ᱜᱮ ᱢᱟᱱᱚᱛ ᱾ ᱱᱚᱸᱰᱮ ᱚᱱᱟ ᱠᱟᱛᱷᱟ ᱢᱮᱱᱟᱜᱼᱟ ᱡᱟᱦᱟᱸ ᱮᱠᱮᱱ ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱜᱮ ᱛᱟᱦᱮᱸᱱᱟ, ᱟᱨ ᱚᱱᱟ ᱦᱚᱸ ᱥᱤᱜᱱᱟᱞ ᱛᱟᱦᱮᱸᱱ ᱚᱠᱛᱮ ᱜᱮ ᱾</string>
+    <string name="verify_server_checking">ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱧᱮᱞ ᱦᱩᱭᱩᱜᱼᱟ…</string>
+    <string name="verify_server_unavailable">ᱥᱤᱜᱱᱟᱞ ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱥᱮᱞᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱦᱚᱸ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱮᱛᱚᱦᱚᱵ ᱨᱮᱭᱟᱜ ᱴᱷᱟᱶ ᱟᱡ ᱛᱮ ᱜᱮ ᱯᱩᱨᱟᱹᱜᱼᱟ ᱾</string>
+    <string name="verify_server_nothing_extra">ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱥᱮᱞᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱵᱟᱹᱱᱩᱜ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="verify_server_worker">ᱠᱟᱹᱢᱤᱛᱮᱛ: %1$s</string>
+    <string name="verify_server_readiness">ᱡᱚᱛᱚ ᱯᱷᱚᱱ ᱢᱤᱫ ᱛᱮ ᱛᱮᱭᱟᱨᱤ: %1$d ‰ (%2$s)</string>
+    <string name="verify_server_statutory_valid">ᱠᱟᱱᱩᱱᱤ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱴᱷᱤᱠ ᱢᱮᱱᱟᱜᱼᱟ</string>
+    <string name="verify_server_statutory_expired">ᱠᱟᱱᱩᱱᱤ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱛᱩᱠᱟᱹᱲ ᱮᱱᱟ</string>
+    <string name="verify_server_disagrees">ᱥᱟᱨᱵᱷᱟᱨ ᱱᱚᱶᱟ ᱨᱮᱠᱚᱰ ᱠᱚ %1$s ᱢᱮᱱᱛᱮ ᱧᱮᱞᱟ ᱾ ᱴᱷᱟᱶ ᱫᱚ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱧᱮᱞ ᱜᱮ ᱠᱟᱱᱟ; ᱱᱚᱶᱟ ᱟᱞᱜᱟ ᱛᱮ ᱵᱩᱡᱷᱟᱹᱣ ᱟᱠᱟᱱᱟ ᱡᱮ ᱵᱟᱨᱭᱟᱜ ᱟᱞᱜᱟ ᱨᱮᱠᱚᱰ ᱧᱮᱞ ᱠᱚ ᱟᱠᱟᱫᱟ ᱟᱨ ᱱᱚᱶᱟ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱞᱟᱹᱠᱛᱤ ᱾</string>
     <string name="verify_site">ᱡᱟᱭᱜᱟ: %1$s</string>
     <string name="verify_sequence">ᱠᱨᱚᱢ: %1$d</string>
     <string name="verify_score">ᱱᱚᱢᱵᱚᱨ: %1$d%%</string>
@@ -217,6 +228,15 @@
     <string name="hazard_mic_permission">ᱟᱲᱟᱝ ᱛᱮ ᱠᱟᱡᱤ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱭᱠ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱟᱲᱟᱝ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
     <string name="hazard_recorder_unavailable">ᱨᱮᱠᱚᱰᱟᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱟᱲᱟᱝ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱢᱮ ᱾</string>
     <string name="hazard_voice_too_short">ᱚᱱᱟ ᱨᱮᱠᱚᱰᱤᱝ ᱰᱷᱮᱨ ᱦᱩᱰᱤᱧ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ, ᱵᱟᱝ ᱫᱚᱦᱚ ᱮᱱᱟ ᱾</string>
+
+    <string name="hazard_photo_title">ᱛᱚᱥᱵᱤᱨ</string>
+    <string name="hazard_photo_explainer">ᱛᱚᱥᱵᱤᱨ ᱛᱮ ᱥᱩᱯᱚᱨᱵᱷᱟᱭᱡᱚᱨ ᱦᱚᱸ ᱚᱱᱟ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱡᱟᱦᱟᱸ ᱟᱢ ᱧᱮᱞ ᱠᱮᱫᱟᱢ ᱾ ᱟᱯᱞᱚᱰ ᱦᱩᱭ ᱦᱟᱹᱵᱤᱡ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱛᱟᱦᱮᱸᱱᱟ, ᱜᱮᱞᱟᱨᱤ ᱨᱮ ᱛᱤᱱᱨᱮ ᱦᱚᱸ ᱵᱟᱝ ᱥᱮᱞᱮᱫᱚᱜᱼᱟ, ᱟᱨ ᱥᱟᱨᱵᱷᱟᱨ ᱛᱮ ᱥᱮᱴᱮᱨ ᱛᱟᱭᱚᱢ ᱚᱰᱚᱠᱚᱜᱼᱟ ᱾</string>
+    <string name="hazard_add_photo">ᱛᱚᱥᱵᱤᱨ ᱦᱟᱛᱟᱣ ᱢᱮ</string>
+    <string name="hazard_retake_photo">ᱫᱩᱦᱲᱟᱹ ᱦᱟᱛᱟᱣ ᱢᱮ</string>
+    <string name="hazard_remove_photo">ᱛᱚᱥᱵᱤᱨ ᱚᱰᱚᱠ ᱢᱮ</string>
+    <string name="hazard_photo_attached">ᱱᱚᱶᱟ ᱠᱷᱚᱵᱚᱨ ᱥᱟᱶᱛᱮ ᱛᱚᱥᱵᱤᱨ ᱛᱚᱞ ᱟᱠᱟᱱᱟ</string>
+    <string name="hazard_photo_failed">ᱚᱱᱟ ᱛᱚᱥᱵᱤᱨ ᱵᱟᱝ ᱫᱚᱦᱚ ᱦᱩᱭ ᱠᱮᱫᱟ ᱾ ᱛᱚᱥᱵᱤᱨ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
+    <string name="hazard_camera_permission">ᱛᱚᱥᱵᱤᱨ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱢᱨᱟ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱛᱚᱥᱵᱤᱨ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾</string>
     <string name="hazard_rate_limited">ᱞᱟᱦᱟ %2$d ᱢᱤᱱᱤᱴ ᱨᱮ %1$d ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱠᱩᱞ ᱞᱟᱦᱟ ᱛᱤᱱᱟᱹᱜ ᱚᱠᱛᱚ ᱛᱷᱤᱨ ᱢᱮ ᱾</string>
     <string name="hazard_invalid">ᱱᱚᱶᱟ ᱠᱷᱚᱵᱚᱨ ᱵᱟᱝ ᱠᱩᱞ ᱦᱩᱭ ᱮᱱᱟ: %1$s</string>
 

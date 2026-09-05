@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.jaagruk.safety.R
 import org.jaagruk.safety.data.DeviceProfile
+import org.jaagruk.safety.data.LocalMediaStore
 import org.jaagruk.safety.data.hazard.HazardCategory
 import org.jaagruk.safety.data.hazard.HazardSeverity
 import org.jaagruk.safety.data.repo.HazardRepository
@@ -27,6 +28,7 @@ class HazardViewModel @Inject constructor(
     private val workers: WorkerRepository,
     private val deviceProfile: DeviceProfile,
     private val recorder: VoiceNoteRecorder,
+    private val media: LocalMediaStore,
     private val syncScheduler: SyncScheduler,
 ) : ViewModel() {
 
@@ -38,6 +40,7 @@ class HazardViewModel @Inject constructor(
         val recording: Boolean = false,
         val recordedSeconds: Int = 0,
         val hasVoiceNote: Boolean = false,
+        val hasPhoto: Boolean = false,
         val pictogramMode: Boolean = false,
         val submitting: Boolean = false,
         val filed: Boolean = false,
@@ -50,7 +53,69 @@ class HazardViewModel @Inject constructor(
     private var reporterWorkerId: String? = null
     private var siteId: String = ""
     private var voiceNote: File? = null
+    private var photo: File? = null
     private var recordingTicker: Job? = null
+
+    // -----------------------------------------------------------------------
+    // Photo
+    // -----------------------------------------------------------------------
+
+    /**
+     * Allocates the file the camera will write into, and returns it so the screen can wrap it in a
+     * `FileProvider` URI.
+     *
+     * The file rather than the URI, because building a content URI needs a `Context` and a view model
+     * that holds one is a view model that leaks an Activity. The screen owns the URI; this owns the
+     * lifecycle of the bytes.
+     *
+     * Any previous attempt is discarded first, so retaking a photo cannot leave the first one behind.
+     */
+    fun preparePhotoTarget(): File {
+        photo?.delete()
+        val target = media.scratchPhotoFile()
+        photo = target
+        _state.value = _state.value.copy(hasPhoto = false, message = null)
+        return target
+    }
+
+    /**
+     * Records what the camera actually produced.
+     *
+     * A cancelled capture still returns to the app, often having created an empty file. Treating
+     * "the file exists" as success would attach a zero-byte photo to the report and then spend a
+     * mine-site uplink uploading it.
+     */
+    fun onPhotoCaptured(succeeded: Boolean) {
+        val file = photo
+        val usable = succeeded && file != null && file.exists() && file.length() > 0L
+        if (!usable) {
+            file?.delete()
+            photo = null
+            _state.value = _state.value.copy(
+                hasPhoto = false,
+                // Silent on an explicit cancel; only a failed capture is worth a message.
+                message = if (succeeded) {
+                    UiMessage.warning(R.string.hazard_photo_failed)
+                } else {
+                    _state.value.message
+                },
+            )
+            return
+        }
+        _state.value = _state.value.copy(hasPhoto = true, message = null)
+    }
+
+    fun discardPhoto() {
+        photo?.delete()
+        photo = null
+        _state.value = _state.value.copy(hasPhoto = false, message = null)
+    }
+
+    fun onCameraPermissionDenied() {
+        _state.value = _state.value.copy(
+            message = UiMessage.warning(R.string.hazard_camera_permission),
+        )
+    }
 
     fun load(workerId: String?) {
         reporterWorkerId = workerId?.takeIf { it.isNotBlank() }
@@ -141,7 +206,7 @@ class HazardViewModel @Inject constructor(
                 longitude = null,
                 zoneLabel = current.zoneLabel,
                 arAnchorId = null,
-                photo = null,
+                photo = photo,
                 voiceNote = voiceNote,
             )
 
@@ -153,7 +218,10 @@ class HazardViewModel @Inject constructor(
                     if (hazards.warrantsImmediateRelay(current.severity)) {
                         syncScheduler.requestSyncNow()
                     }
+                    // Both handles released, never deleted: the repository has moved the files into
+                    // managed storage under the hazard id and the row now points at them.
                     voiceNote = null
+                    photo = null
                     _state.value = _state.value.copy(submitting = false, filed = true)
                 }
 
@@ -179,13 +247,29 @@ class HazardViewModel @Inject constructor(
     fun cancel() {
         recordingTicker?.cancel()
         recorder.cancel()
+        discardUnsubmittedMedia()
+    }
+
+    /**
+     * Deletes media captured for a report that was never filed.
+     *
+     * Scratch files are not named after a hazard id, so `pruneTo` will never consider them deletable
+     * however full the handset gets. Anything missed here stays on a shared site phone indefinitely,
+     * and it is a photograph of a colleague.
+     */
+    private fun discardUnsubmittedMedia() {
         voiceNote?.delete()
         voiceNote = null
+        photo?.delete()
+        photo = null
     }
 
     override fun onCleared() {
         recordingTicker?.cancel()
         recorder.cancel()
+        // Backing out of the screen without submitting also has to clean up. `filed` nulls both
+        // handles first, so a successful report is never touched here.
+        discardUnsubmittedMedia()
         super.onCleared()
     }
 

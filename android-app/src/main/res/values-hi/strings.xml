@@ -169,6 +169,17 @@
     <string name="verify_manual_title">कोड टाइप करें</string>
     <string name="verify_manual_hint">प्रमाणपत्र का पाठ चिपकाएँ या टाइप करें</string>
     <string name="verify_details_title">विवरण</string>
+
+    <string name="verify_server_title">सर्वर से अतिरिक्त जानकारी</string>
+    <string name="verify_server_explainer">ऊपर का निर्णय इसी फ़ोन पर हुआ है और वही मान्य है। यहाँ वह जानकारी है जो केवल सर्वर के पास होती है, और वह भी तभी जब सिग्नल हो।</string>
+    <string name="verify_server_checking">सर्वर से जाँच हो रही है…</string>
+    <string name="verify_server_unavailable">सिग्नल नहीं है, इसलिए कुछ जोड़ने को नहीं। ऊपर का निर्णय अपने आप में पूरा है।</string>
+    <string name="verify_server_nothing_extra">सर्वर के पास जोड़ने को कुछ नहीं था।</string>
+    <string name="verify_server_worker">कर्मचारी: %1$s</string>
+    <string name="verify_server_readiness">सभी फ़ोनों को मिलाकर तैयारी: %1$d ‰ (%2$s)</string>
+    <string name="verify_server_statutory_valid">वैधानिक प्रमाणपत्र अभी वैध है</string>
+    <string name="verify_server_statutory_expired">वैधानिक प्रमाणपत्र की अवधि समाप्त हो चुकी है</string>
+    <string name="verify_server_disagrees">सर्वर इस रिकॉर्ड को %1$s मानता है। निर्णय इसी फ़ोन की जाँच का है; इस अंतर का मतलब है कि दोनों अलग-अलग रिकॉर्ड देख रहे हैं और इसकी सूचना देनी चाहिए।</string>
     <string name="verify_site">साइट: %1$s</string>
     <string name="verify_sequence">क्रम: %1$d</string>
     <string name="verify_score">अंक: %1$d%%</string>
@@ -209,6 +220,15 @@
     <string name="hazard_mic_permission">आवाज़ में बताने के लिए माइक चाहिए। बिना आवाज़ भी सूचना भेज सकते हैं।</string>
     <string name="hazard_recorder_unavailable">रिकॉर्डर उपलब्ध नहीं है। बिना आवाज़ सूचना भेजें।</string>
     <string name="hazard_voice_too_short">वह रिकॉर्डिंग बहुत छोटी थी, रखी नहीं गई।</string>
+
+    <string name="hazard_photo_title">फ़ोटो</string>
+    <string name="hazard_photo_explainer">फ़ोटो से पर्यवेक्षक वही देख पाते हैं जो आपने देखा। यह अपलोड होने तक इसी फ़ोन में रहती है, गैलरी में कभी नहीं जाती, और सर्वर तक पहुँचने के बाद हटा दी जाती है।</string>
+    <string name="hazard_add_photo">फ़ोटो लें</string>
+    <string name="hazard_retake_photo">दोबारा लें</string>
+    <string name="hazard_remove_photo">फ़ोटो हटाएँ</string>
+    <string name="hazard_photo_attached">इस सूचना के साथ फ़ोटो जुड़ी है</string>
+    <string name="hazard_photo_failed">वह फ़ोटो सहेजी नहीं जा सकी। बिना फ़ोटो भी सूचना भेज सकते हैं।</string>
+    <string name="hazard_camera_permission">फ़ोटो के लिए कैमरा चाहिए। बिना फ़ोटो भी सूचना भेज सकते हैं।</string>
     <string name="hazard_rate_limited">पिछले %2$d मिनट में %1$d सूचनाएँ भेज दी गईं। अगली भेजने से पहले थोड़ा रुकें।</string>
     <string name="hazard_invalid">यह सूचना नहीं भेजी जा सकी: %1$s</string>
 

@@ -67,6 +67,20 @@ class DeviceProfile(private val database: JaagrukDatabase) {
 
     suspend fun isDeviceRegistered(): Boolean = kv.get(KEY_DEVICE_REGISTERED) == "1"
 
+    /**
+     * Whether this handset has already asked for notification permission.
+     *
+     * Recorded so the prompt appears once. Android stops showing the system dialog after two
+     * refusals and silently denies from then on, so a screen that asks on every visit burns the
+     * user's only two chances and then looks broken. Asking once, and otherwise leaving it to system
+     * settings, is the behaviour that actually results in reminders arriving.
+     */
+    suspend fun hasAskedForNotifications(): Boolean = kv.get(KEY_ASKED_NOTIFICATIONS) == "1"
+
+    suspend fun markAskedForNotifications() {
+        kv.put(AppKeyValueEntity(KEY_ASKED_NOTIFICATIONS, "1", System.currentTimeMillis()))
+    }
+
     suspend fun markDeviceRegistered() {
         kv.put(AppKeyValueEntity(KEY_DEVICE_REGISTERED, "1", System.currentTimeMillis()))
     }
@@ -96,5 +110,6 @@ class DeviceProfile(private val database: JaagrukDatabase) {
         const val KEY_ACTIVE_SITE = "active_site_id"
         const val KEY_ACTIVE_WORKER = "active_worker_id"
         const val KEY_DEVICE_REGISTERED = "device_registered"
+        const val KEY_ASKED_NOTIFICATIONS = "asked_notifications"
     }
 }

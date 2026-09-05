@@ -8,7 +8,7 @@ Offline-first. Android 10+. No headset. Certificates that verify with no network
 
 `SIH problem statement 26041`
 
-**437** core tests · **53** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **27 MB** APK
+**437** core tests · **78** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **27 MB** APK
 
 </div>
 
@@ -51,7 +51,7 @@ flowchart LR
 | 1 | **Delivery / need mismatch** | Learned in a canteen with Wi-Fi, needed in a haulage road with none | Everything load-bearing runs with the radio off — drills, scoring, signing, verification |
 | 2 | **Certificates are binary and stale** | "Valid until March" tells you nothing about competence in February | Readiness decays on a curve and is recomputed on read; statutory validity is reported *separately* |
 | 3 | **Knowing ≠ acting** | Worker knows to raise the alarm, hesitates four seconds | Every step timed against an expert baseline; correct-but-slow is its own outcome class |
-| 4 | **Literacy and language** | A large share cannot comfortably read; many speak Santali, which no speech engine supports | Zero-text pictogram mode, three languages at 569 keys each, per-site voice enrolment |
+| 4 | **Literacy and language** | A large share cannot comfortably read; many speak Santali, which no speech engine supports | Zero-text pictogram mode, three languages at 603 keys each, per-site voice enrolment |
 
 Everything below follows from those four. The AR is a delivery mechanism, not the point.
 
@@ -84,6 +84,10 @@ Decay computed on read. No job that could have failed silently.
 
 **Speaks the worker's language — or none.**
 English, Hindi, Santali (Ol Chiki). 73 ISO 7010 pictograms for zero-text mode.
+
+**Near-miss reporting in one hand, in gloves.**
+Pictogram category grid, a fifteen-second voice note instead of typing, and an optional photo. Text and
+media sync separately so an image cannot hold up the line that says an exit is blocked.
 
 **Runs a real two-phone buddy drill.**
 Bluetooth + Wi-Fi Direct, no internet. An NPC partner would train none of the skill.
@@ -581,14 +585,14 @@ other 51 weeks of the year measurable.
 Measured on the universal release APK — compressed sizes as they ship:
 
 ```
-native libs (ARCore + MediaPipe + CameraX)  █████████████████████████████████▊   33.81 MB   76.5 %
-dex — ALL of our code + Compose + Room      ███████▋                              7.62 MB   17.2 %
+native libs (ARCore + MediaPipe + CameraX)  █████████████████████████████████▊   33.81 MB   76.4 %
+dex — ALL of our code + Compose + Room      ███████▋                              7.64 MB   17.3 %
 other (META-INF, signatures, manifests)     █▎                                    1.25 MB    2.8 %
 assets (scenario + pictogram data)          ▉                                     0.85 MB    1.9 %
-resources (569×3 strings, vectors)          ▌                                     0.45 MB    1.0 %
-zip overhead (headers, alignment)           ▎                                     0.22 MB    0.5 %
+resources (603×3 strings, vectors)          ▌                                     0.46 MB    1.0 %
+zip overhead (headers, alignment)           ▎                                     0.23 MB    0.5 %
                                                                                 ────────
-one █ = 1 MB                                                                     44.20 MB   528 entries
+one █ = 1 MB                                                                     44.23 MB   528 entries
 ```
 
 **Our own code is 17 % of the download.** The rest is third-party native AR and vision libraries. That framing
@@ -597,11 +601,11 @@ phone only downloads its own architecture.
 
 | Artifact | Size | Reduction |
 |---|---:|---|
-| debug, universal | 115.18 MB | baseline |
-| release, universal (R8 + resource shrink) | 44.20 MB | **−62 %** |
-| **release, arm64-v8a** — what most phones get | **27.45 MB** | **−76 %** |
-| release, armeabi-v7a | 21.09 MB | −82 % |
-| release, x86_64 (emulator) | 16.16 MB | −86 % |
+| debug, universal | 115.20 MB | baseline |
+| release, universal (R8 + resource shrink) | 44.23 MB | **−62 %** |
+| **release, arm64-v8a** — what most phones get | **27.47 MB** | **−76 %** |
+| release, armeabi-v7a | 21.11 MB | −82 % |
+| release, x86_64 (emulator) | 16.18 MB | −86 % |
 
 Two deliberate reductions beyond R8:
 
@@ -637,7 +641,7 @@ test runner itself reports, **stage wall-clock** additionally includes Gradle da
 | Cross-language fixture parity | 20 | — | 9.2 s |
 | Backend — `pytest` | **217** | — | 109.6 s |
 | Dashboard — `tsc` + `vite build` | — | — | 35.7 s |
-| Android — Robolectric unit tests | **53**, 0 failures | 11.4 s | 1.9 s incremental |
+| Android — Robolectric unit tests | **78**, 0 failures | 16.8 s | 5.2 s incremental |
 | Android — `assembleDebug` + `lintDebug` | 0 errors, 288 warnings | — | 304.3 s |
 | Live smoke — 56 HTTP checks, real server start/stop | 56 | — | 8.1 s |
 | **end to end** | | | **≈ 8 min 39 s** |
@@ -656,15 +660,15 @@ worth more than a thorough one that does not.
 |---|---:|---:|---|
 | `core/` main | 26 | 6,389 | all certification logic |
 | `core/` test | 20 | 5,878 | **0.92 test lines per source line** |
-| `android-app/` Kotlin | 79 | 19,646 | 11 screens, 3 AR controllers |
-| `android-app/` tests | 5 | 1,044 | Robolectric: Room, view models, Compose |
-| `android-app/` resources | 16 | 2,295 | 569 keys × 3 locales, verified equal |
+| `android-app/` Kotlin | 79 | 20,086 | 11 screens, 3 AR controllers |
+| `android-app/` tests | 8 | 1,649 | Robolectric: Room, view models, Compose |
+| `android-app/` resources | 16 | 2,357 | 603 keys × 3 locales, verified equal |
 | `backend/` app | 38 | 9,326 | 38 endpoints, 15 tables |
 | `backend/` tests | 9 | 3,512 | |
 | `dashboard/` src | 23 | 5,118 | 11 pages |
 | `docs/` | 8 | 1,623 | |
 | `tools/` | 5 | 923 | |
-| **total** | **229** | **55,754** | |
+| **total** | **232** | **56,863** | |
 
 ---
 
@@ -686,7 +690,7 @@ worth more than a thorough one that does not.
                          └─────────────────────┬───────────────────────┘
                                                ▼
                          ┌─────────────────────────────────────────────┐
-  android tests ───────▶ │  53 Robolectric tests · real Room queries · │
+  android tests ───────▶ │  78 Robolectric tests · real Room queries · │
                          │  view models · screens actually composed    │
                          └─────────────────────┬───────────────────────┘
                                                ▼

@@ -70,6 +70,14 @@ class HomeViewModel @Inject constructor(
         val clockSkewSeconds: Long = 0L,
         val neverSynced: Boolean = true,
         val resumableRunId: String? = null,
+        /**
+         * True exactly once per handset, when notification permission has never been asked for.
+         *
+         * Drives the one-time system prompt for refresher reminders. Without the permission the
+         * reminder worker runs, finds it cannot post, and silently does nothing — which turns the
+         * spaced-refresher model into something the worker never hears about.
+         */
+        val askForNotifications: Boolean = false,
         val message: UiMessage? = null,
         val loading: Boolean = true,
     )
@@ -90,6 +98,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Records that the system prompt has been shown, whatever the answer was.
+     *
+     * Called on the result rather than before launching, so a prompt the user never actually saw —
+     * the process died, the Activity was recreated — is not counted as asked.
+     */
+    fun onNotificationPromptShown() {
+        _state.value = _state.value.copy(askForNotifications = false)
+        viewModelScope.launch { deviceProfile.markAskedForNotifications() }
+    }
+
     fun load(workerId: String) {
         if (this.workerId == workerId && !_state.value.loading) return
         this.workerId = workerId
@@ -97,6 +116,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val worker = workers.find(workerId)
             _state.value = _state.value.copy(
+                askForNotifications = !deviceProfile.hasAskedForNotifications(),
                 workerId = workerId,
                 workerName = worker?.fullName.orEmpty(),
                 siteId = worker?.siteId ?: deviceProfile.activeSiteId(),

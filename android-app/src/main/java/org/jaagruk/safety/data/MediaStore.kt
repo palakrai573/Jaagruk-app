@@ -32,6 +32,16 @@ class LocalMediaStore(context: Context) {
     /** A scratch file for a recording that may be discarded before a hazard id exists. */
     fun scratchVoiceFile(): File = File(voiceDir, "scratch-${UUID.randomUUID()}.m4a")
 
+    /**
+     * A scratch file for a photo the camera is about to write, before a hazard id exists.
+     *
+     * Inside [photoDir] rather than the cache directory on purpose: that is one of the two paths
+     * `file_paths.xml` lets the `FileProvider` expose, so the camera app can be handed a content URI
+     * for it. A photo in the cache directory could not be shared with the camera without widening
+     * the provider, and a near-miss photo can show a colleague's face.
+     */
+    fun scratchPhotoFile(): File = File(photoDir, "scratch-${UUID.randomUUID()}.jpg")
+
     fun resolve(path: String?): File? {
         if (path.isNullOrBlank()) return null
         val file = File(path)
@@ -81,11 +91,18 @@ class LocalMediaStore(context: Context) {
         Log.i(TAG, "pruned ${freed / 1024} kB of uploaded hazard media")
     }
 
-    /** Deletes scratch recordings left behind by a cancelled hazard report. */
+    /**
+     * Deletes scratch media left behind by a cancelled hazard report.
+     *
+     * Both directories. A scratch file is never named after a hazard id, so [pruneTo] will never
+     * consider it deletable however full the handset gets — which means anything missed here stays
+     * on the device indefinitely.
+     */
     fun clearScratch() {
-        voiceDir.listFiles()
-            ?.filter { it.name.startsWith("scratch-") }
-            ?.forEach { runCatching { it.delete() } }
+        sequenceOf(photoDir, voiceDir)
+            .flatMap { it.listFiles()?.asSequence() ?: emptySequence() }
+            .filter { it.name.startsWith("scratch-") }
+            .forEach { runCatching { it.delete() } }
     }
 
     @Throws(IOException::class)

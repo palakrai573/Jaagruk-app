@@ -205,6 +205,18 @@
     <string name="verify_manual_title">Type the code</string>
     <string name="verify_manual_hint">Paste or type the certificate text</string>
     <string name="verify_details_title">Details</string>
+
+    <!-- Optional online cross-check. Adds what only the server knows; never overrides the verdict. -->
+    <string name="verify_server_title">Extra detail from the server</string>
+    <string name="verify_server_explainer">The decision above was made on this phone and is the one that counts. This adds what only the server knows, and only when there is a signal.</string>
+    <string name="verify_server_checking">Checking with the server…</string>
+    <string name="verify_server_unavailable">No signal, so there is nothing to add. The verdict above stands on its own.</string>
+    <string name="verify_server_nothing_extra">The server had nothing to add.</string>
+    <string name="verify_server_worker">Worker: %1$s</string>
+    <string name="verify_server_readiness">Readiness across all phones: %1$d ‰ (%2$s)</string>
+    <string name="verify_server_statutory_valid">The statutory certificate is still in date</string>
+    <string name="verify_server_statutory_expired">The statutory certificate has run out</string>
+    <string name="verify_server_disagrees">The server reads this record as %1$s. The check on this phone is the verdict; the difference means the two are looking at different records and it is worth reporting.</string>
     <string name="verify_site">Site: %1$s</string>
     <string name="verify_sequence">Sequence: %1$d</string>
     <string name="verify_score">Score: %1$d%%</string>
@@ -248,6 +260,16 @@
     <string name="hazard_mic_permission">The microphone is needed for a voice note. You can still send the report without one.</string>
     <string name="hazard_recorder_unavailable">The recorder is not available. Send the report without a voice note.</string>
     <string name="hazard_voice_too_short">That recording was too short to keep.</string>
+
+    <!-- Photo. Corroboration, never a requirement; uploads on its own schedule. -->
+    <string name="hazard_photo_title">Photo</string>
+    <string name="hazard_photo_explainer">A photo helps a supervisor see what you saw. It stays on this phone until it uploads, is never added to the gallery, and is deleted once the server has it.</string>
+    <string name="hazard_add_photo">Take a photo</string>
+    <string name="hazard_retake_photo">Take again</string>
+    <string name="hazard_remove_photo">Remove photo</string>
+    <string name="hazard_photo_attached">Photo attached to this report</string>
+    <string name="hazard_photo_failed">That photo could not be saved. The report can still be sent without it.</string>
+    <string name="hazard_camera_permission">The camera is needed for a photo. You can still send the report without one.</string>
     <string name="hazard_rate_limited">%1$d reports already in the last %2$d minutes. Wait a moment before sending another.</string>
     <string name="hazard_invalid">That report could not be sent: %1$s</string>
 

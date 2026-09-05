@@ -164,6 +164,7 @@ fun VerifyScreen(
 
         state.verdict?.let { verdict ->
             item { VerdictCard(verdict = verdict, state = state, viewModel = viewModel) }
+            item { ServerInsightCard(state = state) }
         }
 
         if (state.reasons.isNotEmpty()) {
@@ -191,6 +192,99 @@ fun VerifyScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+/**
+ * What the server adds, when it can be reached.
+ *
+ * Presented below the verdict and visibly secondary to it. The heading says the decision above is the
+ * one that counts, because an inspector who starts treating this card as the answer has been given a
+ * verification tool that stops working the moment they walk underground.
+ */
+@Composable
+private fun ServerInsightCard(state: VerifyViewModel.State) {
+    SectionCard {
+        Text(
+            text = stringResource(R.string.verify_server_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.verify_server_explainer),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Spacer(Modifier.height(8.dp))
+
+        when (state.crossCheck) {
+            VerifyViewModel.CrossCheck.NOT_ATTEMPTED,
+            VerifyViewModel.CrossCheck.CHECKING,
+            -> Text(
+                text = stringResource(R.string.verify_server_checking),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            VerifyViewModel.CrossCheck.UNAVAILABLE -> StatusBanner(
+                text = stringResource(R.string.verify_server_unavailable),
+                tone = BannerTone.INFO,
+                pictogramDescription = stringResource(R.string.cd_info),
+            )
+
+            VerifyViewModel.CrossCheck.RECEIVED -> {
+                val insight = state.insight
+                if (insight == null) {
+                    Text(
+                        text = stringResource(R.string.verify_server_nothing_extra),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                } else {
+                    insight.workerFullName?.let { name ->
+                        Text(
+                            text = stringResource(R.string.verify_server_worker, name),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                    insight.readinessPermille?.let { permille ->
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(
+                                R.string.verify_server_readiness,
+                                permille,
+                                insight.readinessBand ?: "",
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                    insight.statutoryValid?.let { valid ->
+                        Spacer(Modifier.height(8.dp))
+                        StatusBanner(
+                            text = stringResource(
+                                if (valid) {
+                                    R.string.verify_server_statutory_valid
+                                } else {
+                                    R.string.verify_server_statutory_expired
+                                },
+                            ),
+                            tone = if (valid) BannerTone.SUCCESS else BannerTone.WARNING,
+                            pictogramDescription = stringResource(R.string.cd_info),
+                        )
+                    }
+                    // A disagreement is reported, never obeyed. The signature check on the bytes in
+                    // the inspector's hand is the verdict; this means the two are looking at
+                    // different records and somebody should find out why.
+                    insight.disagreesWithStatus?.let { serverStatus ->
+                        Spacer(Modifier.height(8.dp))
+                        StatusBanner(
+                            text = stringResource(
+                                R.string.verify_server_disagrees,
+                                serverStatus,
+                            ),
+                            tone = BannerTone.WARNING,
+                            pictogramDescription = stringResource(R.string.cd_warning),
+                        )
+                    }
+                }
+            }
         }
     }
 }

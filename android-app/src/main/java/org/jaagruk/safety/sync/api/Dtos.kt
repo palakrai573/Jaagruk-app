@@ -278,6 +278,7 @@ data class VerifyResponse(
     @SerialName("worker_full_name") val workerFullName: String? = null,
     @SerialName("statutory_valid") val statutoryValid: Boolean? = null,
     @SerialName("readiness_permille") val readinessPermille: Int? = null,
+    @SerialName("readiness_band") val readinessBand: String? = null,
 )
 
 /** FastAPI's error body, flattened by the backend's exception handler. */

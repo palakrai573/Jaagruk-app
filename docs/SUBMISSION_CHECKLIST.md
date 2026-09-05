@@ -19,8 +19,8 @@ Every number below is produced by `.\tools\verify-all.ps1`, which reports six st
 | 5 | Assessment engine | **Met** | `core/assessment/` — weighted scoring, critical-step gating, hesitation classification against expert baselines, guess detection, timeout handling. 437 tests on a plain JVM. |
 | 6 | QR-based certificate generation | **Met** | Ed25519-signed attestation encoded into the QR itself: 158-byte payload, 216 characters, pinned by test. |
 | 7 | QR-based certificate verification | **Met** | Fully offline, seven-state verdict, plus constant-time identity confirmation against a hashed worker id. |
-| 8 | Hindi localisation | **Met** | 569 keys. `MissingTranslation` is a fatal lint check and lint passes with 0 errors. |
-| 9 | Santali localisation | **Met (needs native review)** | 569 keys in Ol Chiki. Complete and usable; wording should be reviewed by a native speaker familiar with mine-site vocabulary before a field pilot. Coverage and quality are separate claims and both are stated. |
+| 8 | Hindi localisation | **Met** | 603 keys. `MissingTranslation` is a fatal lint check and lint passes with 0 errors. |
+| 9 | Santali localisation | **Met (needs native review)** | 603 keys in Ol Chiki. Complete and usable; wording should be reviewed by a native speaker familiar with mine-site vocabulary before a field pilot. Coverage and quality are separate claims and both are stated. |
 | 10 | Offline functionality | **Met** | Drills, scoring, Ed25519 signing, chain append and verification all run with the radio off. Durable queue, idempotent upload, peer-to-peer relay for records that cannot get out at all. |
 | 11 | Web admin compliance dashboard | **Met** | React + TypeScript. Role-scoped for DGMS inspector, company admin, site officer, supervisor. Overview, sites, workers, hesitation risk, hazard map, chain integrity, offline verification, CSV exports, live WebSocket updates. |
 | 12 | Demo video | **Script ready** | `docs/DEMO_SCRIPT.md` — six minutes, opens on the hardest-to-fake claim, shows one failure path deliberately. Recording is the remaining action. |

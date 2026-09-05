@@ -75,6 +75,9 @@ live smoke test 56 checks.
 | --- | --- | --- |
 | Full training offline | **Built** | Drills, scoring, signing and verification all work with the radio off. |
 | Offline worker enrolment | **Built** | Supervisor tools enrol a worker on the handset with no uplink: `WorkerRepository.register` writes the row, `serverSynced = false`, and `SyncWorker.pushOfflineEnrolments` posts it when a network appears. Without this the roster only ever arrived from the server, so a handset that had never had signal showed an empty worker picker and nobody could train at all. The worker id is validated against the server's exact pattern and upper-cased, because it is hashed into every certificate they earn. |
+| Hazard photo capture | **Built** | `ActivityResultContracts.TakePicture` writing through the `FileProvider` into app-private storage. Never the gallery: a near-miss photo can show a colleague's face. A zero-byte result from a cancelled capture is refused rather than attached and uploaded, and an abandoned report deletes its own media. |
+| Refresher reminder notifications | **Built** | `POST_NOTIFICATIONS` is requested once on API 33+ and the answer is recorded, because Android stops showing the dialog after two refusals and silently denies from then on. Previously the permission was declared but never requested, so `RefresherReminderWorker` found it missing and skipped in silence. |
+| Optional online verification cross-check | **Built** | Adds the worker's name, their readiness across every synced handset, and statutory validity. Strictly additive and bounded by a 4-second timeout: it cannot change the verdict, and a server that disagrees is reported for follow-up rather than obeyed. The offline verdict is a signature check over the bytes in the inspector's hand and stays authoritative. |
 | Worker chooses their own PIN | **Built** | Enrolment sets no PIN. The worker picks one at first sign-in, so the supervisor never learns it and cannot have a certificate issued in the worker's name. The PIN is never uploaded. |
 | Durable outbound queue | **Built** | An entry is removed only on a server verdict: accepted, duplicate, or quarantined. A 5xx, a timeout or an unregistered device are retryable and never count toward abandonment. |
 | Idempotent batch upload | **Built** | Replay-safe per batch and per item. |
@@ -119,7 +122,7 @@ live smoke test 56 checks.
 
 | Capability | Status | Notes |
 | --- | --- | --- |
-| English, Hindi, Santali | **Built** | 569 keys in each locale, verified equal with no gaps and no extras. Santali is written in Ol Chiki. |
+| English, Hindi, Santali | **Built** | 603 keys in each locale, verified equal with no gaps and no extras. Santali is written in Ol Chiki. |
 | Translation quality | **Partial** | Hindi and Santali are complete and idiomatic enough to use, and both need review by a native speaker familiar with mine-site vocabulary before a field pilot. Coverage and quality are different claims. |
 | Per-app language switching | **Built** | On the sign-in screen, because a shared handset changes hands during a shift and the previous worker's language is not a sensible default. |
 | Ol Chiki rendering | **Built** | Noto Sans Ol Chiki has shipped in AOSP since Android 10, which is one of the reasons `minSdk` is 29. |

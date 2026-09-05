@@ -1,6 +1,7 @@
 package org.jaagruk.safety.ui.verify
 
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.IOException
 
 /**
  * The identity half of verification: does this certificate belong to the person holding it?
@@ -55,6 +57,12 @@ class IdentityCheckTest {
                 mockk<SiteKeyStore>(relaxed = true),
                 clock,
             ),
+            // Pinned offline. Every assertion in this class is about the local verdict and the
+            // identity hash, so the server is made unreachable on purpose: anything that still passes
+            // here is proven not to depend on it.
+            api = mockk {
+                coEvery { verifyCertificate(any()) } throws IOException("no signal")
+            },
         )
     }
 

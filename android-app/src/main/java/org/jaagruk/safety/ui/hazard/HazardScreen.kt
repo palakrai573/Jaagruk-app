@@ -1,5 +1,9 @@
 package org.jaagruk.safety.ui.hazard
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,18 +23,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jaagruk.safety.R
 import org.jaagruk.safety.data.hazard.HazardCategory
 import org.jaagruk.safety.data.hazard.HazardSeverity
+import org.jaagruk.safety.ui.components.BannerTone
 import org.jaagruk.safety.ui.components.GloveButton
 import org.jaagruk.safety.ui.components.GloveOutlinedButton
 import org.jaagruk.safety.ui.components.MessageBanner
 import org.jaagruk.safety.ui.components.OptionCard
 import org.jaagruk.safety.ui.components.SectionCard
+import org.jaagruk.safety.ui.components.StatusBanner
 import org.jaagruk.safety.ui.components.catalogString
 
 /**
@@ -52,6 +61,38 @@ fun HazardScreen(
     viewModel: HazardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // The camera app writes straight into app-private storage through the FileProvider. Nothing goes
+    // to the gallery: a near-miss photo can show a colleague's face or an unsafe act about to be
+    // discussed with a supervisor, and in the gallery every app with storage permission could read it.
+    val capture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        viewModel.onPhotoCaptured(ok)
+    }
+
+    fun launchCapture() {
+        val target = viewModel.preparePhotoTarget()
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            target,
+        )
+        capture.launch(uri)
+    }
+
+    val requestCamera = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        if (granted) launchCapture() else viewModel.onCameraPermissionDenied()
+    }
+
+    fun addPhoto() {
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA,
+        ) == PackageManager.PERMISSION_GRANTED
+        if (granted) launchCapture() else requestCamera.launch(Manifest.permission.CAMERA)
+    }
 
     LaunchedEffect(reporterWorkerId) { viewModel.load(reporterWorkerId) }
 
@@ -197,6 +238,49 @@ fun HazardScreen(
                             modifier = Modifier.weight(1f),
                         )
                     }
+                }
+            }
+        }
+
+        // A photo is corroboration, never a requirement. It uploads on its own schedule so a 900 kB
+        // image on a 2G uplink cannot hold up the one line of text saying an exit is blocked.
+        item {
+            SectionCard {
+                Text(
+                    text = stringResource(R.string.hazard_photo_title),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = stringResource(R.string.hazard_photo_explainer),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(10.dp))
+
+                if (state.hasPhoto) {
+                    StatusBanner(
+                        text = stringResource(R.string.hazard_photo_attached),
+                        tone = BannerTone.SUCCESS,
+                        pictogramDescription = stringResource(R.string.cd_info),
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        GloveOutlinedButton(
+                            text = stringResource(R.string.hazard_retake_photo),
+                            onClick = { addPhoto() },
+                            modifier = Modifier.weight(1f),
+                        )
+                        GloveOutlinedButton(
+                            text = stringResource(R.string.hazard_remove_photo),
+                            onClick = viewModel::discardPhoto,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                } else {
+                    GloveOutlinedButton(
+                        text = stringResource(R.string.hazard_add_photo),
+                        onClick = { addPhoto() },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
         }
