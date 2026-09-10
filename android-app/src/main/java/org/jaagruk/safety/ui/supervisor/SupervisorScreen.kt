@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -361,6 +362,61 @@ fun SupervisorScreen(
                     onClick = onVoiceEnroll,
                     modifier = Modifier.fillMaxWidth(),
                 )
+            }
+        }
+
+        // Server sign-in. Lives here, inside the tools, rather than in front of them: it authorises
+        // uploads and nothing else, and gating the whole screen behind it made a handset that had never
+        // had signal unable to enrol a site key or a worker — and therefore unable to train anybody.
+        item {
+            SectionCard {
+                Text(
+                    text = stringResource(R.string.supervisor_server_title),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = stringResource(R.string.supervisor_server_explainer),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(10.dp))
+
+                val signedInAs = state.signedInAs
+                if (signedInAs != null) {
+                    StatusBanner(
+                        text = stringResource(
+                            R.string.supervisor_server_signed_in_as,
+                            signedInAs,
+                        ),
+                        tone = BannerTone.SUCCESS,
+                        pictogramDescription = stringResource(R.string.cd_info),
+                    )
+                } else {
+                    OutlinedTextField(
+                        value = state.username,
+                        onValueChange = viewModel::setUsername,
+                        label = { Text(stringResource(R.string.signin_username)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = state.password,
+                        onValueChange = viewModel::setPassword,
+                        label = { Text(stringResource(R.string.signin_password)) },
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    GloveButton(
+                        text = stringResource(R.string.action_sign_in),
+                        onClick = viewModel::submitServerLogin,
+                        enabled = !state.busy &&
+                            state.username.isNotBlank() &&
+                            state.password.isNotBlank(),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
 

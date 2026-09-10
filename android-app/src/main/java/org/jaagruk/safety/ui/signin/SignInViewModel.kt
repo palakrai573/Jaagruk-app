@@ -8,16 +8,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jaagruk.core.util.Hex
+import org.jaagruk.core.util.WallClock
 import org.jaagruk.safety.R
 import org.jaagruk.safety.data.DeviceProfile
 import org.jaagruk.safety.data.auth.PinAuthenticator
+import org.jaagruk.safety.data.db.SiteEntity
 import org.jaagruk.safety.data.db.WorkerEntity
+import org.jaagruk.safety.data.keys.SiteKeyStore
+import org.jaagruk.safety.data.repo.SiteRepository
 import org.jaagruk.safety.data.repo.WorkerRepository
-import org.jaagruk.safety.sync.SyncScheduler
 import org.jaagruk.safety.sync.SyncStatusProvider
-import org.jaagruk.safety.sync.api.JaagrukApi
-import org.jaagruk.safety.sync.api.LoginRequest
-import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.ui.LocaleManager
 import org.jaagruk.safety.ui.components.UiMessage
 import javax.inject.Inject
@@ -34,17 +35,15 @@ sealed interface SignInStep {
         val settingNewPin: Boolean,
         val lockedSecondsRemaining: Long? = null,
     ) : SignInStep
-
-    data object SupervisorLogin : SignInStep
 }
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val workers: WorkerRepository,
     private val deviceProfile: DeviceProfile,
-    private val api: JaagrukApi,
-    private val session: SessionStore,
-    private val syncScheduler: SyncScheduler,
+    private val keyStore: SiteKeyStore,
+    private val sites: SiteRepository,
+    private val clock: WallClock,
     syncStatus: SyncStatusProvider,
 ) : ViewModel() {
 
@@ -59,8 +58,6 @@ class SignInViewModel @Inject constructor(
         val allWorkers: List<WorkerRow> = emptyList(),
         val query: String = "",
         val pin: String = "",
-        val username: String = "",
-        val password: String = "",
         val siteId: String? = null,
         val languageTag: String = LocaleManager.ENGLISH,
         val pendingSyncCount: Int = 0,
@@ -134,28 +131,83 @@ class SignInViewModel @Inject constructor(
     fun backToPicker() {
         _state.value = _state.value.copy(
             pin = "",
-            password = "",
             message = null,
             step = SignInStep.PickWorker(filter(_state.value.allWorkers, _state.value.query)),
         )
     }
 
-    fun openSupervisorLogin() {
-        _state.value = _state.value.copy(message = null, step = SignInStep.SupervisorLogin)
+    /**
+     * Provisions a sample site and roster so the app can be used immediately.
+     *
+     * This exists because a fresh handset is otherwise a locked door: nothing seeds the database, so the
+     * worker picker is empty, and reaching training means enrolling a site key and a worker through
+     * Supervisor tools first. That is the correct flow for a real posting and the wrong first experience
+     * for anybody evaluating the app, who has thirty seconds of patience and no site to enrol.
+     *
+     * It is deliberately explicit about being sample data, and deliberately not silent: a real site
+     * enrols real worker numbers from the cards, and a demo roster in a live deployment would put
+     * fictitious names on real certificates.
+     *
+     * The PIN is pre-set here, which is the one place this diverges from the real flow on purpose — the
+     * normal path has the worker choose their own so the supervisor never learns it.
+     */
+    fun setUpDemoSite() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(busy = true, message = null)
+            try {
+                if (!keyStore.hasSiteKey()) {
+                    val pair = keyStore.generateSiteKey(DEMO_SITE_ID)
+                    sites.upsert(
+                        SiteEntity(
+                            siteId = DEMO_SITE_ID,
+                            name = DEMO_SITE_NAME,
+                            district = DEMO_DISTRICT,
+                            sector = DEMO_SECTOR,
+                            publicKeyHex = Hex.encode(pair.publicKey),
+                            createdAtSec = clock.epochSeconds(),
+                        ),
+                    )
+                    sites.recordSiteKey(DEMO_SITE_ID, Hex.encode(pair.publicKey), 1)
+                    keyStore.ensureDeviceAttestationKey()
+                }
+                deviceProfile.setActiveSiteId(DEMO_SITE_ID)
+
+                for ((workerId, fullName, language) in DEMO_WORKERS) {
+                    val result = workers.register(
+                        workerId = workerId,
+                        siteId = DEMO_SITE_ID,
+                        fullName = fullName,
+                        preferredLanguage = language,
+                        pictogramMode = false,
+                    )
+                    if (result is WorkerRepository.RegisterResult.Registered) {
+                        workers.setPin(workerId, DEMO_PIN)
+                    }
+                }
+
+                _state.value = _state.value.copy(siteId = DEMO_SITE_ID)
+                refreshRoster()
+                _state.value = _state.value.copy(
+                    busy = false,
+                    message = UiMessage.success(R.string.signin_demo_ready, DEMO_PIN),
+                )
+            } catch (e: Exception) {
+                // The realistic failure is SiteKeyStore.KeyStoreUnavailable on a device whose keystore
+                // was reset. Reported rather than swallowed, because without a key the certificates the
+                // demo is meant to show cannot be issued.
+                Log.w(TAG, "demo setup failed", e)
+                _state.value = _state.value.copy(
+                    busy = false,
+                    message = UiMessage.error(R.string.signin_demo_failed),
+                )
+            }
+        }
     }
 
     fun setPin(pin: String) {
         // Digits only, capped. Filtering at the source means the validator never has to reject something
         // the keyboard should not have offered.
         _state.value = _state.value.copy(pin = pin.filter(Char::isDigit).take(MAX_PIN_INPUT))
-    }
-
-    fun setUsername(value: String) {
-        _state.value = _state.value.copy(username = value.trim())
-    }
-
-    fun setPassword(value: String) {
-        _state.value = _state.value.copy(password = value)
     }
 
     /**
@@ -255,49 +307,6 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Signs a supervisor in against the server.
-     *
-     * The one flow in the app that genuinely needs connectivity, and it says so: enrolling a site signing
-     * key and authorising uploads are decisions the server has to make. Everything a worker does still works
-     * with the radio off.
-     */
-    fun submitSupervisorLogin(onSignedIn: () -> Unit) {
-        val current = _state.value
-        _state.value = current.copy(busy = true, message = null)
-
-        viewModelScope.launch {
-            try {
-                val response = api.login(LoginRequest(current.username, current.password))
-                val body = response.body()
-                when {
-                    response.isSuccessful && body != null -> {
-                        session.save(body)
-                        body.siteId?.let { deviceProfile.setActiveSiteId(it) }
-                        // Records queued while nobody was signed in can go out now.
-                        syncScheduler.requestSyncNow()
-                        _state.value = _state.value.copy(busy = false, password = "", message = null)
-                        onSignedIn()
-                    }
-
-                    response.isSuccessful -> fail(UiMessage.error(R.string.signin_empty_session))
-
-                    response.code() == HTTP_UNAUTHORIZED ->
-                        fail(UiMessage.error(R.string.signin_bad_credentials))
-
-                    response.code() == HTTP_TOO_MANY_REQUESTS ->
-                        fail(UiMessage.error(R.string.signin_rate_limited))
-
-                    else -> fail(UiMessage.error(R.string.signin_failed_code, response.code()))
-                }
-            } catch (e: Exception) {
-                // No connectivity is the ordinary case here and does not deserve alarming language.
-                Log.i(TAG, "supervisor sign-in could not reach the server", e)
-                fail(UiMessage.warning(R.string.signin_offline))
-            }
-        }
-    }
-
     fun dismissMessage() {
         _state.value = _state.value.copy(message = null)
     }
@@ -306,11 +315,27 @@ class SignInViewModel @Inject constructor(
         _state.value = _state.value.copy(busy = false, pin = "", message = message)
     }
 
-    private companion object {
-        const val TAG = "SignInViewModel"
-        const val ROSTER_PAGE = 60
-        const val MAX_PIN_INPUT = 8
-        const val HTTP_UNAUTHORIZED = 401
-        const val HTTP_TOO_MANY_REQUESTS = 429
+    companion object {
+        private const val TAG = "SignInViewModel"
+        private const val ROSTER_PAGE = 60
+        private const val MAX_PIN_INPUT = 8
+
+        // --- demo provisioning ------------------------------------------------
+        // A real district code and worker-number shape, because the ids have to satisfy the same
+        // validation the server enforces. Anything looser would demo a path that cannot sync.
+
+        const val DEMO_SITE_ID = "JH-DHN-001"
+        const val DEMO_SITE_NAME = "Demo Colliery (sample data)"
+        private const val DEMO_DISTRICT = "Dhanbad"
+        private const val DEMO_SECTOR = "coal"
+
+        /** Shared across the sample roster and shown on screen, since nobody can be asked for it. */
+        const val DEMO_PIN = "2846"
+
+        val DEMO_WORKERS: List<Triple<String, String, String>> = listOf(
+            Triple("JH-DHN-001-W00001", "Budhan Manjhi", LocaleManager.HINDI),
+            Triple("JH-DHN-001-W00002", "Sita Kumari", LocaleManager.HINDI),
+            Triple("JH-DHN-001-W00003", "Rupai Hembram", LocaleManager.SANTALI),
+        )
     }
 }

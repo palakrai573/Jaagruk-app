@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -53,96 +54,133 @@ fun SignInScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Column(
+    // A LazyColumn rather than a Column, so the screen scrolls. In Santali, on a 5-inch handset, with a
+    // no-site banner and a queued-records notice both showing, this content is taller than the display —
+    // and a fixed Column silently clips the sign-in button off the bottom with no way to reach it.
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
     ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Text(
-            text = stringResource(R.string.signin_tagline),
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        item {
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.headlineLarge,
+            )
+            Text(
+                text = stringResource(R.string.signin_tagline),
+                style = MaterialTheme.typography.bodyMedium,
+            )
 
-        Spacer(Modifier.height(12.dp))
-        LanguageRow(
-            current = state.languageTag,
-            onSelect = viewModel::setLanguage,
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        if (state.siteId == null) {
-            StatusBanner(
-                text = stringResource(R.string.signin_no_site),
-                tone = BannerTone.WARNING,
-                pictogramDescription = stringResource(R.string.cd_warning),
+            Spacer(Modifier.height(12.dp))
+            LanguageRow(
+                current = state.languageTag,
+                onSelect = viewModel::setLanguage,
             )
             Spacer(Modifier.height(12.dp))
+        }
+
+        if (state.siteId == null) {
+            item {
+                StatusBanner(
+                    text = stringResource(R.string.signin_no_site),
+                    tone = BannerTone.WARNING,
+                    pictogramDescription = stringResource(R.string.cd_warning),
+                )
+                Spacer(Modifier.height(12.dp))
+            }
         }
 
         if (state.pendingSyncCount > 0) {
             // Framed as a fact, not a failure. The records are signed and safe; this is a delivery note.
-            StatusBanner(
-                text = stringResource(R.string.signin_queued_records, state.pendingSyncCount),
-                tone = BannerTone.INFO,
-                pictogramDescription = stringResource(R.string.cd_info),
-            )
-            Spacer(Modifier.height(12.dp))
+            item {
+                StatusBanner(
+                    text = stringResource(R.string.signin_queued_records, state.pendingSyncCount),
+                    tone = BannerTone.INFO,
+                    pictogramDescription = stringResource(R.string.cd_info),
+                )
+                Spacer(Modifier.height(12.dp))
+            }
         }
 
         if (state.message != null) {
-            MessageBanner(state.message, stringResource(R.string.cd_info))
-            Spacer(Modifier.height(12.dp))
+            item {
+                MessageBanner(state.message, stringResource(R.string.cd_info))
+                Spacer(Modifier.height(12.dp))
+            }
         }
 
         when (val step = state.step) {
-            is SignInStep.PickWorker -> WorkerPicker(
+            is SignInStep.PickWorker -> workerPicker(
                 workers = step.workers,
                 query = state.query,
                 onQueryChange = viewModel::setQuery,
                 onPick = viewModel::selectWorker,
             )
 
-            is SignInStep.EnterPin -> PinEntry(
-                workerName = step.workerName,
-                pin = state.pin,
-                settingNewPin = step.settingNewPin,
-                lockedSeconds = step.lockedSecondsRemaining,
-                onPinChange = viewModel::setPin,
-                onSubmit = { viewModel.submitPin(onWorkerSignedIn) },
-                onCancel = viewModel::backToPicker,
-            )
-
-            is SignInStep.SupervisorLogin -> SupervisorLogin(
-                username = state.username,
-                password = state.password,
-                busy = state.busy,
-                onUsernameChange = viewModel::setUsername,
-                onPasswordChange = viewModel::setPassword,
-                onSubmit = { viewModel.submitSupervisorLogin(onSupervisorTools) },
-                onCancel = viewModel::backToPicker,
-            )
+            is SignInStep.EnterPin -> item {
+                PinEntry(
+                    workerName = step.workerName,
+                    pin = state.pin,
+                    settingNewPin = step.settingNewPin,
+                    lockedSeconds = step.lockedSecondsRemaining,
+                    onPinChange = viewModel::setPin,
+                    onSubmit = { viewModel.submitPin(onWorkerSignedIn) },
+                    onCancel = viewModel::backToPicker,
+                )
+            }
         }
 
-        Spacer(Modifier.height(16.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            // Verification needs no sign-in at all. An inspector arriving at a gate should be able to scan
-            // a worker's card without an account on that handset, and the offline verifier is the
-            // authoritative check either way.
-            GloveOutlinedButton(
-                text = stringResource(R.string.action_verify_certificate),
-                onClick = onVerify,
-                modifier = Modifier.weight(1f),
-            )
-            GloveOutlinedButton(
-                text = stringResource(R.string.action_supervisor),
-                onClick = viewModel::openSupervisorLogin,
-                modifier = Modifier.weight(1f),
-            )
+        // Offered only while the handset has nobody on it. A fresh install is otherwise a locked door:
+        // reaching training means enrolling a site key and a worker through Supervisor tools first, which
+        // is right for a real posting and hopeless as a first experience. Labelled as sample data so it
+        // can never be mistaken for a real roster.
+        if (state.step is SignInStep.PickWorker && state.allWorkers.isEmpty()) {
+            item {
+                Spacer(Modifier.height(16.dp))
+                SectionCard {
+                    Text(
+                        text = stringResource(R.string.signin_demo_title),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Text(
+                        text = stringResource(R.string.signin_demo_explainer),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    GloveButton(
+                        text = stringResource(R.string.signin_demo_action),
+                        onClick = viewModel::setUpDemoSite,
+                        enabled = !state.busy,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+        }
+
+        item {
+            Spacer(Modifier.height(16.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                // Verification needs no sign-in at all. An inspector arriving at a gate should be able to
+                // scan a worker's card without an account on that handset, and the offline verifier is
+                // the authoritative check either way.
+                GloveOutlinedButton(
+                    text = stringResource(R.string.action_verify_certificate),
+                    onClick = onVerify,
+                    modifier = Modifier.weight(1f),
+                )
+                // Straight to the local tools. Everything a supervisor does on device — generating the
+                // site key, enrolling workers, auditing the chain, handing records to another handset —
+                // needs no server. Only uploading does, and that login now lives inside that screen.
+                // Routing this through a network login was what made a fresh offline handset unusable.
+                GloveOutlinedButton(
+                    text = stringResource(R.string.action_supervisor),
+                    onClick = onSupervisorTools,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            Spacer(Modifier.height(24.dp))
         }
     }
 }
@@ -168,14 +206,20 @@ private fun LanguageRow(current: String, onSelect: (String) -> Unit) {
     }
 }
 
-@Composable
-private fun WorkerPicker(
+/**
+ * The roster, emitted into the parent list rather than into a nested one.
+ *
+ * A `LazyColumn` inside a scrolling parent is a crash, not a layout quirk — the child is measured with
+ * an unbounded height and Compose throws. Contributing items to the one list that already exists is
+ * also what lets a long roster scroll together with the search field above it.
+ */
+private fun LazyListScope.workerPicker(
     workers: List<SignInViewModel.WorkerRow>,
     query: String,
     onQueryChange: (String) -> Unit,
     onPick: (String) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    item {
         OutlinedTextField(
             value = query,
             onValueChange = onQueryChange,
@@ -184,43 +228,44 @@ private fun WorkerPicker(
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(8.dp))
+    }
 
-        if (workers.isEmpty()) {
+    if (workers.isEmpty()) {
+        item {
             StatusBanner(
                 text = stringResource(R.string.signin_no_workers),
                 tone = BannerTone.INFO,
                 pictogramDescription = stringResource(R.string.cd_info),
             )
-            return@Column
         }
+        return
+    }
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(workers, key = { it.workerId }) { worker ->
-                SectionCard {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(worker.fullName, style = MaterialTheme.typography.titleMedium)
-                            Text(
-                                text = worker.workerId,
-                                style = MaterialTheme.typography.labelMedium,
-                            )
-                            if (!worker.hasPin) {
-                                Text(
-                                    text = stringResource(R.string.signin_pin_not_set),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.tertiary,
-                                )
-                            }
-                        }
-                        Spacer(Modifier.width(12.dp))
-                        GloveButton(
-                            text = stringResource(R.string.action_sign_in),
-                            onClick = { onPick(worker.workerId) },
+    items(workers, key = { it.workerId }) { worker ->
+        SectionCard {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(worker.fullName, style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = worker.workerId,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                    if (!worker.hasPin) {
+                        Text(
+                            text = stringResource(R.string.signin_pin_not_set),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
                     }
                 }
+                Spacer(Modifier.width(12.dp))
+                GloveButton(
+                    text = stringResource(R.string.action_sign_in),
+                    onClick = { onPick(worker.workerId) },
+                )
             }
         }
+        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -286,60 +331,4 @@ private fun PinEntry(
     }
 }
 
-@Composable
-private fun SupervisorLogin(
-    username: String,
-    password: String,
-    busy: Boolean,
-    onUsernameChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onSubmit: () -> Unit,
-    onCancel: () -> Unit,
-) {
-    SectionCard {
-        Text(
-            text = stringResource(R.string.signin_supervisor_title),
-            style = MaterialTheme.typography.titleLarge,
-        )
-        Text(
-            text = stringResource(R.string.signin_supervisor_explainer),
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        Spacer(Modifier.height(12.dp))
 
-        OutlinedTextField(
-            value = username,
-            onValueChange = onUsernameChange,
-            label = { Text(stringResource(R.string.signin_username)) },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(Modifier.height(8.dp))
-        OutlinedTextField(
-            value = password,
-            onValueChange = onPasswordChange,
-            label = { Text(stringResource(R.string.signin_password)) },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                imeAction = ImeAction.Done,
-            ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            GloveOutlinedButton(
-                text = stringResource(R.string.action_back),
-                onClick = onCancel,
-                modifier = Modifier.weight(1f),
-            )
-            GloveButton(
-                text = stringResource(R.string.action_sign_in),
-                onClick = onSubmit,
-                enabled = !busy && username.isNotBlank() && password.isNotBlank(),
-                modifier = Modifier.weight(1f),
-            )
-        }
-    }
-}

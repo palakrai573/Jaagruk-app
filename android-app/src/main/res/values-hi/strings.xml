@@ -18,6 +18,12 @@
     <string name="signin_search_hint">नाम या कर्मचारी नंबर से खोजें</string>
     <string name="signin_no_workers">इस फ़ोन में अभी कोई कर्मचारी नहीं है। सुपरवाइज़र टूल से जोड़ा जा सकता है।</string>
     <string name="signin_no_site">यह फ़ोन किसी साइट से नहीं जुड़ा है। प्रशिक्षण चलेगा; प्रमाणपत्र के लिए साइट कुंजी चाहिए।</string>
+
+    <string name="signin_demo_title">अभी आज़माएँ</string>
+    <string name="signin_demo_explainer">इस फ़ोन पर एक नमूना साइट और तीन नमूना कर्मचारी बना देता है, ताकि आप तुरंत ड्रिल चला सकें। यह डेमो डेटा है, असली सूची नहीं — असली साइट पर कर्मचारी उनके कार्ड से सुपरवाइज़र टूल में जोड़े जाते हैं।</string>
+    <string name="signin_demo_action">डेमो साइट बनाएँ</string>
+    <string name="signin_demo_ready">डेमो साइट तैयार है। कर्मचारी चुनें और पिन %1$s डालें।</string>
+    <string name="signin_demo_failed">इस फ़ोन पर डेमो साइट नहीं बन सकी। इसका सुरक्षित की-स्टोर उपलब्ध नहीं है।</string>
     <string name="signin_queued_records">%1$d रिकॉर्ड इस फ़ोन में सुरक्षित हैं, अपलोड बाकी है। कुछ नहीं खोया।</string>
     <string name="signin_pin_not_set">पिन अभी सेट नहीं है</string>
     <string name="signin_enter_pin">शिफ़्ट शुरू करने के लिए अपना पिन डालें</string>
@@ -285,6 +291,11 @@
     <string name="supervisor_site_scanned">साइट स्कैन</string>
     <string name="supervisor_pin_reset">%1$s का पिन हटा दिया गया। अगले साइन-इन पर वे नया चुनेंगे।</string>
     <string name="supervisor_worker_unknown">%1$s इस फ़ोन में नहीं है।</string>
+
+    <string name="supervisor_server_title">अपलोड के लिए साइन-इन</string>
+    <string name="supervisor_server_explainer">यह केवल सर्वर तक रिकॉर्ड भेजने के लिए चाहिए। साइट कुंजी, कर्मचारी जोड़ना, चेन जाँच और दूसरे फ़ोन को रिकॉर्ड देना — ये सब इसके बिना भी चलते हैं।</string>
+    <string name="supervisor_server_signed_in">साइन-इन हो गया। कतार के रिकॉर्ड अब भेजे जाएँगे।</string>
+    <string name="supervisor_server_signed_in_as">%1$s के रूप में साइन-इन</string>
 
     <string name="supervisor_worker_enrol_title">कर्मचारी जोड़ें</string>
     <string name="supervisor_worker_enrol_explainer">नेटवर्क हो या न हो, इस फ़ोन पर कर्मचारी दर्ज करें। पहली बार साइन-इन करते समय वे अपना पिन खुद चुनेंगे, इसलिए आप उसे कभी नहीं देखेंगे। रिकॉर्ड अगले अपलोड पर सर्वर तक पहुँच जाएँगे।</string>

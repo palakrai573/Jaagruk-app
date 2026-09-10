@@ -104,6 +104,9 @@ class SupervisorEnrolmentScreenTest {
             timeSync = TimeSyncTracker(database, clock),
             session = mockk<SessionStore>(relaxed = true),
             gossip = gossip,
+            // Server sign-in now lives on this screen. Left unreachable on purpose: everything asserted
+            // here — the site key, enrolment, the roster — must work with no network at all.
+            api = mockk(relaxed = true),
             syncStatus = SyncStatusProvider(database),
         )
     }

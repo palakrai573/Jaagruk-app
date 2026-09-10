@@ -5,10 +5,15 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import org.jaagruk.core.catalog.ModuleCatalog
 import org.jaagruk.safety.ui.components.CatalogStrings
@@ -44,13 +49,24 @@ class MainActivity : AppCompatActivity() {
         val openRefreshers = intent?.getBooleanExtra(EXTRA_OPEN_REFRESHERS, false) == true
         val notifiedWorkerId = intent?.getStringExtra(EXTRA_WORKER_ID)
 
+        // Edge-to-edge is not optional at targetSdk 35: Android 15 draws content behind the system
+        // bars whether or not the app asks. Declaring it here rather than inheriting it silently means
+        // the inset padding below is a deliberate pair with it — without that padding the first line of
+        // every screen sits under the status bar, which is exactly what it did.
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             JaagrukTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    JaagrukNavHost(
-                        openRefreshers = openRefreshers,
-                        notifiedWorkerId = notifiedWorkerId,
-                    )
+                    // Applied once, at the shell, rather than per screen. A drill fills the display and
+                    // the AR surface deliberately draws to the edge, so the padding belongs around the
+                    // navigation host and not inside individual layouts where it would be forgotten.
+                    Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+                        JaagrukNavHost(
+                            openRefreshers = openRefreshers,
+                            notifiedWorkerId = notifiedWorkerId,
+                        )
+                    }
                 }
             }
         }

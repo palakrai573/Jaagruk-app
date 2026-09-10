@@ -30,6 +30,13 @@
     <string name="signin_search_hint">Search by name or worker number</string>
     <string name="signin_no_workers">No workers on this device yet. A supervisor can add them from Supervisor tools.</string>
     <string name="signin_no_site">This device is not enrolled to a site yet. Training still works; certificates need a site key.</string>
+
+    <!-- One-tap demo provisioning, offered only while the handset has no workers on it. -->
+    <string name="signin_demo_title">Try it now</string>
+    <string name="signin_demo_explainer">Sets up a sample site and three sample workers on this phone so you can run a drill straight away. This is demo data, not a real roster — a real site enrols workers from their cards in Supervisor tools.</string>
+    <string name="signin_demo_action">Set up demo site</string>
+    <string name="signin_demo_ready">Demo site ready. Pick a worker and use PIN %1$s.</string>
+    <string name="signin_demo_failed">The demo site could not be created on this device. This phone\'s secure key store is unavailable.</string>
     <string name="signin_queued_records">%1$d record(s) saved on this phone, waiting to upload. Nothing is lost.</string>
     <string name="signin_pin_not_set">No PIN set yet</string>
     <string name="signin_enter_pin">Enter your PIN to start your shift</string>
@@ -331,6 +338,12 @@
     <string name="supervisor_worker_unknown">%1$s is not on this device.</string>
 
     <!-- Offline worker enrolment. The path that makes a handset with no uplink usable at all. -->
+    <!-- Server sign-in, for uploads only. Everything else on this screen works offline. -->
+    <string name="supervisor_server_title">Sign in to upload</string>
+    <string name="supervisor_server_explainer">Only needed to send records to the server. Site keys, worker enrolment, chain checks and handing records to another phone all work without it.</string>
+    <string name="supervisor_server_signed_in">Signed in. Queued records will go out now.</string>
+    <string name="supervisor_server_signed_in_as">Signed in as %1$s</string>
+
     <string name="supervisor_worker_enrol_title">Add a worker</string>
     <string name="supervisor_worker_enrol_explainer">Enrol a worker on this phone, with or without a network. They choose their own PIN the first time they sign in, so you never see it. Records reach the server on the next upload.</string>
     <string name="supervisor_worker_id_hint">Worker ID from the card, e.g. %1$s</string>

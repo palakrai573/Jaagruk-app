@@ -20,6 +20,8 @@ import org.jaagruk.safety.data.repo.WorkerRepository
 import org.jaagruk.safety.sync.SyncScheduler
 import org.jaagruk.safety.sync.SyncStatusProvider
 import org.jaagruk.safety.sync.TimeSyncTracker
+import org.jaagruk.safety.sync.api.JaagrukApi
+import org.jaagruk.safety.sync.api.LoginRequest
 import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.sync.nearby.NearbyGossipService
 import org.jaagruk.safety.ui.LocaleManager
@@ -47,6 +49,7 @@ class SupervisorViewModel @Inject constructor(
     private val timeSync: TimeSyncTracker,
     private val session: SessionStore,
     private val gossip: NearbyGossipService,
+    private val api: JaagrukApi,
     syncStatus: SyncStatusProvider,
 ) : ViewModel() {
 
@@ -82,6 +85,8 @@ class SupervisorViewModel @Inject constructor(
         val newWorkerName: String = "",
         val newWorkerLanguage: String = LocaleManager.HINDI,
         val newWorkerPictogramMode: Boolean = false,
+        val username: String = "",
+        val password: String = "",
     ) {
         /** Enrolment needs a site: the id is hashed into every certificate the worker earns. */
         val canEnrolWorkers: Boolean get() = !siteId.isNullOrBlank()
@@ -140,6 +145,72 @@ class SupervisorViewModel @Inject constructor(
 
     fun setSiteIdInput(value: String) {
         _state.value = _state.value.copy(siteIdInput = value.trim().uppercase())
+    }
+
+    // -----------------------------------------------------------------------
+    // Server sign-in, for uploads
+    // -----------------------------------------------------------------------
+
+    fun setUsername(value: String) {
+        _state.value = _state.value.copy(username = value.trim())
+    }
+
+    fun setPassword(value: String) {
+        _state.value = _state.value.copy(password = value)
+    }
+
+    /**
+     * Signs a supervisor in against the server.
+     *
+     * The one flow in the app that genuinely needs connectivity, and it lives here rather than in front
+     * of the sign-in screen for a specific reason: it used to gate the whole of Supervisor tools, so a
+     * handset that had never had signal could not enrol a site key or a worker, and therefore could not
+     * train anybody. Everything else on this screen works with the radio off. This authorises *uploads*,
+     * which is a decision the server has to make, and nothing more.
+     */
+    fun submitServerLogin() {
+        val current = _state.value
+        _state.value = current.copy(busy = true, message = null)
+
+        viewModelScope.launch {
+            try {
+                val response = api.login(LoginRequest(current.username, current.password))
+                val body = response.body()
+                when {
+                    response.isSuccessful && body != null -> {
+                        session.save(body)
+                        body.siteId?.let { deviceProfile.setActiveSiteId(it) }
+                        // Records queued while nobody was signed in can go out now.
+                        syncScheduler.requestSyncNow()
+                        _state.value = _state.value.copy(
+                            busy = false,
+                            password = "",
+                            message = UiMessage.success(R.string.supervisor_server_signed_in),
+                        )
+                        refresh()
+                    }
+
+                    response.isSuccessful ->
+                        fail(UiMessage.error(R.string.signin_empty_session))
+
+                    response.code() == HTTP_UNAUTHORIZED ->
+                        fail(UiMessage.error(R.string.signin_bad_credentials))
+
+                    response.code() == HTTP_TOO_MANY_REQUESTS ->
+                        fail(UiMessage.error(R.string.signin_rate_limited))
+
+                    else -> fail(UiMessage.error(R.string.signin_failed_code, response.code()))
+                }
+            } catch (e: Exception) {
+                // No connectivity is the ordinary case here and does not deserve alarming language.
+                Log.i(TAG, "server sign-in could not be reached", e)
+                fail(UiMessage.warning(R.string.signin_offline))
+            }
+        }
+    }
+
+    private fun fail(message: UiMessage) {
+        _state.value = _state.value.copy(busy = false, message = message)
     }
 
     // -----------------------------------------------------------------------
@@ -397,5 +468,7 @@ class SupervisorViewModel @Inject constructor(
 
     private companion object {
         const val TAG = "SupervisorViewModel"
+        const val HTTP_UNAUTHORIZED = 401
+        const val HTTP_TOO_MANY_REQUESTS = 429
     }
 }

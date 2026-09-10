@@ -26,6 +26,12 @@
     <string name="signin_search_hint">ᱧᱩᱛᱩᱢ ᱥᱮ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱱᱚᱢᱵᱚᱨ ᱛᱮ ᱯᱟᱱᱛᱮ ᱢᱮ</string>
     <string name="signin_no_workers">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱴᱩᱞ ᱠᱷᱚᱱ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
     <string name="signin_no_site">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱡᱟᱦᱟᱸ ᱡᱟᱭᱜᱟ ᱥᱟᱶ ᱵᱟᱝ ᱥᱮᱞᱮᱫᱟᱠᱟᱱᱟ ᱾ ᱛᱟᱞᱤᱢ ᱦᱩᱭᱩᱜᱼᱟ; ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱭᱜᱟ ᱠᱟᱹᱴᱷᱤ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾</string>
+
+    <string name="signin_demo_title">ᱱᱤᱛᱚᱜ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="signin_demo_explainer">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱱᱟᱢᱩᱱᱟ ᱡᱟᱭᱜᱟ ᱟᱨ ᱯᱮᱭᱟ ᱱᱟᱢᱩᱱᱟ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱛᱮᱭᱟᱨᱚᱜᱼᱟ, ᱚᱱᱟᱛᱮ ᱟᱢ ᱮᱠᱮᱱ ᱛᱟᱞᱤᱢ ᱮᱦᱚᱵ ᱫᱟᱲᱮᱭᱟᱢᱟ ᱾ ᱱᱚᱶᱟ ᱰᱮᱢᱚ ᱰᱮᱴᱟ ᱠᱟᱱᱟ, ᱥᱟᱹᱨᱤ ᱞᱤᱥᱴᱤ ᱵᱟᱝ — ᱥᱟᱹᱨᱤ ᱡᱟᱭᱜᱟ ᱨᱮ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱠᱚ ᱩᱱᱠᱩ ᱨᱮᱭᱟᱜ ᱠᱟᱰ ᱠᱷᱚᱱ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱴᱩᱞ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜᱼᱟ ᱾</string>
+    <string name="signin_demo_action">ᱰᱮᱢᱚ ᱡᱟᱭᱜᱟ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="signin_demo_ready">ᱰᱮᱢᱚ ᱡᱟᱭᱜᱟ ᱛᱮᱭᱟᱨ ᱾ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱟᱨ ᱯᱤᱱ %1$s ᱚᱞ ᱢᱮ ᱾</string>
+    <string name="signin_demo_failed">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱰᱮᱢᱚ ᱡᱟᱭᱜᱟ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱠᱮᱫᱟ ᱾ ᱱᱚᱶᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚᱱ ᱠᱩᱸᱡᱤ ᱵᱷᱟᱺᱰᱟᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
     <string name="signin_queued_records">%1$d ᱨᱮᱠᱚᱰ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱡᱚᱮᱛᱟᱠᱟᱱᱟ, ᱟᱯᱞᱚᱰ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱵᱟᱝ ᱟᱫᱟᱜᱮᱱᱟ ᱾</string>
     <string name="signin_pin_not_set">ᱯᱤᱱ ᱛᱮᱦᱮᱸᱡ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱥᱮᱴ ᱦᱩᱭ ᱟᱠᱟᱱᱟ</string>
     <string name="signin_enter_pin">ᱥᱤᱯᱷᱴ ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱯᱤᱱ ᱮᱢ ᱢᱮ</string>
@@ -293,6 +299,11 @@
     <string name="supervisor_site_scanned">ᱡᱟᱭᱜᱟ ᱥᱠᱮᱱ</string>
     <string name="supervisor_pin_reset">%1$s ᱨᱮᱭᱟᱜ ᱯᱤᱱ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱮᱴᱟᱜ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱨᱮ ᱩᱱᱠᱩ ᱱᱟᱶᱟ ᱵᱟᱪᱷᱟᱣᱟ ᱾</string>
     <string name="supervisor_worker_unknown">%1$s ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+
+    <string name="supervisor_server_title">ᱟᱯᱞᱚᱰ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱤᱱᱼᱤᱱ</string>
+    <string name="supervisor_server_explainer">ᱱᱚᱶᱟ ᱮᱠᱮᱱ ᱥᱟᱨᱵᱷᱟᱨ ᱛᱮ ᱨᱮᱠᱚᱰ ᱠᱩᱞ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ ᱾ ᱡᱟᱭᱜᱟ ᱠᱩᱸᱡᱤ, ᱠᱟᱹᱢᱤᱛᱮᱛ ᱥᱮᱞᱮᱫ, ᱪᱮᱱ ᱧᱮᱞ ᱟᱨ ᱮᱴᱟᱜ ᱯᱷᱚᱱ ᱛᱮ ᱨᱮᱠᱚᱰ ᱮᱢ — ᱡᱚᱛᱚ ᱱᱚᱶᱟ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱦᱚᱸ ᱠᱟᱹᱢᱤᱜᱼᱟ ᱾</string>
+    <string name="supervisor_server_signed_in">ᱥᱟᱭᱤᱱᱼᱤᱱ ᱦᱩᱭ ᱮᱱᱟ ᱾ ᱠᱤᱭᱩ ᱨᱮᱭᱟᱜ ᱨᱮᱠᱚᱰ ᱠᱚ ᱱᱤᱛᱚᱜ ᱚᱰᱚᱠᱚᱜᱼᱟ ᱾</string>
+    <string name="supervisor_server_signed_in_as">%1$s ᱞᱮᱠᱟ ᱥᱟᱭᱤᱱᱼᱤᱱ</string>
 
     <string name="supervisor_worker_enrol_title">ᱠᱟᱹᱢᱤᱛᱮᱛ ᱥᱮᱞᱮᱫ ᱢᱮ</string>
     <string name="supervisor_worker_enrol_explainer">ᱱᱮᱴᱣᱟᱨᱠ ᱢᱮᱱᱟᱜᱼᱟ ᱥᱮ ᱵᱟᱹᱱᱩᱜᱼᱟ, ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱠᱟᱹᱢᱤᱛᱮᱛ ᱱᱚᱛᱮ ᱢᱮ ᱾ ᱯᱩᱭᱞᱩ ᱥᱟᱭᱤᱱᱼᱤᱱ ᱨᱮ ᱩᱱᱠᱩ ᱟᱡ ᱛᱮ ᱯᱤᱱ ᱵᱟᱪᱷᱟᱣᱟ, ᱚᱱᱟᱛᱮ ᱟᱢ ᱚᱱᱟ ᱵᱟᱝ ᱧᱮᱞᱟᱢ ᱾ ᱨᱮᱠᱚᱰ ᱠᱚ ᱮᱴᱟᱜ ᱟᱯᱞᱚᱰ ᱨᱮ ᱥᱟᱨᱵᱷᱟᱨ ᱛᱮ ᱥᱮᱴᱮᱨᱟ ᱾</string>

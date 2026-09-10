@@ -12,11 +12,9 @@ import org.jaagruk.core.util.FixedWallClock
 import org.jaagruk.safety.data.DeviceProfile
 import org.jaagruk.safety.data.auth.PinAuthenticator
 import org.jaagruk.safety.data.db.JaagrukDatabase
+import org.jaagruk.safety.data.repo.SiteRepository
 import org.jaagruk.safety.data.repo.WorkerRepository
-import org.jaagruk.safety.sync.SyncScheduler
 import org.jaagruk.safety.sync.SyncStatusProvider
-import org.jaagruk.safety.sync.api.JaagrukApi
-import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.testing.TestDatabase
 import org.junit.After
 import org.junit.Before
@@ -48,6 +46,7 @@ class OfflineFirstRunFlowTest {
     private lateinit var deviceProfile: DeviceProfile
     private lateinit var viewModel: SignInViewModel
 
+    private val clock = FixedWallClock(1_760_000_000_000L)
     private val siteId = "JH-DHN-001"
     private val workerId = "JH-DHN-001-W00042"
 
@@ -60,7 +59,7 @@ class OfflineFirstRunFlowTest {
         workers = WorkerRepository(
             database = database,
             pinAuthenticator = PinAuthenticator(database.workerDao()),
-            clock = FixedWallClock(1_760_000_000_000L),
+            clock = clock,
         )
         deviceProfile = DeviceProfile(database)
     }
@@ -74,9 +73,11 @@ class OfflineFirstRunFlowTest {
     private fun buildViewModel() = SignInViewModel(
         workers = workers,
         deviceProfile = deviceProfile,
-        api = mockk<JaagrukApi>(relaxed = true),
-        session = mockk<SessionStore>(relaxed = true),
-        syncScheduler = mockk<SyncScheduler>(relaxed = true),
+        // Relaxed: the Android Keystore is not available on the JVM, so generateSiteKey is faked. What
+        // the demo tests below assert is the roster and the site id, which are real database writes.
+        keyStore = mockk(relaxed = true),
+        sites = SiteRepository(database, clock),
+        clock = clock,
         syncStatus = SyncStatusProvider(database),
     )
 
@@ -240,14 +241,53 @@ class OfflineFirstRunFlowTest {
     }
 
     @Test
-    fun `the supervisor login step is reachable, since that is where a site key comes from`() =
-        runTest {
-            viewModel = buildViewModel()
+    fun `demo setup makes the app usable in one tap on a handset with no network`() = runTest {
+        viewModel = buildViewModel()
+        assertThat((viewModel.state.value.step as SignInStep.PickWorker).workers).isEmpty()
 
-            viewModel.openSupervisorLogin()
+        viewModel.setUpDemoSite()
 
-            assertThat(viewModel.state.value.step).isEqualTo(SignInStep.SupervisorLogin)
+        // A site to sign certificates against, and a roster to sign in as. Both were previously
+        // reachable only through a Supervisor tools screen that itself sat behind a network login.
+        assertThat(viewModel.state.value.siteId).isEqualTo(SignInViewModel.DEMO_SITE_ID)
+        val rows = (viewModel.state.value.step as SignInStep.PickWorker).workers
+        assertThat(rows).hasSize(SignInViewModel.DEMO_WORKERS.size)
+        assertThat(viewModel.state.value.message).isNotNull()
+    }
+
+    @Test
+    fun `a demo worker can sign in immediately with the PIN shown on screen`() = runTest {
+        viewModel = buildViewModel()
+        viewModel.setUpDemoSite()
+
+        val first = SignInViewModel.DEMO_WORKERS.first().first
+        viewModel.selectWorker(first)
+        // Already has a PIN, so this is the returning-worker path rather than choosing one.
+        assertThat((viewModel.state.value.step as SignInStep.EnterPin).settingNewPin).isFalse()
+
+        viewModel.setPin(SignInViewModel.DEMO_PIN)
+        var signedInAs: String? = null
+        viewModel.submitPin { signedInAs = it }
+
+        assertThat(signedInAs).isEqualTo(first)
+    }
+
+    @Test
+    fun `demo ids satisfy the same validation the server enforces`() = runTest {
+        // A demo roster the server would reject would be demonstrating a path that cannot sync.
+        for ((workerId, _, _) in SignInViewModel.DEMO_WORKERS) {
+            assertThat(WorkerRepository.WORKER_ID_PATTERN.matches(workerId)).isTrue()
         }
+    }
+
+    @Test
+    fun `running demo setup twice does not duplicate the roster`() = runTest {
+        viewModel = buildViewModel()
+        viewModel.setUpDemoSite()
+        viewModel.setUpDemoSite()
+
+        assertThat(workers.all()).hasSize(SignInViewModel.DEMO_WORKERS.size)
+    }
 
     @Test
     fun `an inactive worker is not offered for sign-in`() = runTest {
