@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jaagruk.ai.LlmSessionGuard
 import org.jaagruk.core.assessment.AbortReason
 import org.jaagruk.core.assessment.ArPresentation
 import org.jaagruk.core.assessment.AssessmentMode
@@ -63,6 +64,7 @@ class DrillViewModel @Inject constructor(
     private val sites: SiteRepository,
     private val deviceProfile: DeviceProfile,
     private val arFactory: ArControllerFactory,
+    private val sessionGuard: LlmSessionGuard,
     private val voiceEngine: VoiceCommandEngine,
     private val narration: NarrationPlayer,
 ) : ViewModel() {
@@ -114,6 +116,15 @@ class DrillViewModel @Inject constructor(
     private var siteId: String = ""
     private var multiSelection = mutableSetOf<String>()
     private var siteScanned = false
+
+    /**
+     * Whether this drill has claimed the device from the AI layer.
+     *
+     * Tracked rather than assumed so the release is balanced with the claim. `start()` can return early
+     * for an unknown scenario or a buddy scenario reached without a peer, and in those cases nothing was
+     * claimed and nothing must be released.
+     */
+    private var drillClaimed = false
     private var backgroundedAtMs: Long = 0L
     private var dwellOptionId: String? = null
 
@@ -163,6 +174,20 @@ class DrillViewModel @Inject constructor(
                 )
                 return@launch
             }
+
+            // Claim the device before the AR session exists, and await it.
+            //
+            // This is the memory and thermal interlock. An ARCore session plus a GLES3 surface plus the
+            // camera pipeline, alongside a 1B language model holding roughly 900 MiB of weights and KV
+            // cache, does not fit comfortably on a 4 GB handset. The consequence is not an out-of-memory
+            // dialog, it is sustained thermal throttling — and a decision latency measured on a
+            // throttled frame loop describes the phone rather than the worker, then gets signed into a
+            // certificate as though it described the worker.
+            //
+            // Awaited rather than fired and forgotten: starting the session first and unloading
+            // afterwards leaves exactly the window this exists to close.
+            sessionGuard.enterDrill()
+            drillClaimed = true
 
             val preferFlat = worker?.pictogramMode == true && FLAT_FOR_PICTOGRAM_MODE
             val ar = arFactory.create(preferFlat = preferFlat)
@@ -657,6 +682,12 @@ class DrillViewModel @Inject constructor(
         voiceEngine.stopListening()
         narration.stop()
         controller?.detach()
+        // Give the device back on every exit path, including an abandoned or crashed run. Guarded by
+        // the flag so a start() that bailed before claiming cannot release a claim it never took.
+        if (drillClaimed) {
+            drillClaimed = false
+            sessionGuard.exitDrill()
+        }
         // A run that was still open when the screen went away is sealed as aborted rather than left
         // dangling. The steps already answered keep their measured latencies.
         session?.takeIf { it.state != SessionState.FINISHED }?.let { active ->

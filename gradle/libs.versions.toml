@@ -148,6 +148,10 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+# :ai is a library rather than another application: it exists so the native build and the
+# 7 MB of vendored llama.cpp are isolated behind one module boundary that :android-app
+# depends on, and that a checkout without the NDK can leave out.
+android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

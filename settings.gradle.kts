@@ -56,6 +56,20 @@ val androidSdkAvailable: Boolean =
         localPropertiesDeclaresSdk
 
 if (!skipAndroid && (forceAndroid || androidSdkAvailable)) {
+    // ---------------------------------------------------------------------------
+    // :ai holds the on-device language model: the vendored llama.cpp CPU backend,
+    // the JNI bridge, and the orchestration that joins :core's retrieval, prompt
+    // building and output guard to it. Separate from :android-app so the NDK
+    // requirement and 7 MB of third-party C++ sit behind one module boundary.
+    //
+    // Included unconditionally alongside :android-app, and therefore the APK build
+    // needs the NDK as well as the SDK. There is deliberately no flag to leave it
+    // out: :android-app references AiCoach directly, so an absent module would not
+    // compile, and an escape hatch that does not work is worse than none.
+    // `tools\bootstrap-android-sdk.ps1` installs the NDK and CMake alongside the
+    // platform, and `docs/ARCHITECTURE.md` states the requirement.
+    // ---------------------------------------------------------------------------
+    include(":ai")
     include(":android-app")
 } else {
     logger.lifecycle(

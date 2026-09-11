@@ -504,3 +504,233 @@ The backend must reproduce Kotlin's bytes exactly or every signature check fails
 
 Neither side can drift without a red test, and the fixture file is the single source of truth
 for both.
+
+---
+
+## 14. On-device assistance (`core/ai`, `:ai`)
+
+A local language model, added to explain, answer and summarise. Normative rules follow; the
+built/partial/not-yet accounting is in `docs/CAPABILITY_MATRIX.md` and the thresholds are in
+`docs/CALIBRATION.md`.
+
+### 14.1 The invariant
+
+**Assistance is additive. Nothing in the training, assessment, certification or sync path depends on
+it.** Removing the `:ai` module would remove four optional panels and change no other behaviour. That
+is not a nice-to-have property, it is what makes shipping a non-deterministic component into a safety
+certification workflow defensible at all.
+
+The model is forbidden from touching:
+
+- scoring, hesitation classification, pass/fail, `OutcomeClass`
+- certificate contents, signing, chain linkage, verification verdicts
+- the scenario catalog, which stays compiled and signed so scores remain comparable across sites
+- runtime translation of any safety-critical string
+- anything inside the AR frame loop
+- Santali output of any kind
+
+Enforced structurally rather than by discipline: `AiTask.StepCoaching` carries the outcome and the
+timings and has **no field for a score or a pass flag**, so the model is never told the verdict and
+cannot restate it.
+
+### 14.2 Where the code lives, and why
+
+| Module | Holds | Depends on |
+|---|---|---|
+| `core/ai` | corpus, BM25 retrieval, prompt construction, output guard, capability enum, task types | nothing Android, no coroutines |
+| `:ai` | vendored llama.cpp CPU backend, JNI bridge, engine, model store, AR interlock, orchestration | `:core` |
+| `:android-app` | Hilt bindings, the shared `AiPanel`, four feature integrations | `:core`, `:ai` |
+
+Everything that decides what a worker may be shown is in `core/ai`, on a plain JVM, unit tested with
+no emulator and no model file. The model is the only non-deterministic part of the system and it sits
+between two deterministic gates.
+
+`:ai` is a separate module so the NDK requirement and roughly 7 MB of third-party C++ sit behind one
+boundary. **The APK build therefore requires the NDK as well as the SDK** — NDK `28.2.13676358` and
+CMake `3.22.1`, both pinned, both installed by `tools\bootstrap-android-sdk.ps1`. There is
+deliberately no flag to exclude `:ai`: `:android-app` references `AiCoach` directly, so an absent
+module would not compile, and an escape hatch that does not work is worse than none.
+
+### 14.3 Pipeline
+
+Every stage can refuse, and a refusal is a reported outcome rather than an error:
+
+```
+capability check   -> Unavailable    (no engine, no model, sat, mid-drill, policy)
+retrieval          -> NoGrounding    (nothing relevant; the model never runs)
+prompt building    -> NoGrounding    (grounding could not be laid out)
+generation         -> Failed
+AnswerGuard        -> Filtered | ModelDeclined
+otherwise                            Answer
+```
+
+Six outcomes, for the same reason chain verification reports seven verdicts rather than two.
+Collapsing them either hides a real problem or cries wolf.
+
+### 14.4 Retrieval
+
+BM25 over a bundled corpus of 68 passages — 34 authored pairs in English and Hindi. One index per
+language, so document frequencies are language-local; a mixed index would give Devanagari terms
+inflated IDF purely because the English half never contains them.
+
+Two properties are load-bearing:
+
+- **Devanagari words must survive tokenisation.** `Char.isLetterOrDigit()` is false for a matra, so
+  "गैस" (ग + ◌ै + स) splits into two single consonants under a naive tokeniser and every query then
+  matches every passage. Non-spacing marks, combining marks and the zero-width joiners are treated as
+  word characters.
+- **Document frequency is counted over the passages the filter admits**, not the whole corpus, so
+  narrowing a query to one module does not leave IDF describing text the query was never allowed to
+  see.
+
+Dispatch by task kind is deliberate, and the asymmetry is the point:
+
+| Task | Strategy | Can refuse |
+|---|---|---|
+| `SafetyQuestion` | term match against the relevance floor | **yes** — the only case where refusing is the right answer |
+| `StepCoaching` | the passage authored for that step, selected by **identity**, then term matches to fill | no, if the step has an authored passage |
+| `ShiftBriefing` | term match, falling back to `GENERAL` passages | no |
+| `HazardSummary` | term match, falling back to `GENERAL` passages | no |
+
+The last two are not questions. They restate structured data the app already holds — counts the
+dashboard computed, a note a worker typed — so grounding supplies vocabulary and a rule to reference
+rather than the facts. Refusing to summarise a hazard because the corpus has no passage about that
+particular cable would be worse than summarising it against general practice. Their numeric claims are
+still checked against the whole prompt, so the fallback widens what may be *referenced* and not what
+may be *asserted*.
+
+### 14.5 Prompt format
+
+Gemma 3's template, and the two things that are easy to get wrong:
+
+1. **There is no system role.** Gemma 3 IT has `user` and `model` turns only. System instructions are
+   prepended to the first user turn. A `system` turn produces a prompt shape the model never saw in
+   training, and the symptom is ignored instructions rather than an error.
+2. **Do not emit `<bos>`.** llama.cpp is called with `add_special = true`, so the tokeniser adds it.
+   Writing it too gives the model two, which degrades the opening tokens invisibly.
+
+```
+<start_of_turn>user
+{instructions}
+
+### SAFETY SOURCES (the only facts you may use)
+[1] {title}
+{body}
+
+### {task block}<end_of_turn>
+<start_of_turn>model
+```
+
+The trailing `model` turn is left open; that is where generation begins. Construction is pure and
+deterministic — no clock, no randomness, stable ordering — and `PromptBuilderTest` pins the English
+question prompt byte for byte, for the same reason `attestation_vectors.json` pins the certificate
+encoding.
+
+All interpolated free text passes through `GemmaChatTemplate.sanitize`, which strips chat control
+tokens. A worker's question and hazard note are untrusted input reaching an interpreter; the fix costs
+one pass over a short string.
+
+### 14.6 Output guard
+
+Deterministic validation of everything the model produces, in this order:
+
+| Check | Rejects |
+|---|---|
+| Control-token strip, then blank | `EMPTY` |
+| Refusal sentinel `[[NOT_IN_SOURCES]]` | — returns `Refused`, a success |
+| Instruction echo | `PROMPT_LEAKAGE` |
+| Hard character ceiling | `DEGENERATE_LOOP` |
+| Ol Chiki codepoints | `UNSUPPORTED_SCRIPT` |
+| Repeated sentences, trigram diversity | `DEGENERATE_LOOP` |
+| Script share for the requested language | `LANGUAGE_DRIFT` |
+| Verdict phrases | `VERDICT_LANGUAGE` |
+| **Numeric claims not present in the prompt** | `UNGROUNDED_NUMBER` |
+| Sentence or line limit | truncates, flags `truncated` |
+
+The refusal check runs before the content checks so a refusal can never be rejected for content it
+does not contain. The numeric check runs against the **whole prompt**, not just the sources, because a
+briefing legitimately echoes counts from the task block — and a figure present nowhere in the prompt
+cannot have come from anywhere but the model.
+
+English verdict detection is phrase-based, not word-based: a bare "failed" appears legitimately in "if
+the ventilation failed", and matching it would discard correct safety advice. The two Hindi words
+उत्तीर्ण and अनुत्तीर्ण are safe to match bare.
+
+A rule that lives only in a prompt is a request. A small model under an unusual input will ignore it,
+and without this class nothing downstream would know.
+
+### 14.7 The model file
+
+Gemma 3 1B instruction-tuned, Q4_K_M, **769 MiB**, from
+[`ggml-org/gemma-3-1b-it-GGUF`](https://huggingface.co/ggml-org/gemma-3-1b-it-GGUF) — the llama.cpp
+project's own conversion, which is the reason to prefer it over a third-party re-quant. **Not in the APK
+and not in this repository.**
+
+That is large for a 1B model, and the reason is the vocabulary. Gemma 3 uses a 262,144-token
+tokeniser, so the embedding table is a substantial fraction of the parameter count, and K-quants keep
+`token_embd` at higher precision than the transformer blocks. The published "roughly 529 MB" figure for
+Gemma 3 1B refers to Google's own AI Edge int4 build, not a llama.cpp Q4_K_M GGUF; this repository
+measured the file it actually loads. Q8_0 in the same repo is 1,020 MiB, and no smaller K-quant is
+published there, so Q4_K_M is both the recommended and the smallest sensible choice.
+
+Bundling it would end the 27 MB download, and cost a second 769 MiB because an asset must be extracted
+to a real path before llama.cpp can memory-map it — a 1 GB footprint plus a multi-minute first launch.
+So it arrives out of band, is validated by GGUF magic bytes and a 200 MB size floor, and is mapped in
+place with `use_mmap = true`. Installation writes to a `.part` file and renames on success, so an
+interrupted transfer cannot leave something that passes the presence check.
+
+Absent it, every feature reports `MODEL_MISSING` and the non-AI paths run. This is the same contract
+the app already has with `gesture_recognizer.task` and the ARCore Cloud Anchor key.
+
+### 14.8 The AR interlock
+
+An AR drill holds an ARCore session, a GLES3 surface and the camera pipeline. A 1B model at Q4 needs
+roughly 900 MiB resident: 769 MiB of weights plus its KV cache. On the 4 GB handsets this platform targets, holding both means
+sustained thermal throttling and a real chance the allocator kills one of them.
+
+Throttling is the part that matters: **decision latency measured on a throttled frame loop describes
+the phone, not the worker**, and that measurement is signed into a certificate. So the model is
+released, not merely discouraged.
+
+`LlmSessionGuard` is reference counted rather than a boolean, because a buddy drill has a drill screen
+and a peer session that overlap and a naive boolean would let the first to finish re-admit the model
+while the second was still running. `DrillViewModel` **awaits** `enterDrill()` immediately before
+`ArControllerFactory.create` — starting the session first and unloading afterwards leaves exactly the
+window the interlock exists to close — and releases in `onCleared`, guarded by a flag so a `start()`
+that bailed early cannot release a claim it never took. A listener that throws does not prevent a
+drill starting: safety training takes precedence over the optional feature.
+
+### 14.9 ABI coverage
+
+| ABI | AI native library | Reported capability |
+|---|---|---|
+| `arm64-v8a` | 3.29 MB, present | `READY` once a model is installed |
+| `x86_64` | 3.58 MB, present | `READY` — exists so the feature is demonstrable on an emulator |
+| `armeabi-v7a` | **absent** | `UNSUPPORTED_DEVICE` |
+
+A 32-bit handset has a 4 GB address space shared with the camera pipeline and the AR session, and a 1B
+model does not fit alongside them. `System.loadLibrary` therefore fails on those devices *by design* —
+which is why the library is loaded lazily inside a `try`, and not from an initialiser. In an
+initialiser that expected failure becomes `ExceptionInInitializerError` on first touch of the class: an
+unrecoverable crash on a device the app is meant to work on. Verified at the packaging level: the
+`armeabi-v7a` release APK contains no `libjaagruk_llm.so`.
+
+### 14.10 Streaming, and why there is none
+
+Generation returns the whole text rather than streaming it. Partial output has not been through the
+guard, and showing a worker an invented methane threshold for two seconds before replacing it would
+defeat the point of having one. Progress is reported as a word count so the UI can be honest about
+waiting without showing unvalidated text.
+
+### 14.11 Vendored third party
+
+`ai/src/main/cpp/llama/` holds roughly 7 MB of llama.cpp: `include/`, `src/`, and only the ggml CPU
+backend. Every GPU backend (CUDA, Vulkan, SYCL, Metal, OpenCL, CANN and the rest), `common/`, AMX,
+kleidiai and spacemit are excluded — 18 MB of source that would compile to nothing usable here. Arch
+kernels are selected by `ANDROID_ABI`, and an ABI with no vendored kernels is a CMake `FATAL_ERROR`
+rather than a library that half works.
+
+Two build details worth keeping: `-O3` is used **without** `-ffast-math`, because that implies
+`-ffinite-math-only` and ggml uses `INFINITY` for masked attention scores — compiling under
+finite-math produces a library that loads, runs and returns wrong numbers. And debug symbols are
+stripped: the unstripped library is 65 MB against 3.29 MB stripped.

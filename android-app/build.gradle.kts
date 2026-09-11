@@ -178,7 +178,15 @@ android {
         // Accessibility and localisation are functional requirements here, not nice-to-haves:
         // a missing content description or an untranslated string is a worker who cannot proceed.
         fatal += setOf("ContentDescription", "MissingTranslation")
-        disable += setOf("GradleDependency", "ObsoleteLintCustomCheck")
+        disable += setOf(
+            "GradleDependency",
+            "ObsoleteLintCustomCheck",
+            // This app ships APKs, not an App Bundle, so there is no per-language split to configure
+            // and no Play Core language download to make. The check fires on
+            // `createConfigurationContext` in `CatalogResolver`, which exists because the per-app
+            // locale does not reach the application context below API 33 — see the KDoc there.
+            "AppBundleLocaleChanges",
+        )
         // Lint's own Kotlin analysis crashes on this module's test sources with
         // `LLFirModuleLazyDeclarationResolver` — a bug in lint's use of the Kotlin analysis API,
         // reproducible on the Compose UI test source set and unrelated to anything it would report.
@@ -212,9 +220,15 @@ configurations.configureEach {
 }
 
 dependencies {
-    // Every piece of load-bearing logic lives in :core, which is a plain JVM module with 437
+    // Every piece of load-bearing logic lives in :core, which is a plain JVM module with 606
     // unit tests. The Android layer is deliberately a thin shell around it.
     implementation(project(":core"))
+
+    // The on-device language model, its vendored llama.cpp backend, and the orchestration that joins
+    // :core's retrieval, prompt building and output guard to it. Nothing in the training,
+    // assessment, certification or sync path depends on this module: assistance is additive, and
+    // every feature that uses it has a working non-AI path.
+    implementation(project(":ai"))
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)

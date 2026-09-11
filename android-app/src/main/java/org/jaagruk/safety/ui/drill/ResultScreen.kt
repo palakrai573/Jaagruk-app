@@ -31,15 +31,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jaagruk.ai.AiCoach
+import org.jaagruk.core.ai.AiTaskFactory
 import org.jaagruk.core.assessment.Completion
 import org.jaagruk.core.assessment.OutcomeClass
 import org.jaagruk.core.catalog.ModuleCatalog
 import org.jaagruk.core.catalog.Pictogram
 import org.jaagruk.safety.R
+import org.jaagruk.safety.ai.CatalogResolver
+import org.jaagruk.safety.ai.currentAiLanguage
 import org.jaagruk.safety.data.repo.AssessmentRepository
 import org.jaagruk.safety.data.repo.CertificateRepository
 import org.jaagruk.safety.sync.api.StepResultUpload
+import org.jaagruk.safety.ui.components.AiPanel
+import org.jaagruk.safety.ui.components.AiPanelState
 import org.jaagruk.safety.ui.components.BannerTone
+import org.jaagruk.safety.ui.components.UiMessage
+import org.jaagruk.safety.ui.components.toPanelState
 import org.jaagruk.safety.ui.components.GloveButton
 import org.jaagruk.safety.ui.components.GloveOutlinedButton
 import org.jaagruk.safety.ui.components.PictogramIcon
@@ -211,7 +219,11 @@ fun ResultScreen(
         }
 
         items(state.remediationSteps, key = { it.stepId }) { step ->
-            StepReviewCard(step)
+            StepReviewCard(
+                step = step,
+                coachState = state.coaching[step.stepId] ?: AiPanelState.Idle,
+                onExplain = { viewModel.explain(step) },
+            )
         }
 
         item {
@@ -236,7 +248,11 @@ fun ResultScreen(
 }
 
 @Composable
-private fun StepReviewCard(step: StepResultUpload) {
+private fun StepReviewCard(
+    step: StepResultUpload,
+    coachState: AiPanelState,
+    onExplain: () -> Unit,
+) {
     SectionCard {
         Text(
             text = catalogString("step_${step.stepId}_prompt"),
@@ -262,8 +278,9 @@ private fun StepReviewCard(step: StepResultUpload) {
             )
         }
 
-        // The remediation string is the one piece of coaching a worker takes away, so it is shown for every
-        // step worth reviewing rather than only for outright wrong answers.
+        // The authored remediation string is the coaching that always works: it needs no model, no
+        // memory and no ABI. It is shown first and unconditionally. Whatever the assistant adds sits
+        // underneath it, so a handset with no model installed loses nothing that was there before.
         val remedyKey = "step_${step.stepId}_remedy"
         Spacer(Modifier.height(6.dp))
         Text(
@@ -271,6 +288,18 @@ private fun StepReviewCard(step: StepResultUpload) {
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
         )
+
+        // Hidden entirely when there is no engine on this device, rather than shown as a dead button.
+        if (coachState !is AiPanelState.Unavailable) {
+            Spacer(Modifier.height(10.dp))
+            AiPanel(
+                state = coachState,
+                titleRes = R.string.ai_coach_title,
+                disclaimerRes = R.string.ai_coach_disclaimer,
+                actionRes = R.string.ai_coach_action,
+                onAsk = onExplain,
+            )
+        }
     }
 }
 
@@ -284,6 +313,8 @@ private fun voidLabel(reason: String): Int = when (reason) {
 class ResultViewModel @Inject constructor(
     private val assessments: AssessmentRepository,
     private val certificates: CertificateRepository,
+    private val aiCoach: AiCoach,
+    private val catalogResolver: CatalogResolver,
 ) : ViewModel() {
 
     data class State(
@@ -292,10 +323,70 @@ class ResultViewModel @Inject constructor(
         val moduleTitleKey: String? = null,
         val certificateSeq: Long? = null,
         val remediationSteps: List<StepResultUpload> = emptyList(),
+        /** Assistance state per step id. Absent means never asked. */
+        val coaching: Map<String, AiPanelState> = emptyMap(),
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+
+    private fun setCoaching(stepId: String, panel: AiPanelState) {
+        _state.value = _state.value.copy(
+            coaching = _state.value.coaching + (stepId to panel),
+        )
+    }
+
+    /**
+     * Explains one reviewed step.
+     *
+     * Reads the outcome from the stored run and rebuilds the question, the correct action and the
+     * authored distractors from the catalog. It deliberately does not learn, or claim, which option the
+     * worker picked: the stored payload is the same one that syncs to the server, and that has no field
+     * for it. Widening the sync contract for a coaching feature would be the wrong trade.
+     *
+     * Nothing here can change the score, the pass flag or the certificate. Those are already sealed and
+     * signed by the time this screen exists, and there is no code path from this method to any of them.
+     */
+    fun explain(step: StepResultUpload) {
+        val run = _state.value.run ?: return
+        val language = currentAiLanguage()
+        if (language == null) {
+            setCoaching(
+                step.stepId,
+                AiPanelState.Unavailable(UiMessage.info(R.string.ai_unavailable_language)),
+            )
+            return
+        }
+
+        val outcome = runCatching { OutcomeClass.valueOf(step.outcome.uppercase()) }.getOrNull()
+            ?: return
+        val task = AiTaskFactory.stepCoachingFromCatalog(
+            moduleId = run.moduleId,
+            stepId = step.stepId,
+            outcome = outcome,
+            latencyMs = step.latencyMs,
+            expertMs = step.expertMs,
+            critical = step.critical,
+            language = language,
+            resolver = catalogResolver,
+        )
+        if (task == null) {
+            // No authored text for this step, so there is nothing honest to explain.
+            setCoaching(
+                step.stepId,
+                AiPanelState.NoAnswer(UiMessage.info(R.string.ai_not_in_documents)),
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            setCoaching(step.stepId, AiPanelState.Working())
+            val result = aiCoach.run(task) { words ->
+                setCoaching(step.stepId, AiPanelState.Working(words))
+            }
+            setCoaching(step.stepId, result.toPanelState())
+        }
+    }
 
     fun load(runId: String) {
         viewModelScope.launch {

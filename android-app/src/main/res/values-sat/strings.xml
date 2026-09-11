@@ -418,4 +418,74 @@
         <item quantity="other">%1$d ᱢᱚᱰᱭᱩᱞ ᱨᱮ ᱦᱩᱰᱤᱧ ᱫᱚᱦᱲᱟ ᱛᱟᱞᱤᱢ ᱵᱟᱰᱟᱭᱮᱫᱟ ᱾</item>
     </plurals>
 
+    <!-- ==================================================================
+         ᱯᱷᱚᱱ ᱨᱮ ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱥᱚᱦᱟᱭᱚᱠ
+
+         Santali here, as everywhere in this app, is authored translation and is
+         listed in docs/CAPABILITY_MATRIX.md as needing review by a native
+         speaker familiar with mine-site vocabulary. Coverage and quality are
+         different claims and the repository does not conflate them.
+
+         Note what these strings are for: the assistant itself cannot write
+         Santali, because no model in this size class generates Ol Chiki. So
+         these are the strings that *explain that*, plus the ones a supervisor
+         reads. A Santali speaker gets the authored guidance, the pictograms and
+         the per-site voice recordings, all of which are real.
+         ================================================================== -->
+    <string name="ai_working">ᱡᱚᱵᱟᱵ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱠᱟᱱᱟ ᱾</string>
+    <string name="ai_working_progress">ᱡᱚᱵᱟᱵ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱠᱟᱱᱟ ᱾ ᱱᱤᱛ ᱦᱟᱹᱵᱤᱡ %1$d ᱠᱟᱛᱷᱟ ᱾</string>
+    <string name="ai_stop">ᱛᱷᱟᱢ ᱢᱮ</string>
+    <string name="ai_source">ᱚᱠᱟ ᱠᱷᱚᱱ: %1$s</string>
+    <string name="ai_shortened">ᱯᱟᱲᱦᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱤᱡ ᱦᱩᱭ ᱮᱱᱟ ᱾</string>
+    <string name="ai_not_in_documents">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱮᱱᱟᱜ ᱥᱩᱨᱚᱠᱷᱭᱟ ᱠᱟᱜᱚᱡ ᱠᱚ ᱨᱮ ᱱᱚᱶᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱵᱟᱵ ᱵᱟᱝ ᱢᱮᱱᱟᱜ-ᱟ ᱾ ᱟᱢᱟᱜ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱠᱷᱚᱱ ᱠᱩᱠᱞᱤ ᱢᱮ ᱾</string>
+    <string name="ai_no_question">ᱯᱩᱭᱞᱩ ᱠᱩᱠᱞᱤ ᱚᱞ ᱢᱮ ᱾</string>
+    <string name="ai_check_failed">ᱚᱱᱟ ᱡᱚᱵᱟᱵ ᱥᱩᱨᱚᱠᱷᱭᱟ ᱡᱟᱸᱪ ᱨᱮ ᱵᱟᱝ ᱯᱟᱥ ᱮᱱᱟ, ᱚᱱᱟᱛᱮ ᱵᱟᱝ ᱩᱫᱩᱜ ᱮᱱᱟ ᱾ ᱮᱛᱚᱦᱚᱵ ᱨᱮ ᱚᱞ ᱟᱠᱟᱱ ᱠᱟᱛᱷᱟ ᱚᱱᱠᱟᱜᱮ ᱢᱮᱱᱟᱜ-ᱟ ᱾</string>
+    <string name="ai_failed">ᱥᱚᱦᱟᱭᱚᱠ ᱱᱤᱛᱚᱜ ᱡᱚᱵᱟᱵ ᱵᱟᱝ ᱮᱢ ᱫᱟᱲᱮ ᱮᱱᱟ ᱾ ᱫᱚᱦᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾</string>
+    <string name="ai_unavailable_not_installed">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱚᱦᱟᱭᱚᱠ ᱵᱟᱝ ᱢᱮᱱᱟᱜ-ᱟ ᱾ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱱᱚᱶᱟ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱭ ᱾</string>
+    <string name="ai_unavailable_device">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱚᱦᱟᱭᱚᱠ ᱵᱟᱝ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱾ ᱮᱴᱟᱜ ᱡᱚᱛᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤᱭᱮᱫᱟ ᱾</string>
+    <string name="ai_unavailable_language">ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱚᱦᱟᱭᱚᱠ ᱥᱟᱶᱛᱟᱲᱤ ᱨᱮ ᱵᱟᱝ ᱚᱞ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱾ ᱚᱞ ᱟᱠᱟᱱ ᱠᱟᱛᱷᱟ, ᱪᱤᱛᱟᱹᱨ ᱟᱨ ᱨᱟᱲ ᱨᱮᱭᱟᱜ ᱦᱩᱠᱩᱢ ᱠᱚ ᱡᱚᱛᱚ ᱯᱩᱨᱟᱹᱣ ᱢᱮᱱᱟᱜ-ᱟ ᱾</string>
+    <string name="ai_unavailable_drill">ᱴᱨᱮᱱᱤᱝ ᱪᱟᱞᱟᱣ ᱡᱚᱠᱷᱚᱡ ᱥᱚᱦᱟᱭᱚᱠ ᱛᱷᱟᱢ ᱟᱠᱟᱱᱟ, ᱡᱟᱦᱟᱸᱛᱮ ᱡᱚᱛᱚ ᱯᱷᱚᱱ ᱴᱨᱮᱱᱤᱝ ᱞᱟᱹᱜᱤᱫ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="ai_unavailable_policy">ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱞᱟᱹᱜᱤᱫ ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱚᱦᱟᱭᱚᱠ ᱵᱚᱸᱫ ᱢᱮᱱᱟᱜ-ᱟ ᱾</string>
+
+    <!-- ᱴᱨᱮᱱᱤᱝ ᱛᱟᱭᱚᱢ ᱵᱩᱡᱷᱟᱹᱣ -->
+    <string name="ai_coach_title">ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱪᱮᱫᱟᱜ ᱴᱷᱤᱠ ᱠᱟᱱᱟ?</string>
+    <string name="ai_coach_action">ᱱᱚᱶᱟ ᱴᱷᱮᱜ ᱵᱩᱡᱷᱟᱹᱣ ᱢᱮ</string>
+    <string name="ai_coach_disclaimer">ᱠᱷᱟᱹᱞᱤ ᱵᱩᱡᱷᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱾ ᱱᱚᱶᱟ ᱛᱮ ᱟᱢᱟᱜ ᱱᱚᱢᱵᱚᱨ ᱟᱨ ᱥᱚᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱨᱮ ᱡᱟᱦᱟᱸ ᱵᱚᱫᱚᱞ ᱵᱟᱝ ᱦᱩᱭᱩᱜ-ᱟ ᱾</string>
+
+    <!-- ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱩᱨᱚᱠᱷᱭᱟ ᱠᱩᱠᱞᱤ -->
+    <string name="ask_title">ᱥᱩᱨᱚᱠᱷᱭᱟ ᱨᱮᱭᱟᱜ ᱠᱩᱠᱞᱤ ᱠᱩᱞᱤ ᱢᱮ</string>
+    <string name="ask_subtitle">ᱡᱚᱵᱟᱵ ᱠᱷᱟᱹᱞᱤ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱮᱱᱟᱜ ᱥᱩᱨᱚᱠᱷᱭᱟ ᱠᱟᱜᱚᱡ ᱠᱚ ᱠᱷᱚᱱ ᱦᱮᱡᱚᱜ-ᱟ ᱾ ᱱᱮᱴᱣᱟᱨᱠ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤ ᱾</string>
+    <string name="ask_hint">ᱟᱢ ᱪᱮᱫ ᱵᱟᱰᱟᱭ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ?</string>
+    <string name="ask_action">ᱠᱩᱞᱤ ᱢᱮ</string>
+    <string name="ask_disclaimer">ᱠᱷᱟᱹᱞᱤ ᱦᱩᱠᱩᱢ ᱞᱟᱹᱜᱤᱫ ᱾ ᱟᱢᱟᱜ ᱥᱟᱭᱤᱴ ᱨᱮᱭᱟᱜ ᱱᱤᱭᱚᱢ ᱟᱨ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱨᱮᱭᱟᱜ ᱠᱟᱛᱷᱟ ᱢᱟᱱᱟᱣ ᱢᱮ ᱾</string>
+    <string name="ask_examples_title">ᱡᱮᱞᱠᱟ</string>
+    <string name="ask_example_one">ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱟᱨᱭᱟ ᱦᱚᱲ ᱪᱮᱫᱟᱜ ᱵᱚᱞᱚᱜ-ᱟ?</string>
+    <string name="ask_example_two">ᱡᱩᱞ ᱠᱟᱱ ᱵᱤᱡᱩᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱫᱟᱜ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ?</string>
+    <string name="ask_example_three">ᱥᱤᱲᱤ ᱚᱠᱟ ᱠᱚᱱ ᱨᱮ ᱛᱮᱲᱟᱣ ᱦᱩᱭᱩᱜ-ᱟ?</string>
+    <string name="action_ask_question">ᱠᱩᱠᱞᱤ ᱠᱩᱞᱤ ᱢᱮ</string>
+
+    <!-- ᱯᱟᱞᱤ ᱮᱛᱚᱦᱚᱵ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱵᱚᱨ -->
+    <string name="briefing_title">ᱯᱟᱞᱤ ᱮᱛᱚᱦᱚᱵ ᱠᱷᱚᱵᱚᱨ ᱨᱮᱭᱟᱜ ᱰᱨᱟᱯᱷᱴ</string>
+    <string name="briefing_action">ᱠᱷᱚᱵᱚᱨ ᱰᱨᱟᱯᱷᱴ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="briefing_disclaimer">ᱱᱚᱶᱟ ᱫᱚ ᱰᱨᱟᱯᱷᱴ ᱠᱟᱱᱟ, ᱯᱟᱲᱦᱟᱣ ᱠᱟᱛᱮ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾ ᱟᱢ ᱵᱟᱝ ᱞᱟᱹᱭ ᱦᱟᱹᱵᱤᱡ ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤᱦᱚᱲ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱦᱩᱠᱩᱢ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾</string>
+
+    <!-- ᱡᱚᱠᱷᱚᱢ ᱨᱮᱭᱟᱜ ᱥᱟᱨᱟᱸᱥ -->
+    <string name="hazard_ai_title">ᱥᱩᱨᱚᱠᱷᱭᱟ ᱚᱯᱷᱤᱥᱚᱨ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱨᱟᱸᱥ</string>
+    <string name="hazard_ai_action">ᱥᱟᱨᱟᱸᱥ ᱰᱨᱟᱯᱷᱴ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="hazard_ai_disclaimer">ᱠᱷᱟᱹᱞᱤ ᱥᱚᱞᱟᱦ ᱾ ᱟᱢ ᱡᱟᱦᱟᱸ ᱠᱤᱥᱟᱹᱬ ᱟᱨ ᱠᱟᱹᱴᱷᱤᱱ ᱛᱮᱭᱟᱨ ᱟᱠᱟᱫᱟᱢ, ᱚᱱᱟᱜᱮ ᱞᱤᱠᱷᱟᱭᱚᱜ-ᱟ ᱾</string>
+    <string name="hazard_needs_note">ᱯᱩᱭᱞᱩ ᱠᱤᱥᱟᱹᱬ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱟᱨ ᱠᱟᱹᱴᱤᱡ ᱠᱟᱛᱷᱟ ᱚᱞ ᱢᱮ ᱾</string>
+    <string name="hazard_possible_duplicate">ᱱᱚᱶᱟ ᱱᱮᱛᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱠᱷᱚᱵᱚᱨ ᱞᱮᱠᱟ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ: %1$s</string>
+
+    <!-- ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ: ᱢᱚᱰᱮᱞ -->
+    <string name="ai_model_title">ᱚᱯᱷᱞᱟᱭᱤᱱ ᱥᱚᱦᱟᱭᱚᱠ</string>
+    <string name="ai_model_installed">ᱥᱮᱞᱮᱫ ᱮᱱᱟ, %1$d MB ᱾</string>
+    <string name="ai_model_absent">ᱵᱟᱝ ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾ ᱱᱚᱶᱟ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱨᱮ ᱦᱚᱸ ᱮᱯ ᱯᱩᱨᱟᱹ ᱠᱟᱹᱢᱤᱭᱮᱫᱟ; ᱱᱚᱶᱟ ᱠᱷᱟᱹᱞᱤ ᱵᱩᱡᱷᱟᱹᱣ ᱟᱨ ᱠᱩᱠᱞᱤ ᱡᱚᱵᱟᱵ ᱥᱮᱞᱮᱫᱟ ᱾</string>
+    <string name="ai_model_device_unfit">ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱥᱚᱦᱟᱭᱚᱠ ᱪᱟᱞᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱢᱮᱢᱚᱨᱤ ᱠᱟᱹᱴᱤᱡ ᱢᱮᱱᱟᱜ-ᱟ ᱾</string>
+    <string name="ai_model_no_native">ᱱᱚᱶᱟ ᱵᱤᱞᱰ ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱥᱚᱦᱟᱭᱚᱠ ᱵᱟᱝ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱾</string>
+    <string name="ai_model_install">ᱯᱷᱟᱭᱤᱞ ᱠᱷᱚᱱ ᱥᱮᱞᱮᱫ ᱢᱮ</string>
+    <string name="ai_model_remove">ᱢᱚᱰᱮᱞ ᱚᱲᱟᱜ ᱢᱮ</string>
+    <string name="ai_model_installing">ᱠᱚᱯᱤ ᱦᱩᱭ ᱠᱟᱱᱟ, ᱱᱤᱛ ᱦᱟᱹᱵᱤᱡ %1$d MB ᱾</string>
+    <string name="ai_model_install_failed">ᱚᱱᱟ ᱯᱷᱟᱭᱤᱞ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ ᱢᱚᱰᱮᱞ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ, ᱚᱱᱟᱛᱮ ᱡᱟᱦᱟᱸ ᱵᱟᱝ ᱵᱚᱫᱚᱞ ᱮᱱᱟ ᱾</string>
+    <string name="ai_model_install_done">ᱥᱚᱦᱟᱭᱚᱠ ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾</string>
+    <string name="ai_model_expected_file">ᱟᱥᱟ ᱠᱟᱱ ᱯᱷᱟᱭᱤᱞ: %1$s</string>
 </resources>

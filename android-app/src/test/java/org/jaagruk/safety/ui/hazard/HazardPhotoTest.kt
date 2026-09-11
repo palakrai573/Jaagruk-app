@@ -4,6 +4,9 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import org.jaagruk.ai.AiCoach
+import org.jaagruk.ai.NoopLlmEngine
+import org.jaagruk.safety.ai.CatalogResolver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,6 +84,11 @@ class HazardPhotoTest {
             recorder = recorder,
             media = media,
             syncScheduler = mockk<SyncScheduler>(relaxed = true),
+            // No engine, which is the correct state for a unit test JVM and also the state of every
+            // armeabi-v7a handset. What these tests assert is the photo and media handling, and that
+            // has to keep working with the assistant unavailable.
+            aiCoach = AiCoach(NoopLlmEngine()),
+            catalogResolver = CatalogResolver(ApplicationProvider.getApplicationContext()),
         )
         viewModel.load(workerId)
     }

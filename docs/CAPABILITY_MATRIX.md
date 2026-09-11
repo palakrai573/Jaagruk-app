@@ -11,9 +11,9 @@ Three columns, and they mean exactly what they say:
   needed for the full effect. Each row names what.
 - **Designed** — specified in `docs/ARCHITECTURE.md`, not implemented. No code pretends it exists.
 
-Verified by `.\tools\verify-all.ps1` at the commit this document describes: `:core` 437 tests, backend 217
-tests, dashboard `tsc` + `vite build` clean, Android `assembleDebug` + `lintDebug` clean (0 errors),
-live smoke test 56 checks.
+Verified by `.\tools\verify-all.ps1` at the commit this document describes: `:core` 606 tests, `:ai` 52
+tests, backend 217 tests, dashboard `tsc` + `vite build` clean, Android `assembleDebug` + `lintDebug`
+clean (0 errors, 296 warnings), live smoke test 56 checks.
 
 ---
 
@@ -131,12 +131,65 @@ live smoke test 56 checks.
 | Content descriptions | **Built** | `ContentDescription` is a fatal lint check and lint passes with 0 errors. |
 | Screen-reader tested with TalkBack | **Not yet** | Semantics are present and lint-verified. Full WCAG conformance needs manual testing with assistive technology and expert review, which has not been done. |
 
+## On-device assistance
+
+A local language model, added to explain, answer and summarise. It is additive by construction:
+**nothing in the training, assessment, certification or sync path depends on it**, and every feature
+that uses it has a working non-AI path that is shown first.
+
+The model is Gemma 3 1B instruction-tuned at Q4_K_M, **769 MiB**, from
+[`ggml-org/gemma-3-1b-it-GGUF`](https://huggingface.co/ggml-org/gemma-3-1b-it-GGUF), run through a
+vendored llama.cpp CPU backend. It is **not in the APK** and is not in this repository. Larger than a 1B
+model suggests because Gemma 3's 262k-token vocabulary makes the embedding table a big share of the
+weights; `docs/ARCHITECTURE.md` §14.7 has the detail.
+
+| Capability | Status | Notes |
+| --- | --- | --- |
+| Retrieval over a bundled safety corpus | **Built** | BM25 in `:core`, no embedding model, no download. 68 passages: 34 authored pairs in English and Hindi, covering all five modules plus statutory references and cross-cutting practice. |
+| Devanagari-correct tokenisation | **Built, tested** | `Char.isLetterOrDigit()` is false for a matra, so a naive tokeniser splits "गैस" into two single consonants and Hindi retrieval silently matches everything. Marks and conjunct joiners are word characters, and `AiTokenizerTest` keeps it that way. |
+| Refusal when the corpus does not cover a question | **Built** | The load-bearing behaviour. Below a third of query terms matched, **no model runs at all** and the worker is told to ask a supervisor. |
+| Numeric grounding check | **Built** | Every figure in generated output must appear in the prompt. 1.25 % is the DGMS methane withdrawal level; a model writing 1.5 % has produced a fluent, confident, fatal sentence, and that output is discarded rather than shown. |
+| Verdict suppression | **Built** | Pass, fail, score and certification are settled by signed code. The guard rejects output claiming any of them, so a model can never become a second, unsigned source of truth about whether a worker may enter a confined space. |
+| Loop, drift and leakage detection | **Built** | Repeated sentences, low trigram diversity, wrong-script answers, Ol Chiki output and echoed instructions are each rejected with their own reason. |
+| Prompt-injection neutralisation | **Built** | A worker's typed question and hazard note are free text reaching an interpreter. Chat control tokens are stripped, and a test asserts a hostile note cannot open a second turn. |
+| Deterministic prompts | **Built** | Greedy decoding and a byte-pinned prompt snapshot test. A prompt is an interface; one that drifts silently is a bug found in the field. |
+| AR interlock | **Built** | The model is unloaded before an AR session starts and generation is refused for the duration. Not a convention — `LlmSessionGuard` is reference counted, the drill awaits it, and `LlmSessionGuardTest` covers the nesting a buddy drill produces. |
+| Six distinct outcomes surfaced in the UI | **Built** | Answer, no-grounding, model-declined, filtered, unavailable, failed. Collapsing them would hide the two that matter: "your documents do not cover this" is useful, and "not installed on this phone" is fixable. |
+| Post-drill step explanation | **Built** | On the result screen, for wrong, timed-out and hesitant steps. The authored remediation string is shown first and unconditionally, so a handset with no model loses nothing that was there before. |
+| Offline safety questions | **Built** | Its own screen, grounded and cited, with worked examples because a blank box is intimidating to somebody who has never used a search field. |
+| Shift-briefing draft | **Built** | From the site's own readiness bands, hesitation cohort and hazard zones. A supervisor reads and changes it before saying it, which is why it is the lowest-risk of the four. |
+| Hazard summary and duplicate detection | **Built** | Advisory only: the category and severity the worker chose are what get stored and synced. Duplicate detection is lexical, local and needs no model time. |
+| Answers in Hindi | **Built** | Gemma 3 is multilingual and the corpus is authored in Hindi, so retrieval and generation both work in it. |
+| Answers in Santali | **Not built, and not attempted** | No model in this size class generates Ol Chiki. Reported as `LANGUAGE_UNSUPPORTED` with the reason stated, and the UI points at the authored translations, the 73 pictograms and the per-site voice recordings, which are all real. A plausible paragraph of wrong Santali in front of a worker who cannot cross-check it is worse than nothing. |
+| The model file itself | **Partial** | Deliberately not bundled. At 769 MiB it would end the 27 MB download and cost a second 769 MiB, because an asset has to be extracted before it can be memory-mapped. It arrives by supervisor sideload, is validated by GGUF magic and a size floor, and is mapped in place. Absent it, every feature reports `MODEL_MISSING` and the non-AI paths run. |
+| Answer quality measured against a rubric | **Not yet** | The guard proves what output *cannot* contain. It does not prove the answers are good. Judging that needs a scored set of real worker questions reviewed by a safety officer, which has not been done. |
+| Run on a physical mid-range handset | **Not yet** | The native library builds and loads, the interlock and the guard are covered by tests, and the packaging is verified — the `armeabi-v7a` APK genuinely contains no AI library, so those devices report `UNSUPPORTED_DEVICE`. What has not happened is a 769 MiB model loaded on a real 4 GB phone with timings taken. Stated rather than implied. |
+| Hindi corpus reviewed by a native speaker | **Not yet** | Same standing as the app's Hindi and Santali strings: complete and usable, quality unverified. |
+
+### What the assistance layer is not allowed to touch
+
+A project-wide rule, enforced by where the code lives rather than by discipline:
+
+- scoring, hesitation classification, pass/fail, `OutcomeClass`
+- certificate contents, signing, chain linkage, verification verdicts
+- the scenario catalog, which stays compiled and signed so scores remain comparable across sites
+- runtime translation of any safety-critical string
+- anything inside the AR frame loop
+- Santali output of any kind
+
+`AiTask.StepCoaching` has no field for a score or a pass flag, so the model is never told the verdict
+and cannot restate it. A test asserts that by reflection, which is a strange thing to test until you
+consider what adding one field would silently enable.
+
 ## Designed, not built
 
 Specified in `docs/ARCHITECTURE.md`; no code claims these exist.
 
 | Capability | Why it is not built |
 | --- | --- |
+| Model-assisted translation of safety content | The corpus and the UI strings are authored and reviewable. A model translating a withdrawal threshold or an evacuation instruction at runtime would put an unreviewed sentence in front of a worker, and the failure would be invisible until it mattered. |
+| Voice dictation of a safety question | The voice layer is MFCC and DTW against a fixed 19-word vocabulary, which is what makes it work offline in Santali. Free-form dictation needs an acoustic model, and none exists for Santali at all. Typing and the worked examples cover it. |
+| Speaking answers aloud | Narration already has three tiers, and generated Hindi text could go through platform TTS. Not wired, because an answer that has been read out cannot be re-read to check the citation. |
 | DGMS submission workflow | Needs the actual statutory return format and a departmental sign-off path. Guessing at it would produce something an inspector could not file. |
 | Multi-tenant SSO | The pilot scope is a handful of sites. Local accounts with role scoping cover it, and an SSO integration nobody has specified is an integration nobody can test. |
 | PostgreSQL in production | Fully supported by the code and isolated in `requirements-postgres.txt` so a wheel failure cannot block SQLite development. Not exercised in CI here. |

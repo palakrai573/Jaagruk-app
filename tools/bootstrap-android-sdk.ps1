@@ -5,7 +5,8 @@
 
 .DESCRIPTION
     Downloads the command-line tools, then installs exactly the packages the build needs:
-    platform-tools, platforms;android-35 and build-tools;35.0.0. Nothing else, because a full
+    platform-tools, platforms;android-35, build-tools;35.0.0, and the pinned NDK and CMake that
+    :ai needs to compile the vendored llama.cpp backend. Nothing else, because a full
     SDK install is several gigabytes and the build does not use any of it.
 
     Writes local.properties on success, which is what makes settings.gradle.kts include
@@ -27,6 +28,14 @@ $cmdlineLatest = Join-Path $cmdlineParent 'latest'
 $cmdlineToolsUrl = 'https://dl.google.com/android/repository/commandlinetools-win-11076708_latest.zip'
 $compileSdk = '35'
 $buildTools = '35.0.0'
+
+# The NDK and CMake exist for :ai, which compiles the vendored llama.cpp CPU backend. Both versions
+# are pinned rather than left to "newest installed": ggml's arch-specific kernels use inline assembly
+# and intrinsics that are sensitive to toolchain changes, and a silent NDK bump is not something to
+# diagnose from a native crash report off a mine site. These add roughly 2.5 GB to the download, which
+# is why they are named here rather than pulled in by a wildcard.
+$ndkVersion = '28.2.13676358'
+$cmakeVersion = '3.22.1'
 
 Write-Host "[jaagruk] Android SDK root: $sdkRoot"
 New-Item -ItemType Directory -Force -Path $downloadDir | Out-Null
@@ -73,7 +82,9 @@ $licenceAnswers | & cmd /c "`"$sdkManager`" --sdk_root=`"$sdkRoot`" --licenses" 
 $packages = @(
     'platform-tools',
     "platforms;android-$compileSdk",
-    "build-tools;$buildTools"
+    "build-tools;$buildTools",
+    "ndk;$ndkVersion",
+    "cmake;$cmakeVersion"
 )
 
 foreach ($package in $packages) {

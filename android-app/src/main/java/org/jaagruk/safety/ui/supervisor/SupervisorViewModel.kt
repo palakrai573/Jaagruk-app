@@ -1,4 +1,4 @@
-﻿package org.jaagruk.safety.ui.supervisor
+package org.jaagruk.safety.ui.supervisor
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -8,9 +8,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jaagruk.ai.AiCoach
+import org.jaagruk.ai.ModelStore
+import org.jaagruk.core.ai.AiCapability
+import org.jaagruk.core.ai.AiTask
 import org.jaagruk.core.crypto.ChainStatus
 import org.jaagruk.core.util.Hex
 import org.jaagruk.safety.R
+import org.jaagruk.safety.ai.BriefingFactsBuilder
+import org.jaagruk.safety.ai.currentAiLanguage
 import org.jaagruk.safety.data.DeviceProfile
 import org.jaagruk.safety.data.keys.SiteKeyStore
 import org.jaagruk.safety.data.repo.CertificateRepository
@@ -25,7 +31,9 @@ import org.jaagruk.safety.sync.api.LoginRequest
 import org.jaagruk.safety.sync.api.SessionStore
 import org.jaagruk.safety.sync.nearby.NearbyGossipService
 import org.jaagruk.safety.ui.LocaleManager
+import org.jaagruk.safety.ui.components.AiPanelState
 import org.jaagruk.safety.ui.components.UiMessage
+import org.jaagruk.safety.ui.components.toPanelState
 import javax.inject.Inject
 
 /**
@@ -50,6 +58,9 @@ class SupervisorViewModel @Inject constructor(
     private val session: SessionStore,
     private val gossip: NearbyGossipService,
     private val api: JaagrukApi,
+    private val aiCoach: AiCoach,
+    private val modelStore: ModelStore,
+    private val briefingFacts: BriefingFactsBuilder,
     syncStatus: SyncStatusProvider,
 ) : ViewModel() {
 
@@ -87,6 +98,11 @@ class SupervisorViewModel @Inject constructor(
         val newWorkerPictogramMode: Boolean = false,
         val username: String = "",
         val password: String = "",
+        /** Shift-briefing draft state. */
+        val briefing: AiPanelState = AiPanelState.Idle,
+        /** Offline assistant availability and installed size, for the diagnostics card. */
+        val aiCapability: AiCapability = AiCapability.MODEL_MISSING,
+        val aiModelMegabytes: Int = 0,
     ) {
         /** Enrolment needs a site: the id is hashed into every certificate the worker earns. */
         val canEnrolWorkers: Boolean get() = !siteId.isNullOrBlank()
@@ -139,6 +155,101 @@ class SupervisorViewModel @Inject constructor(
                 readiness = retention.siteReadinessSummary(roster.map { it.workerId }),
                 siteIdInput = siteId.orEmpty(),
                 workersNotOnServer = workers.countNotYetOnServer(),
+                aiCapability = aiCoach.capability(LocaleManager.current()),
+                aiModelMegabytes = (modelStore.modelFile.length() / (1024 * 1024)).toInt(),
+            )
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Shift briefing
+    // -----------------------------------------------------------------------
+
+    /**
+     * Drafts a pre-shift briefing from this site's own numbers.
+     *
+     * The output is a draft in the strict sense: a supervisor reads it, changes it, and says it. That
+     * human step is why this is the lowest-risk of the four assistance features — nothing reaches the
+     * workforce without somebody who knows the site having agreed to it — and the copy on the card says
+     * so rather than leaving it implied.
+     */
+    fun draftBriefing() {
+        val siteId = _state.value.siteId
+        if (siteId.isNullOrBlank()) {
+            _state.value = _state.value.copy(
+                briefing = AiPanelState.NoAnswer(UiMessage.info(R.string.supervisor_site_id_required)),
+            )
+            return
+        }
+        val language = currentAiLanguage()
+        if (language == null) {
+            _state.value = _state.value.copy(
+                briefing = AiPanelState.Unavailable(UiMessage.info(R.string.ai_unavailable_language)),
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            _state.value = _state.value.copy(briefing = AiPanelState.Working())
+            val facts = briefingFacts.build(siteId, _state.value.siteName.orEmpty())
+            val outcome = aiCoach.run(AiTask.ShiftBriefing(language, facts)) { words ->
+                _state.value = _state.value.copy(briefing = AiPanelState.Working(words))
+            }
+            _state.value = _state.value.copy(briefing = outcome.toPanelState())
+        }
+    }
+
+    /**
+     * Installs the model from a file a supervisor picked.
+     *
+     * This is how a 769 MiB model reaches a handset that has never had a usable connection: copied from
+     * an SD card, a USB stick or another phone, once, by somebody standing in front of it. The store
+     * refuses anything that is not a GGUF of a plausible size and leaves the previous state untouched
+     * when it does, so a wrong file is a message rather than a broken assistant.
+     */
+    fun installAiModel(open: () -> java.io.InputStream?) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(busy = true, message = null)
+            val stream = runCatching { open() }.getOrNull()
+            if (stream == null) {
+                _state.value = _state.value.copy(
+                    busy = false,
+                    message = UiMessage.error(R.string.ai_model_install_failed),
+                )
+                return@launch
+            }
+            // The model is mapped, not read into the heap, so it must not be loaded while being
+            // replaced. Releasing first also frees the memory the copy is about to need.
+            aiCoach.release()
+            val result = modelStore.install(stream) { copied ->
+                _state.value = _state.value.copy(
+                    message = UiMessage.info(
+                        R.string.ai_model_installing,
+                        (copied / (1024 * 1024)).toInt(),
+                    ),
+                )
+            }
+            refresh()
+            _state.value = _state.value.copy(
+                busy = false,
+                message = if (result.isSuccess) {
+                    UiMessage.success(R.string.ai_model_install_done)
+                } else {
+                    UiMessage.error(R.string.ai_model_install_failed)
+                },
+            )
+        }
+    }
+
+    /** Removes the model, for a handset being handed to somebody who does not need it. */
+    fun removeAiModel() {
+        viewModelScope.launch {
+            aiCoach.release()
+            modelStore.delete()
+            refresh()
+            _state.value = _state.value.copy(
+                message = UiMessage.info(R.string.ai_model_absent),
+                briefing = AiPanelState.Idle,
             )
         }
     }

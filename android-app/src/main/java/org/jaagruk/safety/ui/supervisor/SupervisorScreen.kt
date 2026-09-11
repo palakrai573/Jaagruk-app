@@ -1,5 +1,7 @@
 package org.jaagruk.safety.ui.supervisor
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,15 +19,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.jaagruk.ai.ModelStore
+import org.jaagruk.core.ai.AiCapability
 import org.jaagruk.safety.R
 import org.jaagruk.safety.data.repo.WorkerRepository
 import org.jaagruk.safety.ui.LocaleManager
+import org.jaagruk.safety.ui.components.AiPanel
 import org.jaagruk.safety.ui.components.BannerTone
 import org.jaagruk.safety.ui.components.GloveButton
 import org.jaagruk.safety.ui.components.GloveOutlinedButton
@@ -52,6 +58,19 @@ fun SupervisorScreen(
     viewModel: SupervisorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // OpenDocument rather than GetContent: the model is hundreds of megabytes and needs to be read as
+    // a stream from wherever it actually is, not copied into a cache first by the picker. The MIME
+    // filter is wide because GGUF has no registered type and file managers report it inconsistently;
+    // ModelStore checks the magic bytes, which is the check that matters.
+    val modelPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri != null) {
+            viewModel.installAiModel { context.contentResolver.openInputStream(uri) }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -521,6 +540,72 @@ fun SupervisorScreen(
                     stringResource(R.string.supervisor_site_scanned),
                     state.siteScanned.toString(),
                 )
+            }
+        }
+
+        // The briefing sits near the end because it is the last thing done before a shift, and it is
+        // hidden outright when there is no assistant on this handset rather than shown as a dead button.
+        if (state.aiCapability != AiCapability.UNSUPPORTED_DEVICE) {
+            item {
+                AiPanel(
+                    state = state.briefing,
+                    titleRes = R.string.briefing_title,
+                    disclaimerRes = R.string.briefing_disclaimer,
+                    actionRes = R.string.briefing_action,
+                    onAsk = viewModel::draftBriefing,
+                )
+            }
+        }
+
+        item {
+            SectionCard {
+                Text(
+                    text = stringResource(R.string.ai_model_title),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = when (state.aiCapability) {
+                        AiCapability.READY, AiCapability.BUSY_IN_DRILL ->
+                            stringResource(R.string.ai_model_installed, state.aiModelMegabytes)
+                        AiCapability.MODEL_MISSING -> stringResource(R.string.ai_model_absent)
+                        AiCapability.UNSUPPORTED_DEVICE -> stringResource(R.string.ai_model_no_native)
+                        AiCapability.LANGUAGE_UNSUPPORTED ->
+                            stringResource(R.string.ai_unavailable_language)
+                        AiCapability.DISABLED_BY_POLICY ->
+                            stringResource(R.string.ai_unavailable_policy)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(6.dp))
+                // Named explicitly so a supervisor copying a file onto the handset knows what to call
+                // it. The store refuses anything that is not a GGUF of a plausible size, so a wrong
+                // file is a message rather than a crash.
+                DiagnosticRow(
+                    stringResource(R.string.ai_model_expected_file),
+                    ModelStore.MODEL_FILE_NAME,
+                )
+                // Only offered where it could work. A phone with no native library or not enough
+                // memory would copy 769 MiB and then still report unavailable.
+                if (state.aiCapability == AiCapability.MODEL_MISSING) {
+                    Spacer(Modifier.height(10.dp))
+                    GloveButton(
+                        text = stringResource(R.string.ai_model_install),
+                        onClick = { modelPicker.launch(arrayOf("*/*")) },
+                        enabled = !state.busy,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                if (state.aiCapability == AiCapability.READY ||
+                    state.aiCapability == AiCapability.BUSY_IN_DRILL
+                ) {
+                    Spacer(Modifier.height(10.dp))
+                    GloveOutlinedButton(
+                        text = stringResource(R.string.ai_model_remove),
+                        onClick = viewModel::removeAiModel,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
 

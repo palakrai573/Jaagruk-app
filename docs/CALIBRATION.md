@@ -118,7 +118,41 @@ sit consistently above prediction, the half-life is too short; below, too long. 
 
 ---
 
-## 4. What is *not* a tunable
+## 4. Retrieval and output-guard thresholds
+
+The numbers behind on-device assistance. Two of them are policy, two are measurable, and the
+distinction matters more here than anywhere else in this document: the guard is what stands between a
+1B model and a worker.
+
+| Constant | Value | Where it comes from |
+|---|---|---|
+| `RetrievalConfig.minMatchedTermRatio` | 0.34 | A third of the question's distinct terms. Expressed as a bounded ratio, **not** a raw BM25 score, because raw BM25 grows with query length and corpus size — a threshold in raw units silently changes meaning every time a passage is added. Below one term in three, a passage has stopped being about the same subject, and a small model handed it anyway will still write a fluent paragraph. That is the failure this number exists to prevent. |
+| `RetrievalConfig.maxPassages` | 4 | Against a 4096-token window with 384 reserved for output. `PromptBuilder` enforces the byte budget on top, dropping the lowest-ranked passage rather than truncating mid-sentence. |
+| `Bm25Config.k1` / `b` | 1.2 / 0.75 | Okapi defaults, deliberately untuned. Fitting them against 68 passages would be fitting noise. |
+| `PromptBudget.charsPerTokenDevanagari` | 1.6 | An estimate, and named as one. Devanagari costs far more tokens per character than Latin even with Gemma's large vocabulary. Conservative on purpose: overflow is the dangerous direction, because it pushes the earliest source out of context and produces an answer grounded in less than the caller believes. |
+| `AnswerGuard` numeric grounding | exact match | Not a threshold. Every figure in the output must appear in the prompt after normalising Devanagari digits, thousands separators and trailing zeros. Corpus passages must therefore write figures as **digits, never words**: "twenty minutes" in one language and "20 minutes" in the other would reject a correct answer. A test asserts each authored language pair states the same figures. |
+| `MIN_SCRIPT_SHARE` | 0.60 | Share of letters that must be in the requested script. Not higher, because a Hindi answer legitimately contains SCBA, CO2 and LOTO. Not applied below 20 letters, where the share is noise. |
+| `MAX_SENTENCE_REPEATS` / `MIN_TRIGRAM_DIVERSITY` | 3 / 0.50 | Loop detection. Sub-1B models repeat under-specified instructions, and a wall of repeated text reads to a worker as a broken app. |
+| `HARD_CHAR_CEILING` | 2500 | No task here permits more than five sentences, so anything past this is degenerate whatever it says. |
+| `DUPLICATE_RATIO` (hazard) | 0.50 | Higher than the corpus floor on purpose, because the cost of being wrong runs the other way: a missed duplicate is a merge a safety officer does in a moment, while a false one tells a worker their report already exists when it does not — and a worker who believes that stops reporting. |
+| `SamplingParams.temperature` | 0.0 | Greedy. Sampling would make a given prompt produce different output run to run, which would make the guard's behaviour impossible to pin in a test or defend to a reviewer. It also removes any reason to retry a rejected generation, which is why there is no retry. |
+| `MIN_DEVICE_MEMORY_BYTES` | 3.5 GB | Weights plus KV cache sit around 900 MiB: 769 MiB of weights plus the KV cache. On a 3 GB handset that competes with the camera pipeline and the OS, and the allocator settles the competition by killing something. Checked against *total* RAM, because free RAM at the moment of asking says nothing about free RAM once an AR session has started. |
+
+**How to validate in a pilot.** The guard needs no field data: it is deterministic and its rules are
+unit tested. What does need field data is the two things the guard cannot judge.
+
+1. **Retrieval recall.** Collect the questions workers actually ask, in their own words. For each,
+   record whether the corpus contains an answer and whether retrieval found it. A question the corpus
+   covers but retrieval misses is a corpus wording problem, not a threshold problem — the fix is to
+   add the words a worker would use, which is exactly how the confined-space rescue passage was
+   corrected during development. Only if misses persist after rewording should `minMatchedTermRatio`
+   move, and lowering it should be the last resort, not the first.
+2. **Answer usefulness.** Have a site safety officer score a sample of accepted answers as useful,
+   harmless-but-useless, or misleading. The guard should make "misleading" rare; if it is not, the
+   problem is the corpus rather than the model. Nothing in this repository claims that measurement has
+   been made.
+
+## 5. What is *not* a tunable
 
 For clarity, since these look like tunables and are not:
 
@@ -129,3 +163,5 @@ For clarity, since these look like tunables and are not:
 | Statutory validity 365 days | Set by the Factories Act 1948 and Mines Act 1952, not by us. |
 | `moduleCode` values 1–5 | Signed into every issued certificate. Renumbering invalidates the field. |
 | Canonical byte encoding | Pinned by cross-language fixtures. Changing it requires a `FORMAT_VERSION` bump and a migration plan for certificates already issued. |
+| Six `AiOutcome` shapes | The same reasoning as the seven certificate verdicts: collapsing "the documents do not cover this" into "sorry" loses the one piece of information a worker can act on. |
+| The AI layer never touching score, pass, certificate or catalog | Not a setting. `AiTask.StepCoaching` has no field for a score, so the model is never told the verdict and cannot restate it. Adding one would create a second, unsigned source of truth about whether a worker may enter a confined space. |

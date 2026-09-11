@@ -8,7 +8,7 @@ Offline-first. Android 10+. No headset. Certificates that verify with no network
 
 `SIH problem statement 26041`
 
-**437** core tests · **78** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **27 MB** APK
+**606** core tests · **52** AI tests · **81** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **32 MB** APK
 
 </div>
 
@@ -28,8 +28,9 @@ Offline-first. Android 10+. No headset. Certificates that verify with no network
 | [4. The certificate](#4-the-certificate) | [11. Quality gates](#11-quality-gates) |
 | [5. Measuring the decision, not the answer](#5-measuring-the-decision-not-the-answer) | [12. Getting it running](#12-getting-it-running) |
 | [6. Readiness decay: the finding nobody else surfaces](#6-readiness-decay-the-finding-nobody-else-surfaces) | [13. Repository layout](#13-repository-layout) |
-| [7. The AR fidelity ladder](#7-the-ar-fidelity-ladder) | [14. Decisions worth defending](#14-decisions-worth-defending) |
-| | [15. Honest limitations](#15-honest-limitations) |
+| [7. The AR fidelity ladder](#7-the-ar-fidelity-ladder) | [14. The offline assistant, and the fence around it](#14-the-offline-assistant-and-the-fence-around-it) |
+| | [15. Decisions worth defending](#15-decisions-worth-defending) |
+| | [16. Honest limitations](#16-honest-limitations) |
 
 ---
 
@@ -91,6 +92,11 @@ media sync separately so an image cannot hold up the line that says an exit is b
 
 **Runs a real two-phone buddy drill.**
 Bluetooth + Wi-Fi Direct, no internet. An NPC partner would train none of the skill.
+
+**Answers the question a worker actually has, offline.**
+A 769 MiB language model, grounded in 68 authored safety passages, that refuses when they do not cover
+the question. It never touches a score or a certificate, and it is released before an AR drill starts.
+Sideloaded, never bundled, and the app is fully functional without it.
 
 </td></tr>
 </table>
@@ -156,7 +162,7 @@ which has **no Android dependency at all**.
 
 | | Logic in the app module | Logic in `:core` (chosen) |
 |---|---|---|
-| Test runtime | Emulator or device, minutes | Plain JVM, **1.6 s for 437 tests** |
+| Test runtime | Emulator or device, minutes | Plain JVM, **1.4 s for 606 tests** |
 | Determinism | Real clocks, real sensors | Injected `MonotonicTimeSource` / `WallClock` |
 | Can you test a 6-week decay? | Only by waiting | `FixedWallClock`, instantly |
 | Can you test a 2-phone drill? | Two devices | Two machines + one fake clock |
@@ -550,6 +556,8 @@ three times and is ignored stops using the working input too.
 | Usable without reading | ⚠️ verbal | ❌ | ⚠️ | ❌ | ✅ |
 | Santali support | ⚠️ if trainer speaks it | ❌ | ❌ | ❌ | ✅ |
 | Two-person buddy drill | ✅ real | ❌ | ⚠️ NPC | ❌ | ✅ real |
+| Answers a worker's own question | ✅ if trainer present | ❌ | ❌ | ❌ | ✅ offline, cited |
+| Refuses rather than guessing | ✅ | — | — | — | ✅ enforced in code |
 | Scales to a district | ❌ trainer-bound | ✅ | ❌ | ✅ | ✅ |
 
 Classroom training is genuinely good at the things marked ✅ — it just does not scale and leaves no
@@ -560,7 +568,7 @@ other 51 weeks of the year measurable.
 
 | Decision | Chosen | Rejected | Because |
 |---|---|---|---|
-| Where the logic lives | plain Kotlin/JVM `:core` | Android library | 437 tests in 1.6 s, no emulator |
+| Where the logic lives | plain Kotlin/JVM `:core` | Android library | 606 tests in 1.4 s, no emulator |
 | AR renderer | GLES3 camera quad + Compose markers | Sceneform / Filament / SceneView / glTF | deprecated, version churn, frame budget, no accessibility |
 | ARCore requirement | `optional` in manifest | `required` | ~⅓ of the target market excluded |
 | Signature algorithm | Ed25519 (BouncyCastle lightweight) | RSA-2048 | 256-byte signature will not fit a QR |
@@ -569,6 +577,11 @@ other 51 weeks of the year measurable.
 | Device attestation | separate hardware EC P-256 key | reuse the site key | separates "who logged in" from "which device may issue" |
 | Santali voice | per-site MFCC/DTW enrolment | Vosk / general ASR | 50 MB download; **no Santali corpus exists** |
 | Backend stack | sync SQLAlchemy on FastAPI threadpool | full async (asyncpg + aiosqlite) | complexity with no measured benefit at this scale |
+| Assistant model | Gemma 3 1B IT Q4_K_M, 769 MiB | Qwen 2.5 1.5B Q4_K_M, ~1 GB | smaller, and trained across far more languages, which is what Hindi output depends on |
+| Model delivery | sideloaded file, mmapped in place | bundled APK asset | an asset must be extracted before mmap, so bundling costs 769 MiB twice and ends the 32 MB download |
+| Grounding | BM25 over 68 authored passages | embeddings + vector search | no 100 MB embedding model, no index to rebuild, and lexical retrieval is inspectable when it goes wrong |
+| Decoding | greedy | sampled at temperature | one prompt must give one answer, or the guard cannot be pinned by a test |
+| Generated text shown | only after the guard passes | streamed token by token | an invented threshold shown for two seconds has already been read |
 | Password hashing | stdlib `hashlib.scrypt` | `passlib[bcrypt]` | version-conflict fragility |
 | Certificate upload | `qr_text` + `worker_id`, server re-decodes | pre-parsed fields | a second parsing path could accept what the offline verifier rejects |
 | Room migrations | explicit | `fallbackToDestructiveMigration` | would delete unsynced certificates |
@@ -585,27 +598,39 @@ other 51 weeks of the year measurable.
 Measured on the universal release APK — compressed sizes as they ship:
 
 ```
-native libs (ARCore + MediaPipe + CameraX)  █████████████████████████████████▊   33.81 MB   76.4 %
-dex — ALL of our code + Compose + Room      ███████▋                              7.64 MB   17.3 %
-other (META-INF, signatures, manifests)     █▎                                    1.25 MB    2.8 %
-assets (scenario + pictogram data)          ▉                                     0.85 MB    1.9 %
-resources (603×3 strings, vectors)          ▌                                     0.46 MB    1.0 %
-zip overhead (headers, alignment)           ▎                                     0.23 MB    0.5 %
-                                                                                ────────
-one █ = 1 MB                                                                     44.23 MB   528 entries
+native libs (ARCore + MediaPipe + CameraX + llama.cpp)  ███████████████████████████████████████████   43.05 MB   80.1 %
+dex — ALL of our code + Compose + Room                  ███████▉                                       7.87 MB   14.6 %
+other (META-INF, signatures, manifests)                 █▎                                             1.25 MB    2.3 %
+assets (scenario + pictogram data)                      ▉                                              0.85 MB    1.6 %
+resources (403×3 strings, vectors)                      ▌                                              0.48 MB    0.9 %
+zip overhead (headers, alignment)                       ▎                                              0.26 MB    0.5 %
+                                                                                                    ────────
+one █ = 1 MB                                                                                          53.75 MB   534 entries
 ```
 
-**Our own code is 17 % of the download.** The rest is third-party native AR and vision libraries. That framing
-matters: there is very little of *our* fat to trim, and the biggest available win was splitting per-ABI so a
+**Our own code is 15 % of the download.** The rest is third-party native AR, vision and inference
+libraries — and this is the *universal* APK, which carries three architectures. That framing matters:
+there is very little of *our* fat to trim, and the biggest available win was splitting per-ABI so a
 phone only downloads its own architecture.
+
+Of the native slice, llama.cpp is 3.29 MB per ABI plus 1.20 MB of `libc++_shared`. The 769 MiB model is
+not in here and never will be — §14.6.
 
 | Artifact | Size | Reduction |
 |---|---:|---|
-| debug, universal | 115.20 MB | baseline |
-| release, universal (R8 + resource shrink) | 44.23 MB | **−62 %** |
-| **release, arm64-v8a** — what most phones get | **27.47 MB** | **−76 %** |
-| release, armeabi-v7a | 21.11 MB | −82 % |
-| release, x86_64 (emulator) | 16.18 MB | −86 % |
+| debug, universal | 124.66 MB | baseline |
+| release, universal (R8 + resource shrink) | 53.75 MB | **−57 %** |
+| **release, arm64-v8a** — what most phones get | **32.23 MB** | **−74 %** |
+| release, armeabi-v7a | 21.37 MB | −83 % |
+| release, x86_64 (emulator) | 21.20 MB | −83 % |
+
+The arm64 APK grew **4.74 MB** when the on-device assistant was added: a 3.29 MB llama.cpp CPU backend
+plus 1.20 MB of `libc++_shared`. The 769 MiB model is not in it and never will be — see §16.
+
+`armeabi-v7a` grew by 0.24 MB, which is the Kotlin for the assistance layer and nothing else. Those
+phones get **no AI native library at all**, verified by reading the APK: a 32-bit handset shares a 4 GB
+address space with the camera pipeline and the AR session, and a 1B model does not fit alongside them.
+They report `UNSUPPORTED_DEVICE` and everything else works normally.
 
 Two deliberate reductions beyond R8:
 
@@ -630,27 +655,35 @@ Two deliberate reductions beyond R8:
 
 ### 10.3 Build and verification speed
 
-`.\tools\verify-all.ps1` runs six stages and fails the whole run on the first one that fails. Two different
-numbers matter here and conflating them would be dishonest, so both are given: **test execution** is what the
-test runner itself reports, **stage wall-clock** additionally includes Gradle daemon startup, compilation,
-`npm`/`uvicorn` process launch and teardown.
+`.\tools\verify-all.ps1` runs eight stages and fails the whole run on the first one that fails. Two
+different numbers matter here and conflating them would be dishonest, so both are given: **test
+execution** is what the test runner itself reports, **stage wall-clock** additionally includes Gradle
+daemon startup, compilation, `npm`/`uvicorn` process launch and teardown.
 
 | Stage | Tests | Test execution | Stage wall-clock |
 |---|---:|---:|---:|
-| `:core` unit tests | **437**, 0 failures, 0 skipped | **1.27 s** | 51.6 s |
+| `:core` unit tests | **606**, 0 failures, 0 skipped | **1.43 s** | 51.6 s |
 | Cross-language fixture parity | 20 | — | 9.2 s |
 | Backend — `pytest` | **217** | — | 109.6 s |
 | Dashboard — `tsc` + `vite build` | — | — | 35.7 s |
-| Android — Robolectric unit tests | **78**, 0 failures | 16.8 s | 5.2 s incremental |
-| Android — `assembleDebug` + `lintDebug` | 0 errors, 288 warnings | — | 304.3 s |
+| `:ai` unit tests — scripted engine, no native library | **52**, 0 failures | 6.56 s | 70.1 s |
+| Android — Robolectric unit tests | **81**, 0 failures | 51.6 s | 5.2 s incremental |
+| Android — `assembleDebug` + `lintDebug` | 0 errors, 296 warnings | — | 304.3 s |
 | Live smoke — 56 HTTP checks, real server start/stop | 56 | — | 8.1 s |
-| **end to end** | | | **≈ 8 min 39 s** |
+| **end to end, cold** | | | **≈ 13 min** |
+| **end to end, everything up to date** | | | **2 min 54 s** *(measured)* |
+
+The two end-to-end figures are far apart now and the reason is the native build: compiling the vendored
+llama.cpp CPU backend for two ABIs takes about four minutes the first time and nothing at all
+afterwards. The warm figure is the one that matters day to day — the run above reported
+`:core` 4.3 s, parity 4.5 s, backend 80 s, dashboard 25 s, `:ai` 3.2 s, android tests 7.4 s, assemble
+and lint 44.6 s, smoke 4.4 s, all passing.
 
 Stage wall-clock is measured on a cold Gradle daemon; when everything is already up to date the Android stage
 drops to a couple of seconds because Gradle skips the work. A clean Android release build of all four ABIs
 through R8 takes **3 m 44 s**.
 
-**The 1.27 s figure is the one that shaped the architecture.** 437 tests covering every certification rule,
+**The 1.43 s figure is the one that shaped the architecture.** 606 tests covering every certification rule,
 with no emulator and no device, is fast enough to run on every save — and a suite that actually gets run is
 worth more than a thorough one that does not.
 
@@ -676,7 +709,8 @@ worth more than a thorough one that does not.
 
 ```
                          ┌─────────────────────────────────────────────┐
-  every save  ──────────▶│  :core  437 tests · 1.27 s · no emulator    │
+  every save  ──────────▶│  :core  606 tests · 1.43 s · no emulator    │
+                         │  includes the retrieval and output guard    │
                          └─────────────────────┬───────────────────────┘
                                                ▼
                          ┌─────────────────────────────────────────────┐
@@ -690,7 +724,13 @@ worth more than a thorough one that does not.
                          └─────────────────────┬───────────────────────┘
                                                ▼
                          ┌─────────────────────────────────────────────┐
-  android tests ───────▶ │  78 Robolectric tests · real Room queries · │
+  ai ──────────────────▶ │  52 tests · scripted engine · no native     │
+                         │  library, no model file · proves a worker    │
+                         │  cannot be shown an invented figure         │
+                         └─────────────────────┬───────────────────────┘
+                                               ▼
+                         ┌─────────────────────────────────────────────┐
+  android tests ───────▶ │  81 Robolectric tests · real Room queries · │
                          │  view models · screens actually composed    │
                          └─────────────────────┬───────────────────────┘
                                                ▼
@@ -715,7 +755,10 @@ passed"* from *"everything that could run passed"* — because those are differe
 
 | Claim | How you check it yourself |
 |---|---|
-| The scoring engine is correct | `.\gradlew.bat :core:test` — 437 tests, no device |
+| The scoring engine is correct | `.\gradlew.bat :core:test` — 606 tests, no device |
+| A model cannot show a worker an invented figure | `.\gradlew.bat :ai:testDebugUnitTest` — 52 tests, no native library, no model file |
+| Hindi retrieval is not silently broken | `.\gradlew.bat :core:test --tests "*AiTokenizerTest"` — the Devanagari cases are the reason that class exists |
+| The assistant is genuinely optional | delete the model file and every AI panel states why it is unavailable; drills, scoring, signing and verification are untouched |
 | Kotlin and Python agree on signed bytes | `AttestationVectorsTest` + `test_canonical_parity.py`, same committed fixtures |
 | Voice thresholds are measured | `.\gradlew.bat :core:test --tests "*DtwSeparationTest"` prints the profile in §8 |
 | Nothing is untranslated | `MissingTranslation` is fatal; `MainActivity` audits all 222 catalog keys on every debug launch |
@@ -730,9 +773,14 @@ passed"* from *"everything that could run passed"* — because those are differe
 
 ### Prerequisites
 
-JDK 17 · Node 20+ · Python 3.11+. **An Android SDK only if you want the APK** — `core/`, `backend/` and
-`dashboard/` all verify without one. No SDK? `.\tools\bootstrap-android-sdk.ps1` fetches a minimal one and
-writes `local.properties`; `settings.gradle.kts` then includes `:android-app` automatically.
+JDK 17 · Node 20+ · Python 3.11+. **An Android SDK and NDK only if you want the APK** — `core/`,
+`backend/` and `dashboard/` all verify without either. No SDK? `.\tools\bootstrap-android-sdk.ps1`
+fetches a minimal one, including NDK `28.2.13676358` and CMake `3.22.1`, and writes `local.properties`;
+`settings.gradle.kts` then includes `:ai` and `:android-app` automatically.
+
+The NDK is genuinely required for the APK now, because `:ai` compiles the vendored llama.cpp CPU
+backend. There is deliberately no flag to skip it: the app references `AiCoach` directly, so an absent
+module would not compile, and an escape hatch that does not work is worse than none.
 
 ### Backend
 
@@ -804,13 +852,18 @@ Jaagruk/
 │   ├── catalog/          5 modules · 11 scenarios · 73 pictograms · AR targets
 │   ├── retention/        readiness decay · spaced repetition
 │   ├── speech/           FFT · MFCC · DTW · keyword spotter
-│   └── drill/            buddy-drill protocol state machine
+│   ├── drill/            buddy-drill protocol state machine
+│   └── ai/               BM25 retrieval · safety corpus · prompt builder · output guard
+├── ai/                Android library — the on-device model, and nothing else
+│   ├── cpp/llama/        vendored llama.cpp, CPU backend only (~7 MB)
+│   └── runtime/          JNI bridge · engine · model store · AR interlock
 ├── android-app/
 │   ├── data/             Room (13 tables) · keystore · repositories
 │   ├── sync/             queue worker · media worker · Nearby relay
 │   ├── ar/               ArCore · sensor fallback · pictogram · coach · watchdog
 │   ├── input/            voice engine · enrolment · gestures · narration
-│   └── ui/               11 screens · theme · pictogram renderer
+│   ├── ai/               catalog resolver · briefing facts
+│   └── ui/               12 screens · theme · pictogram renderer
 ├── backend/              FastAPI · 38 endpoints · 15 tables
 ├── dashboard/            React + TS + Vite + Leaflet · 11 pages
 ├── tools/                bootstrap · run · verify
@@ -830,11 +883,119 @@ Jaagruk/
 
 ---
 
-## 14. Decisions worth defending
+## 14. The offline assistant, and the fence around it
+
+A local language model, added to do four things a static app cannot: explain a step a worker got wrong,
+answer a question they ask in their own words, draft a shift briefing, and summarise a hazard report.
+Gemma 3 1B instruction-tuned at Q4_K_M, roughly 769 MiB, through a vendored llama.cpp CPU backend. No
+network, ever.
+
+**It is additive by construction.** Nothing in the training, assessment, certification or sync path
+depends on it. Delete the model file and every panel states why it is unavailable; drills, scoring,
+signing and offline verification are untouched. That is not politeness, it is what makes shipping a
+non-deterministic component into a safety certification workflow defensible at all.
+
+### 14.1 What a 1B model is, and is not
+
+It is fluent. It is not a reliable store of specifics. Published benchmarking on sub-1B models shows
+accuracy on classification tasks collapsing without retrieval and recovering sharply once relevant text
+is supplied — [Gemma3-1B goes from 20 % to 85 % on log-severity classification once RAG is
+added](https://arxiv.org/abs/2601.07790), with Qwen3-0.6B reaching 88 % despite being weak without it.
+*(Rephrased for licensing compliance.)*
+
+So the architecture follows the finding rather than hoping around it. **The model supplies phrasing.
+The corpus supplies facts.** 68 authored passages, 34 pairs in English and Hindi, covering all five
+modules plus the statutory hooks and cross-cutting practice, compiled into `:core` the same way the
+scenario catalog is — because it has to work on a handset that has never had signal, and because a
+safety officer has to be able to review it in a diff.
+
+### 14.2 The two gates
+
+The model sits between two deterministic gates, both in `:core`, both unit tested on a plain JVM with
+no emulator, no native library and no 769 MiB file.
+
+**Before: retrieval, which can refuse.** Below a third of the question's distinct terms matched, **no
+model runs at all** and the worker is told the site's documents do not cover it and to ask a
+supervisor. That is a useful answer. A confident paragraph about a hazard nobody wrote down is the
+single worst thing this feature could produce.
+
+**After: the output guard.** Ten checks, each with its own reason code. The one that matters most:
+
+```
+every figure in the output must appear in the prompt
+```
+
+1.25 % is the DGMS methane withdrawal level for Indian coal mines. A model that writes 1.5 % has
+produced a fluent, confident, fatal sentence. That output is discarded, not shown, not softened.
+
+The guard also rejects any claim about passing, failing, scoring or being certified. Those are settled
+by signed code, and a model paraphrasing them would create a second, unsigned source of truth about
+whether a worker may enter a confined space.
+
+A rule that lives only in a prompt is a request. A small model under an unusual input will ignore it,
+and without the guard nothing downstream would know.
+
+### 14.3 Six outcomes, not two
+
+| Outcome | What the worker is told |
+|---|---|
+| `Answer` | the answer, with the document it came from |
+| `NoGrounding` | the documents on this phone do not cover this; ask your supervisor |
+| `ModelDeclined` | same, reached the other way — the model was given sources and said they do not answer it |
+| `Filtered` | that answer did not pass the safety check, so it is not shown |
+| `Unavailable` | not installed / this phone cannot / not in Santali / paused during a drill |
+| `Failed` | could not answer just now |
+
+The same reasoning as the seven certificate verdicts. Collapsing these loses the two a worker can act
+on, and "not installed on this phone" is a thing a supervisor can fix.
+
+### 14.4 Santali gets no generated text at all
+
+No model in this size class writes Ol Chiki. Reported as `LANGUAGE_UNSUPPORTED` with the reason stated,
+and the UI points at what is real for a Santali speaker: the authored translations, the 73 pictograms,
+and the per-site voice recordings. A plausible paragraph of wrong Santali in front of a worker who
+cannot cross-check it is worse than nothing, and the guard rejects Ol Chiki codepoints outright in case
+a model ever tries.
+
+### 14.5 The model is never resident during a drill
+
+An AR drill holds an ARCore session, a GLES3 surface and the camera pipeline. A 1B model at Q4 needs
+roughly 900 MiB resident: 769 MiB of weights plus its KV cache. On the 4 GB handsets this platform targets, holding both means
+sustained thermal throttling.
+
+Throttling is the part that matters. **Decision latency measured on a throttled frame loop describes
+the phone, not the worker** — and that measurement is signed into a certificate. So the model is
+released, by interlock rather than by convention: `DrillViewModel` *awaits* `enterDrill()` immediately
+before the AR controller is created, because starting the session first and unloading afterwards leaves
+exactly the window the interlock exists to close. Reference counted, because a buddy drill has a drill
+screen and a peer session that overlap.
+
+### 14.6 Why the model is not in the APK
+
+At 769 MiB, bundling it would end the 32 MB download and cost a second 769 MiB, because an APK asset has
+to be extracted to a real path before llama.cpp can memory-map it. So it arrives out of band — a
+supervisor copies it onto the handset once — is validated by GGUF magic bytes and a size floor, and is
+mapped in place. The same contract the app already has with `gesture_recognizer.task` and the ARCore
+Cloud Anchor key: absent, the feature hides itself and says why.
+
+### 14.7 What this cost
+
+| | |
+|---|---|
+| APK, arm64-v8a | 27.49 MB → **32.23 MB** (+4.74) |
+| APK, armeabi-v7a | 21.13 MB → **21.37 MB** (+0.24, no native library) |
+| New `:core` tests | **+169** (437 → 606), still 1.43 s |
+| New `:ai` tests | **52**, no emulator, no model |
+| Vendored third-party C++ | ~7 MB of llama.cpp, CPU backend only |
+| Lint | 0 errors, both fatal checks still clean |
+
+---
+
+## 15. Decisions worth defending
 
 A few choices that look odd until you know why.
 
-**`:core` is a plain JVM module.** 437 tests in 1.6 s with no emulator. A scoring engine you can only test on
+**`:core` is a plain JVM module.** 606 tests in 1.4 s with no emulator. A scoring engine you can only test on
 a device is a scoring engine nobody tests.
 
 **Readiness is computed on read, never stored.** No decay job that could have failed silently.
@@ -865,7 +1026,20 @@ to take the replacements on trust.
 
 ---
 
-## 15. Honest limitations
+**The assistant is fenced, not trusted.** It cannot touch scoring, hesitation classification, pass/fail,
+certificates, the chain, the catalog, or any safety-critical string. `AiTask.StepCoaching` has no field
+for a score, so the model is never told the verdict and cannot restate it — asserted by a test, which is
+a strange thing to test until you consider what adding one field would silently enable.
+
+**Greedy decoding, and no retry.** Sampling would make one prompt produce different output run to run,
+which would make the guard's behaviour impossible to pin in a test. Greedy also removes any reason to
+retry a rejected generation: a second attempt produces the same tokens, so a rejection is reported
+rather than papered over.
+
+**Progress is a word count, never partial text.** Unvalidated output has not been through the guard, and
+showing an invented threshold for two seconds before replacing it would defeat the point of having one.
+
+## 16. Honest limitations
 
 Listed because an assessor will find them anyway, and finding them *listed* is a very different impression
 from finding them hidden. Full accounting in
@@ -881,6 +1055,9 @@ from finding them hidden. Full accounting in
 | 3 of 5 modules use generic AR placement | Fully assessable, not bespoke scenes; the UI says so | Author three more anchor sets |
 | PostgreSQL not exercised here | Supported and isolated in `requirements-postgres.txt` | Run the suite against Postgres in CI |
 | DGMS filing workflow not built | CSV exports with provenance headers only | Needs the statutory return format and a sign-off path |
+| **The model has not been run on a physical mid-range handset** | The library builds and loads, the interlock and guard are covered by tests, and the packaging is verified. What is missing is a 769 MiB model loaded on a real 4 GB phone with timings taken. | One afternoon, one handset, one model file |
+| **Answer quality is unmeasured** | The guard proves what output *cannot* contain. It does not prove answers are good. | Score a sample of real worker questions with a site safety officer; method in `CALIBRATION.md` §4 |
+| Hindi corpus unreviewed | Same standing as the app's Hindi strings: complete and usable, quality unverified | Native speaker with mine-site vocabulary |
 
 ---
 

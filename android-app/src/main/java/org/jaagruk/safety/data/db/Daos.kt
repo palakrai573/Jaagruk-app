@@ -245,6 +245,42 @@ interface AssessmentRunDao {
 
     @Query("DELETE FROM assessment_runs WHERE runId = :runId")
     suspend fun delete(runId: String)
+
+    /**
+     * Workers at this site whose most recent completed run raised the hesitation flag.
+     *
+     * Distinct workers, not runs: a supervisor needs to know how many people to talk to, and a worker
+     * who hesitated on three modules is still one conversation. Bounded by [sinceSec] because a
+     * hesitation from eleven months ago says nothing about this shift.
+     */
+    @Query(
+        """
+        SELECT COUNT(DISTINCT workerId) FROM assessment_runs
+        WHERE siteId = :siteId
+          AND hesitationFlag = 1
+          AND completion = 'COMPLETED'
+          AND finishedAtSec >= :sinceSec
+        """,
+    )
+    suspend fun countHesitationFlaggedWorkers(siteId: String, sinceSec: Long): Int
+
+    /**
+     * The step ids most often answered wrong or slowly at this site.
+     *
+     * Read from the stored step payload rather than a column, so it is a LIKE over the run's JSON. That
+     * is acceptable here and would not be on a hot path: it runs once when a supervisor asks for a
+     * briefing, over one site's runs.
+     */
+    @Query(
+        """
+        SELECT moduleId FROM assessment_runs
+        WHERE siteId = :siteId AND finishedAtSec >= :sinceSec AND passed = 0
+        GROUP BY moduleId
+        ORDER BY COUNT(*) DESC
+        LIMIT :limit
+        """,
+    )
+    suspend fun mostFailedModuleIds(siteId: String, sinceSec: Long, limit: Int): List<String>
 }
 
 @Dao
@@ -329,6 +365,36 @@ interface HazardTagDao {
      */
     @Query("SELECT hazardId FROM hazard_tags WHERE uploaded = 1 AND mediaPending = 0")
     suspend fun fullyUploadedIds(): List<String>
+
+    @Query("SELECT COUNT(*) FROM hazard_tags WHERE siteId = :siteId")
+    suspend fun countForSite(siteId: String): Int
+
+    /**
+     * Zone labels carrying the most reports.
+     *
+     * Nulls excluded rather than grouped: an underground report often has no zone label and no GPS fix,
+     * and a briefing line reading "most reports in (none)" is worse than one zone short.
+     */
+    @Query(
+        """
+        SELECT zoneLabel FROM hazard_tags
+        WHERE siteId = :siteId AND zoneLabel IS NOT NULL AND zoneLabel != ''
+        GROUP BY zoneLabel
+        ORDER BY COUNT(*) DESC
+        LIMIT :limit
+        """,
+    )
+    suspend fun busiestZones(siteId: String, limit: Int): List<String>
+
+    /** Recent reports, for near-duplicate detection when a new one is being written. */
+    @Query(
+        """
+        SELECT * FROM hazard_tags
+        WHERE siteId = :siteId AND createdAtSec >= :sinceSec
+        ORDER BY createdAtSec DESC LIMIT :limit
+        """,
+    )
+    suspend fun recentForSite(siteId: String, sinceSec: Long, limit: Int): List<HazardTagEntity>
 
     @Query(
         """

@@ -43,6 +43,12 @@ class HazardRepository(
 
     suspend fun pendingMedia(limit: Int): List<HazardTagEntity> = hazards.pendingMedia(limit)
 
+    /** Recent reports at a site. Used for the local near-duplicate check when a new one is written. */
+    suspend fun recentForSite(siteId: String, sinceSec: Long, limit: Int): List<HazardTagEntity> =
+        hazards.recentForSite(siteId, sinceSec, limit)
+
+    suspend fun countForSite(siteId: String): Int = hazards.countForSite(siteId)
+
     suspend fun markUploaded(ids: List<String>, mediaPending: Boolean) =
         hazards.markUploaded(ids, mediaPending)
 

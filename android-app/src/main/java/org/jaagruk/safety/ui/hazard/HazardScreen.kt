@@ -33,6 +33,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jaagruk.safety.R
 import org.jaagruk.safety.data.hazard.HazardCategory
 import org.jaagruk.safety.data.hazard.HazardSeverity
+import org.jaagruk.safety.ui.components.AiPanel
+import org.jaagruk.safety.ui.components.AiPanelState
 import org.jaagruk.safety.ui.components.BannerTone
 import org.jaagruk.safety.ui.components.GloveButton
 import org.jaagruk.safety.ui.components.GloveOutlinedButton
@@ -282,6 +284,31 @@ fun HazardScreen(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
+            }
+        }
+
+        // Above the submit button, and never in its way. The report is complete without this; a worker
+        // who ignores it loses nothing, and the submit button is never gated on it.
+        if (state.summary !is AiPanelState.Unavailable) {
+            item {
+                AiPanel(
+                    state = state.summary,
+                    titleRes = R.string.hazard_ai_title,
+                    disclaimerRes = R.string.hazard_ai_disclaimer,
+                    actionRes = R.string.hazard_ai_action,
+                    onAsk = viewModel::draftSummary,
+                    enabled = state.category != null && state.note.isNotBlank(),
+                )
+            }
+        }
+
+        state.possibleDuplicate?.let { duplicate ->
+            item {
+                StatusBanner(
+                    text = stringResource(R.string.hazard_possible_duplicate, duplicate),
+                    tone = BannerTone.INFO,
+                    pictogramDescription = stringResource(R.string.cd_info),
+                )
             }
         }
 

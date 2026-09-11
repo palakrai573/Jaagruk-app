@@ -6,9 +6,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import org.jaagruk.ai.AiCoach
+import org.jaagruk.ai.ModelStore
+import org.jaagruk.ai.NoopLlmEngine
+import org.jaagruk.safety.ai.BriefingFactsBuilder
+import org.jaagruk.safety.ai.CatalogResolver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,6 +113,19 @@ class SupervisorEnrolmentScreenTest {
             // Server sign-in now lives on this screen. Left unreachable on purpose: everything asserted
             // here — the site key, enrolment, the roster — must work with no network at all.
             api = mockk(relaxed = true),
+            // On-device assistance, with no engine behind it. That is the honest state for a unit test
+            // JVM — there is no native library and no 769 MiB model — and it is also the state of an
+            // armeabi-v7a handset, so this configuration is one the app genuinely ships into. What it
+            // proves here is that the supervisor screen composes and enrols workers with the assistant
+            // reporting unavailable, which is the property that matters: assistance is additive.
+            aiCoach = AiCoach(NoopLlmEngine()),
+            modelStore = ModelStore(ApplicationProvider.getApplicationContext()),
+            briefingFacts = BriefingFactsBuilder(
+                database = database,
+                retention = RetentionRepository(database, clock),
+                resolver = CatalogResolver(ApplicationProvider.getApplicationContext()),
+                clock = clock,
+            ),
             syncStatus = SyncStatusProvider(database),
         )
     }

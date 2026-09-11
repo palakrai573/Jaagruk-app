@@ -102,3 +102,22 @@
 
 # Kotlin's `Result` and coroutine internals are referenced reflectively by Retrofit's suspend adapter.
 -keepclassmembers class kotlin.Result { *; }
+
+# --- On-device assistance --------------------------------------------------
+# The JNI keeps live in `ai/consumer-rules.pro` and travel with the `:ai` module, so the rules that
+# make the native boundary work cannot be forgotten here. What is left is the `:core` AI code that
+# R8 can see is reachable, but whose *behaviour* depends on names surviving.
+#
+# The retrieval, prompt and guard classes are kept because the corpus, the prompt shape and the
+# rejection reasons are all asserted byte-for-byte and name-for-name by tests in `:core`. A release
+# build that renamed or inlined them differently from the debug build under test would be a release
+# build whose safety checks are no longer the ones that were verified.
+-keep class org.jaagruk.core.ai.** { *; }
+-keep class org.jaagruk.ai.** { *; }
+
+# The generation callback is invoked from C++ by name. Belt and braces alongside the consumer rule:
+# if the consumer rules are ever dropped from the library, this is what keeps release generation
+# from failing with UnsatisfiedLinkError on the first token.
+-keepclasseswithmembernames,includedescriptorclasses class org.jaagruk.ai.runtime.LlamaBridge {
+    native <methods>;
+}

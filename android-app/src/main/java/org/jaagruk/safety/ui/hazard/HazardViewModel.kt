@@ -9,7 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jaagruk.ai.AiCoach
+import org.jaagruk.core.ai.AiLanguage
+import org.jaagruk.core.ai.AiTask
+import org.jaagruk.core.ai.Bm25Index
+import org.jaagruk.core.ai.CorpusPassage
+import org.jaagruk.core.ai.PassageScope
 import org.jaagruk.safety.R
+import org.jaagruk.safety.ai.CatalogResolver
+import org.jaagruk.safety.ai.currentAiLanguage
 import org.jaagruk.safety.data.DeviceProfile
 import org.jaagruk.safety.data.LocalMediaStore
 import org.jaagruk.safety.data.hazard.HazardCategory
@@ -18,7 +26,9 @@ import org.jaagruk.safety.data.repo.HazardRepository
 import org.jaagruk.safety.data.repo.WorkerRepository
 import org.jaagruk.safety.input.VoiceNoteRecorder
 import org.jaagruk.safety.sync.SyncScheduler
+import org.jaagruk.safety.ui.components.AiPanelState
 import org.jaagruk.safety.ui.components.UiMessage
+import org.jaagruk.safety.ui.components.toPanelState
 import java.io.File
 import javax.inject.Inject
 
@@ -30,6 +40,8 @@ class HazardViewModel @Inject constructor(
     private val recorder: VoiceNoteRecorder,
     private val media: LocalMediaStore,
     private val syncScheduler: SyncScheduler,
+    private val aiCoach: AiCoach,
+    private val catalogResolver: CatalogResolver,
 ) : ViewModel() {
 
     data class State(
@@ -45,6 +57,17 @@ class HazardViewModel @Inject constructor(
         val submitting: Boolean = false,
         val filed: Boolean = false,
         val message: UiMessage? = null,
+        /**
+         * The advisory summary for the safety officer's worklist.
+         *
+         * Advisory in the strict sense: it is never stored, never uploaded, and never touches the
+         * category or the severity the worker chose. Those are the worker's judgement and they are what
+         * syncs. This exists because a note typed on a phone in a haulage road is often three words,
+         * and a queue of three-word notes is a queue nobody triages.
+         */
+        val summary: AiPanelState = AiPanelState.Idle,
+        /** A recent report at this site that looks like the same problem. */
+        val possibleDuplicate: String? = null,
     )
 
     private val _state = MutableStateFlow(State())
@@ -188,6 +211,93 @@ class HazardViewModel @Inject constructor(
         )
     }
 
+    // -----------------------------------------------------------------------
+    // Advisory summary
+    // -----------------------------------------------------------------------
+
+    /**
+     * Drafts a one-line summary for the safety officer, and flags a likely duplicate.
+     *
+     * Nothing here changes what gets filed. The category, the severity, the note, the photo and the
+     * voice note are the worker's report and they sync exactly as entered. This only produces something
+     * a safety officer reads alongside them, which is why it is safe to offer at all: the worst case is
+     * a summary that is unhelpful, not a report that is wrong.
+     *
+     * The duplicate check is deliberately lexical and local. It compares this note against recent
+     * reports from the same site using the same BM25 index the safety corpus uses, so it costs no model
+     * time and works with the radio off. A false positive is harmless: the copy says "possibly the same
+     * as", and filing anyway is one tap.
+     */
+    fun draftSummary() {
+        val current = _state.value
+        val category = current.category
+        if (category == null || current.note.isBlank()) {
+            _state.value = current.copy(
+                summary = AiPanelState.NoAnswer(UiMessage.info(R.string.hazard_needs_note)),
+            )
+            return
+        }
+        val language = currentAiLanguage()
+        if (language == null) {
+            _state.value = current.copy(
+                summary = AiPanelState.Unavailable(UiMessage.info(R.string.ai_unavailable_language)),
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            _state.value = _state.value.copy(summary = AiPanelState.Working())
+            val duplicate = findPossibleDuplicate(current.note)
+            val outcome = aiCoach.run(
+                AiTask.HazardSummary(
+                    language = language,
+                    categoryLabel = catalogResolver.resolve(category.labelKey)
+                        .ifBlank { category.wireName },
+                    severityLabel = catalogResolver.resolve(current.severity.labelKey)
+                        .ifBlank { current.severity.wireName },
+                    note = current.note,
+                    zoneLabel = current.zoneLabel.takeIf { it.isNotBlank() },
+                ),
+            ) { words ->
+                _state.value = _state.value.copy(summary = AiPanelState.Working(words))
+            }
+            _state.value = _state.value.copy(
+                summary = outcome.toPanelState(),
+                possibleDuplicate = duplicate,
+            )
+        }
+    }
+
+    /**
+     * A recent report at this site whose note overlaps this one.
+     *
+     * Built as a one-off index rather than kept warm: a worker files a hazard rarely, and indexing thirty
+     * short notes costs microseconds. Reusing [org.jaagruk.core.ai.Bm25Index] rather than writing a
+     * similarity check means the Devanagari tokenisation and the stemming are the ones already covered by
+     * tests.
+     */
+    private suspend fun findPossibleDuplicate(note: String): String? {
+        if (siteId.isBlank()) return null
+        val since = System.currentTimeMillis() / 1_000L - DUPLICATE_LOOKBACK_SECONDS
+        val recent = hazards.recentForSite(siteId, since, DUPLICATE_CANDIDATES)
+            .filter { !it.note.isNullOrBlank() }
+        if (recent.isEmpty()) return null
+
+        val language = currentAiLanguage() ?: AiLanguage.ENGLISH
+        val passages = recent.mapIndexed { index, row ->
+            CorpusPassage(
+                passageId = row.hazardId,
+                title = catalogResolver.resolve(row.category).ifBlank { row.category },
+                body = row.note.orEmpty(),
+                language = language,
+                scope = PassageScope.GENERAL,
+                sourceLabel = "hazard report ${index + 1}",
+            )
+        }
+        val hit = Bm25Index(passages).search(note, limit = 1).firstOrNull() ?: return null
+        return if (hit.matchedTermRatio >= DUPLICATE_RATIO) hit.passage.body else null
+    }
+
     fun submit() {
         val current = _state.value
         val category = current.category ?: return
@@ -276,5 +386,20 @@ class HazardViewModel @Inject constructor(
     private companion object {
         const val TICK_MS = 250L
         const val MAX_ZONE_LABEL = 64
+
+        /** 14 days. Beyond that a similar report is a separate event, not a duplicate. */
+        const val DUPLICATE_LOOKBACK_SECONDS = 14L * 24 * 60 * 60
+
+        const val DUPLICATE_CANDIDATES = 30
+
+        /**
+         * Term overlap at which two notes are called possibly the same.
+         *
+         * Higher than the corpus relevance floor of 0.34, because the cost of being wrong runs the
+         * other way here: a missed duplicate is a second report a safety officer merges in a moment,
+         * while a false one tells a worker their report already exists when it does not, and a worker
+         * who believes that stops reporting.
+         */
+        const val DUPLICATE_RATIO = 0.5
     }
 }

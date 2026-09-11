@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Runs every check in the repository and prints one verdict.
 
@@ -142,6 +142,16 @@ try {
     # queries actually execute, that the view models drive the real repositories, and that the screens
     # compose without throwing. Run before assemble so a broken flow is reported in seconds rather than
     # after a five-minute lint pass.
+    # The AI orchestration, against a scripted engine. No native library, no emulator, no 769 MiB model:
+    # what it proves is that a worker cannot be shown an invented figure, a pass/fail verdict, or an
+    # answer to a question the site's documents do not cover, and that each of those is reported as its
+    # own outcome. Run before the app tests because a break here explains a break there.
+    Invoke-Stage -Name ':ai unit tests' -LogFile 'ai-test.log' `
+        -Skipped:($SkipAndroid -or -not $androidAvailable) `
+        -SkipReason $(if ($SkipAndroid) { 'requested with -SkipAndroid' } else { 'no Android SDK found' }) -Body {
+        & $gradlew --console=plain :ai:testDebugUnitTest
+    }
+
     Invoke-Stage -Name 'android unit tests' -LogFile 'android-test.log' `
         -Skipped:($SkipAndroid -or -not $androidAvailable) `
         -SkipReason $(if ($SkipAndroid) { 'requested with -SkipAndroid' } else { 'no Android SDK found' }) -Body {

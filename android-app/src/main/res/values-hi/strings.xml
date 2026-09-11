@@ -410,4 +410,63 @@
         <item quantity="other">%1$d मॉड्यूल में छोटा दोहराव बाकी है।</item>
     </plurals>
 
+    <!-- ==================================================================
+         उपकरण पर चलने वाला सहायक
+         ================================================================== -->
+    <string name="ai_working">उत्तर तैयार हो रहा है।</string>
+    <string name="ai_working_progress">उत्तर तैयार हो रहा है। अब तक %1$d शब्द।</string>
+    <string name="ai_stop">रोकें</string>
+    <string name="ai_source">स्रोत: %1$s</string>
+    <string name="ai_shortened">पढ़ने में आसान रहे, इसलिए छोटा किया गया।</string>
+    <string name="ai_not_in_documents">इस फ़ोन में रखे सुरक्षा दस्तावेज़ों में इसका उत्तर नहीं है। अपने सुपरवाइज़र से पूछें।</string>
+    <string name="ai_no_question">पहले सवाल लिखें।</string>
+    <string name="ai_check_failed">वह उत्तर सुरक्षा जाँच में पास नहीं हुआ, इसलिए दिखाया नहीं गया। ऊपर लिखा मार्गदर्शन वैसा ही है।</string>
+    <string name="ai_failed">सहायक अभी उत्तर नहीं दे सका। दोबारा कोशिश करें।</string>
+    <string name="ai_unavailable_not_installed">इस फ़ोन में ऑफ़लाइन सहायक स्थापित नहीं है। सुपरवाइज़र इसे जोड़ सकते हैं।</string>
+    <string name="ai_unavailable_device">यह फ़ोन ऑफ़लाइन सहायक नहीं चला सकता। बाकी सब सामान्य रूप से काम करता है।</string>
+    <string name="ai_unavailable_language">ऑफ़लाइन सहायक संताली नहीं लिख सकता। लिखा मार्गदर्शन, चित्र-चिह्न और आवाज़ के निर्देश पूरे हैं।</string>
+    <string name="ai_unavailable_drill">अभ्यास चलते समय सहायक रुका रहता है, जिससे पूरा फ़ोन अभ्यास के लिए रहे।</string>
+    <string name="ai_unavailable_policy">इस साइट के लिए ऑफ़लाइन सहायक बंद है।</string>
+
+    <!-- अभ्यास के बाद समझाना -->
+    <string name="ai_coach_title">सही कार्रवाई क्यों सही है?</string>
+    <string name="ai_coach_action">यह चरण समझाएँ</string>
+    <string name="ai_coach_disclaimer">केवल समझाने के लिए। इससे आपके अंक या प्रमाणपत्र में कोई बदलाव नहीं होता।</string>
+
+    <!-- ऑफ़लाइन सुरक्षा सवाल -->
+    <string name="ask_title">सुरक्षा का सवाल पूछें</string>
+    <string name="ask_subtitle">उत्तर केवल इस फ़ोन में रखे सुरक्षा दस्तावेज़ों से आते हैं। नेटवर्क की ज़रूरत नहीं।</string>
+    <string name="ask_hint">आप क्या जानना चाहते हैं?</string>
+    <string name="ask_action">पूछें</string>
+    <string name="ask_disclaimer">केवल मार्गदर्शन। अपनी साइट के नियम और सुपरवाइज़र का पालन करें।</string>
+    <string name="ask_examples_title">उदाहरण के लिए</string>
+    <string name="ask_example_one">बंद जगह में दो लोगों को क्यों जाना पड़ता है?</string>
+    <string name="ask_example_two">जलते बिजली के पैनल पर पानी डाल सकते हैं?</string>
+    <string name="ask_example_three">सीढ़ी किस कोण पर लगानी चाहिए?</string>
+    <string name="action_ask_question">सवाल पूछें</string>
+
+    <!-- पाली-पूर्व सूचना -->
+    <string name="briefing_title">पाली-पूर्व सूचना का मसौदा</string>
+    <string name="briefing_action">सूचना का मसौदा बनाएँ</string>
+    <string name="briefing_disclaimer">यह मसौदा है, पढ़कर बदल लें। जब तक आप न कहें, यह मज़दूरों के लिए निर्देश नहीं है।</string>
+
+    <!-- खतरे का सारांश -->
+    <string name="hazard_ai_title">सुरक्षा अधिकारी के लिए सारांश</string>
+    <string name="hazard_ai_action">सारांश का मसौदा बनाएँ</string>
+    <string name="hazard_ai_disclaimer">केवल सलाह। आपने जो श्रेणी और गंभीरता चुनी है, वही दर्ज होती है।</string>
+    <string name="hazard_needs_note">पहले श्रेणी चुनें और छोटा विवरण लिखें।</string>
+    <string name="hazard_possible_duplicate">यह हाल की एक सूचना जैसी लग रही है: %1$s</string>
+
+    <!-- सुपरवाइज़र: मॉडल प्रबंधन -->
+    <string name="ai_model_title">ऑफ़लाइन सहायक</string>
+    <string name="ai_model_installed">स्थापित, %1$d MB।</string>
+    <string name="ai_model_absent">स्थापित नहीं। इसके बिना भी ऐप पूरा काम करता है; यह केवल समझाना और सवाल-जवाब जोड़ता है।</string>
+    <string name="ai_model_device_unfit">इस फ़ोन में सहायक चलाने के लिए पर्याप्त मेमोरी नहीं है।</string>
+    <string name="ai_model_no_native">यह बिल्ड इस फ़ोन पर सहायक नहीं चला सकता।</string>
+    <string name="ai_model_install">फ़ाइल से स्थापित करें</string>
+    <string name="ai_model_remove">मॉडल हटाएँ</string>
+    <string name="ai_model_installing">कॉपी हो रहा है, अब तक %1$d MB।</string>
+    <string name="ai_model_install_failed">वह फ़ाइल काम लायक मॉडल नहीं थी, इसलिए कुछ नहीं बदला।</string>
+    <string name="ai_model_install_done">सहायक स्थापित हो गया।</string>
+    <string name="ai_model_expected_file">अपेक्षित फ़ाइल: %1$s</string>
 </resources>

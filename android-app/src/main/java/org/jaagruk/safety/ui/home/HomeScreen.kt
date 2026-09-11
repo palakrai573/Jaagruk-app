@@ -61,6 +61,7 @@ fun HomeScreen(
     onStartBuddyDrill: (scenarioId: String) -> Unit,
     onCertificates: () -> Unit,
     onReportHazard: () -> Unit,
+    onAskQuestion: () -> Unit,
     onVerify: () -> Unit,
     onSupervisorTools: () -> Unit,
     onSignOut: () -> Unit,
@@ -254,6 +255,14 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f),
                     )
                 }
+                Spacer(Modifier.height(10.dp))
+                // Full width, above the supervisor row, because this is the one action here a worker
+                // takes for their own reasons rather than because the app asked them to.
+                GloveOutlinedButton(
+                    text = stringResource(R.string.action_ask_question),
+                    onClick = onAskQuestion,
+                    modifier = Modifier.fillMaxWidth(),
+                )
                 Spacer(Modifier.height(10.dp))
                 GloveOutlinedButton(
                     text = stringResource(R.string.action_supervisor),

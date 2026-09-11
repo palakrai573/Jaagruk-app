@@ -13,6 +13,7 @@ import org.jaagruk.safety.ui.drill.DrillScreen
 import org.jaagruk.safety.ui.drill.ResultScreen
 import org.jaagruk.safety.ui.hazard.HazardScreen
 import org.jaagruk.safety.ui.home.HomeScreen
+import org.jaagruk.safety.ui.ask.AskScreen
 import org.jaagruk.safety.ui.signin.SignInScreen
 import org.jaagruk.safety.ui.supervisor.SiteScanScreen
 import org.jaagruk.safety.ui.supervisor.SupervisorScreen
@@ -74,6 +75,15 @@ sealed class Route(val pattern: String) {
 
     data object Supervisor : Route("supervisor")
 
+    /**
+     * Offline safety questions.
+     *
+     * No worker argument: the answers are grounded in the site's bundled safety text and are the same
+     * for everybody, so nothing here is scoped to a person and nothing is recorded against one. A
+     * worker asking a question is not an assessment and must not look like one.
+     */
+    data object Ask : Route("ask")
+
     data object SiteScan : Route("sitescan")
 
     data object VoiceEnroll : Route("voiceenroll")
@@ -130,6 +140,7 @@ fun JaagrukNavHost(
                 },
                 onCertificates = { navController.navigate(Route.Certificates.of(workerId)) },
                 onReportHazard = { navController.navigate(Route.Hazard.of(workerId)) },
+                onAskQuestion = { navController.navigate(Route.Ask.pattern) },
                 onVerify = { navController.navigate(Route.Verify.of()) },
                 onSupervisorTools = { navController.navigate(Route.Supervisor.pattern) },
                 onSignOut = {
@@ -230,6 +241,10 @@ fun JaagrukNavHost(
                 onVoiceEnroll = { navController.navigate(Route.VoiceEnroll.pattern) },
                 onVerify = { navController.navigate(Route.Verify.of()) },
             )
+        }
+
+        composable(Route.Ask.pattern) {
+            AskScreen(onBack = { navController.popBackStack() })
         }
 
         composable(Route.SiteScan.pattern) {

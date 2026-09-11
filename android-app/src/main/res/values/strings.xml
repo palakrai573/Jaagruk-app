@@ -469,4 +469,73 @@
         <item quantity="other">%1$d modules need a short refresher.</item>
     </plurals>
 
+    <!-- ==================================================================
+         On-device assistance
+
+         Wording rules for this section, because it is the one place in the app
+         where a machine writes the words:
+
+          * Never imply the assistant decides anything. Score, pass and
+            certificate are settled by signed code, and the copy says so.
+          * A refusal is phrased as something the worker can act on, which is
+            almost always "ask your supervisor".
+          * An unavailable assistant states what still works, so nobody
+            concludes the app is broken.
+         ================================================================== -->
+    <string name="ai_working">Preparing an answer.</string>
+    <string name="ai_working_progress">Preparing an answer. %1$d words so far.</string>
+    <string name="ai_stop">Stop</string>
+    <string name="ai_source">From: %1$s</string>
+    <string name="ai_shortened">Shortened so it stays quick to read.</string>
+    <string name="ai_not_in_documents">The safety documents on this phone do not answer that. Ask your supervisor.</string>
+    <string name="ai_no_question">Type a question first.</string>
+    <string name="ai_check_failed">That answer did not pass the safety check, so it is not shown. The written guidance above is unchanged.</string>
+    <string name="ai_failed">The assistant could not answer just now. Try again.</string>
+    <string name="ai_unavailable_not_installed">The offline assistant is not installed on this phone. A supervisor can add it.</string>
+    <string name="ai_unavailable_device">This phone cannot run the offline assistant. Everything else works normally.</string>
+    <string name="ai_unavailable_language">The offline assistant cannot write Santali. The written guidance, pictograms and voice prompts are complete.</string>
+    <string name="ai_unavailable_drill">The assistant is paused while a drill is running, so the drill gets the whole phone.</string>
+    <string name="ai_unavailable_policy">The offline assistant is switched off for this site.</string>
+
+    <!-- Post-drill explanation -->
+    <string name="ai_coach_title">Why is that the right action?</string>
+    <string name="ai_coach_action">Explain this step</string>
+    <string name="ai_coach_disclaimer">Explanation only. It never changes your score or your certificate.</string>
+
+    <!-- Offline safety question -->
+    <string name="ask_title">Ask a safety question</string>
+    <string name="ask_subtitle">Answers come only from the safety documents stored on this phone. No signal needed.</string>
+    <string name="ask_hint">What do you want to know?</string>
+    <string name="ask_action">Ask</string>
+    <string name="ask_disclaimer">Guidance only. Follow your site rules and your supervisor.</string>
+    <string name="ask_examples_title">For example</string>
+    <string name="ask_example_one">Why do two people have to enter a confined space?</string>
+    <string name="ask_example_two">Can I use water on a burning electrical panel?</string>
+    <string name="ask_example_three">What angle should a ladder be set at?</string>
+    <string name="action_ask_question">Ask a question</string>
+
+    <!-- Shift briefing -->
+    <string name="briefing_title">Shift briefing draft</string>
+    <string name="briefing_action">Draft a briefing</string>
+    <string name="briefing_disclaimer">A draft for you to read and change. It is not an instruction to the workforce until you say it.</string>
+
+    <!-- Hazard summary -->
+    <string name="hazard_ai_title">Summary for the safety officer</string>
+    <string name="hazard_ai_action">Draft a summary</string>
+    <string name="hazard_ai_disclaimer">Advisory only. The category and severity you chose are what get recorded.</string>
+    <string name="hazard_needs_note">Pick a category and write a short note first.</string>
+    <string name="hazard_possible_duplicate">Possibly the same as a recent report: %1$s</string>
+
+    <!-- Supervisor: model management -->
+    <string name="ai_model_title">Offline assistant</string>
+    <string name="ai_model_installed">Installed, %1$d MB.</string>
+    <string name="ai_model_absent">Not installed. The app works fully without it; explanations and questions are the only things it adds.</string>
+    <string name="ai_model_device_unfit">This phone does not have enough memory to run the assistant.</string>
+    <string name="ai_model_no_native">This build cannot run the assistant on this phone.</string>
+    <string name="ai_model_install">Install from a file</string>
+    <string name="ai_model_remove">Remove the model</string>
+    <string name="ai_model_installing">Copying, %1$d MB so far.</string>
+    <string name="ai_model_install_failed">That file was not a usable model, so nothing was changed.</string>
+    <string name="ai_model_install_done">Assistant installed.</string>
+    <string name="ai_model_expected_file">Expected file: %1$s</string>
 </resources>
