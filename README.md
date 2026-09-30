@@ -221,7 +221,7 @@ sequenceDiagram
     Repo->>Repo: Check language, model and interlock
     Repo->>Corpus: Retrieve relevant passages
     Corpus-->>Repo: Up to 3 candidates
-    Repo->>Model: Select a document number; max 8 tokens
+    Repo->>Model: Select a document number (maximum 8 tokens)
     Model-->>Repo: Number, refusal or invalid output
     Repo->>Repo: Validate exact selection and displayed passage
     Repo-->>UI: Unchanged source text + citation, or explicit failure/refusal
