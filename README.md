@@ -20,6 +20,25 @@ Offline-first. Android 10+. No headset. Certificates that verify with no network
 
 ## Contents
 
+## Active Android App
+
+The latest phone-tested Kotlin app is **[INFINITY_MOBILE](INFINITY_MOBILE/README.md)**.
+Open that directory as its own Android Studio project. It includes public training without
+sign-in, five offline 3D modules, native camera AR, a grounded on-device safety coach,
+and English, Hindi, Santali and Tamil training resources.
+
+See its [validation report](INFINITY_MOBILE/docs/VALIDATION.md) and
+[AR architecture and release guide](INFINITY_MOBILE/docs/AR-AND-RELEASE.md).
+The signed bundled APK is approximately 864 MB because it includes the local AI model;
+model weights, signing keys and APKs are not stored in Git.
+
+The original root-level `android-app`, backend and dashboard are preserved below.
+Their earlier test counts and 32 MB APK figures above do not describe `INFINITY_MOBILE`.
+Physical AR anchor stability, release installation and native-speaker translation review
+remain pending; camera startup tests alone do not establish complete AR validation.
+
+### Original Project Contents
+
 | | |
 |---|---|
 | [1. The problem, precisely](#1-the-problem-precisely) | [8. Voice, and why it had to be built from scratch](#8-voice-and-why-it-had-to-be-built-from-scratch) |

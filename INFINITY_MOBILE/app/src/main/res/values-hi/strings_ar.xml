@@ -1,0 +1,11 @@
+<resources>
+    <string name="ar_open">कैमरा AR</string>
+    <string name="ar_permission">AR अभ्यास के लिए कैमरे की अनुमति चाहिए। कैमरे की तस्वीरें आपके फ़ोन पर ही रहती हैं।</string>
+    <string name="ar_allow">कैमरे की अनुमति दें</string>
+    <string name="ar_unavailable">AR शुरू नहीं हो सका। कैमरे की अनुमति और Google Play Services for AR जाँचें, फिर यह मोड खोलें। ऑफ़लाइन 3D अभ्यास उपलब्ध है।</string>
+    <string name="ar_tracking">कैमरा ट्रैकिंग रुकी है। अच्छी रोशनी वाली खुली जगह में धीरे चलाएँ।</string>
+    <string name="ar_scan">कैमरा फर्श या मेज़ की ओर करके धीरे घुमाएँ।</string>
+    <string name="ar_surface">सतह मिल गई। अभ्यास का दृश्य यहाँ रखें।</string>
+    <string name="ar_anchored">अभ्यास की वस्तुएँ रखी गई हैं। यह असली खतरों की पहचान नहीं है।</string>
+    <string name="ar_place">दृश्य रखें</string>
+</resources>

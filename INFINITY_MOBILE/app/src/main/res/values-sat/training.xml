@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authored Santali training shell strings. Needs native safety-language review before field pilot. -->
+<resources>
+    <string name="safety_library">ᱥᱟᱹᱜᱟᱹᱭ ᱞᱟᱭᱵᱽᱨᱮᱨᱤ ᱯᱟᱥᱮᱡ (AI ᱛᱮ ᱵᱟᱝ ᱵᱮᱱᱟᱣ)</string>
+    <string name="train_general_chat">ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱟᱞᱢᱟᱨᱟᱣ (ᱵᱟᱝ ᱡᱟᱸᱪ)</string>
+    <string name="train_title">ᱨᱠᱷᱟ ᱛᱟᱞᱤᱢ</string>
+    <string name="train_subtitle">ᱟᱨᱦᱚᱸ ᱨᱠᱷᱟ ᱥᱤᱯᱷᱴ ᱞᱟᱹᱜᱤᱫ ᱛᱮᱭᱟᱨ।</string>
+    <string name="train_offline">ᱚᱯᱷᱞᱟᱭᱤᱱ ᱟᱵᱷᱭᱟᱥ</string>
+    <string name="train_meta">%1$d ᱴᱤᱯᱤᱡ · %2$d ᱱᱤᱨᱱᱚᱭ</string>
+    <string name="train_practice">ᱟᱵᱷᱭᱟᱥ ᱢᱮ</string>
+    <string name="train_ask">ᱨᱠᱷᱟ ᱥᱟᱦᱟᱭᱚᱜ</string>
+    <string name="train_documents">ᱫᱚᱞᱤᱞ ᱟᱨ ᱦᱟᱛᱭᱟᱨ</string>
+    <string name="train_language">ᱯᱟᱹᱨᱥᱤ</string>
+    <string name="train_notice">ᱚᱠᱛᱚ ᱵᱟᱝ ᱵᱟᱱᱫᱷᱟ ᱟᱵᱷᱭᱟᱥ। ᱱᱚᱶᱟ AR ᱮᱥᱮᱥᱢᱮᱱᱴ ᱵᱟᱝ ᱟᱨ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ ᱮᱢᱟ।</string>
+    <string name="train_step">ᱱᱤᱨᱱᱚᱭ %1$d / %2$d</string>
+    <string name="train_order">ᱠᱟᱹᱢᱤ ᱠᱚ ᱴᱷᱤᱠ ᱛᱤᱨᱭᱟᱹᱣ ᱨᱮ ᱵᱟᱪᱷᱟᱣ ᱢᱮ।</string>
+    <string name="train_multi">ᱡᱚᱛᱚ ᱞᱟᱹᱠᱛᱤ ᱠᱟᱹᱢᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ।</string>
+    <string name="train_check">ᱛᱮᱞᱟ ᱡᱟᱸᱪ ᱢᱮ</string>
+    <string name="train_next">ᱞᱟᱦᱟ</string>
+    <string name="train_correct">ᱴᱷᱤᱠ</string>
+    <string name="train_review">ᱱᱚᱶᱟ ᱱᱤᱨᱱᱚᱭ ᱫᱚᱦᱲᱟ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="train_complete">ᱟᱵᱷᱭᱟᱥ ᱯᱩᱨᱟᱹ</string>
+    <string name="train_result">%2$d ᱠᱷᱚᱱ %1$d ᱱᱤᱨᱱᱚᱭ ᱴᱷᱤᱠ</string>
+    <string name="train_again">ᱫᱩᱦᱲᱟᱹ ᱟᱵᱷᱭᱟᱥ ᱢᱮ</string>
+    <string name="train_invalid">ᱱᱚᱶᱟ ᱟᱵᱷᱭᱟᱥ ᱢᱚᱰᱭᱩᱞ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ।</string>
+    <string name="safety_question">ᱟᱢᱟᱜ ᱨᱠᱷᱟ ᱠᱩᱞᱤ</string>
+    <string name="safety_ask">ᱠᱩᱞᱤ ᱢᱮ</string>
+    <string name="safety_notice">AI ᱜᱚᱲᱚ ᱫᱚ ᱯᱟᱨᱢᱤᱴ ᱥᱮ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱵᱟᱝ। ᱟᱢᱟᱜ ᱥᱟᱭᱤᱴ ᱱᱤᱭᱚᱢ ᱢᱟᱱᱟᱣ ᱢᱮ ᱟᱨ ᱥᱩᱯᱟᱨᱵᱷᱟᱭᱡᱚᱨ ᱠᱷᱚᱱ ᱱᱤᱨᱱᱚᱭ ᱡᱟᱸᱪ ᱢᱮ।</string>
+    <string name="safety_working">ᱨᱠᱷᱟ ᱞᱟᱭᱵᱽᱨᱮᱨᱤ ᱡᱟᱸᱪ ᱠᱟᱱᱟ…</string>
+    <string name="safety_refused">ᱫᱚᱦᱚ ᱨᱠᱷᱟ ᱠᱟᱛᱷᱟ ᱱᱚᱶᱟ ᱠᱩᱞᱤ ᱨᱮ ᱛᱮᱞᱟ ᱵᱟᱝ ᱮᱢ ᱫᱟᱲᱮᱭᱟ। ᱥᱩᱯᱟᱨᱵᱷᱟᱭᱡᱚᱨ ᱠᱷᱚᱱ ᱠᱩᱞᱤ ᱢᱮ।</string>
+    <string name="safety_failed">ᱡᱟᱸᱪ ᱟᱠᱟᱱ ᱛᱮᱞᱟ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ। ᱫᱩᱦᱲᱟᱹ ᱠᱩᱨᱩᱢᱩᱴᱩ ᱢᱮ ᱥᱮ ᱥᱩᱯᱟᱨᱵᱷᱟᱭᱡᱚᱨ ᱠᱷᱚᱱ ᱠᱩᱞᱤ ᱢᱮ।</string>
+    <string name="safety_unsupported">ᱥᱟᱱᱛᱟᱲᱤ AI ᱛᱮᱞᱟ ᱵᱟᱝ ᱥᱟᱯᱚᱨᱴ। ᱛᱚᱨᱡᱚᱢᱟ ᱟᱵᱷᱭᱟᱥ ᱢᱮᱱᱟᱜᱼᱟ।</string>
+    <string name="safety_model_missing">ᱚᱯᱷᱞᱟᱭᱤᱱ ᱢᱳᱰᱮᱞ ᱛᱮᱭᱟᱨ ᱵᱟᱝ। ᱥᱮᱴᱤᱝᱥ ᱨᱮ ᱢᱳᱰᱮᱞ ᱡᱟᱸᱪ ᱢᱮ।</string>
+    <string name="safety_sources">ᱥᱚᱨᱥ</string>
+    <string name="safety_truncated">ᱛᱮᱞᱟ ᱟᱫᱷᱟ। ᱱᱚᱶᱟ ᱯᱩᱨᱟᱹ ᱯᱨᱚᱠᱨᱤᱭᱟ ᱞᱮᱠᱟ ᱟᱞᱚᱢ ᱵᱮᱵᱷᱟᱨ ᱢᱮ।</string>
+</resources>

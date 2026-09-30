@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hindi (Devanagari).
+
+  Key set is identical to values/strings.xml. MissingTranslation is a fatal lint check, so
+  a key added there without a line here fails the build.
+
+  Register note: this is addressed to a working miner or steel-plant worker, not a manual.
+  Short sentences, everyday words, no English loanwords where a common Hindi word exists.
+-->
+<resources>
+
+    <!-- ══ Identity ══════════════════════════════════════════════════════════ -->
+    <string name="app_name">जागरुक</string>
+    <string name="app_tagline">सुरक्षा की सीख, जो साथ रहे</string>
+
+    <!-- ══ Bottom navigation ═════════════════════════════════════════════════ -->
+    <string name="nav_home">मुख्य</string>
+    <string name="nav_chat">पूछें</string>
+    <string name="nav_tools">औज़ार</string>
+    <string name="nav_library">रिकॉर्ड</string>
+    <string name="nav_settings">सेटिंग</string>
+
+    <!-- ══ Dashboard ═════════════════════════════════════════════════════════ -->
+    <string name="greeting_morning">सुप्रभात</string>
+    <string name="greeting_afternoon">नमस्कार</string>
+    <string name="greeting_evening">शुभ संध्या</string>
+    <string name="dashboard_headline">मैं किस बात में मदद करूँ?</string>
+    <string name="dashboard_ask_hint">खतरा, परमिट या मशीन के बारे में पूछें…</string>
+    <string name="dashboard_chat_card_title">जागरुक से पूछें</string>
+    <string name="dashboard_chat_card_body">कुछ भी पूछें — इसी फ़ोन पर चलता है, सिग्नल की ज़रूरत नहीं।</string>
+
+    <!-- ══ Ask / chat ════════════════════════════════════════════════════════ -->
+    <string name="chat_title">जागरुक से पूछें</string>
+    <string name="chat_assistant_name">जागरुक</string>
+    <string name="chat_input_hint">सुरक्षा से जुड़ा सवाल पूछें…</string>
+    <string name="chat_input_hint_generating">काम चल रहा है…</string>
+    <string name="chat_welcome">मुझसे खतरे, परमिट या मशीन के बारे में पूछें। जवाब इसी फ़ोन में रखी सुरक्षा जानकारी से आता है।</string>
+    <string name="chat_source_label">जागरुक बातचीत</string>
+
+    <!-- ══ Engine state ══════════════════════════════════════════════════════ -->
+    <string name="ai_state_ready">तैयार</string>
+    <string name="ai_state_loading">मॉडल तैयार हो रहा है…</string>
+    <string name="ai_state_thinking">आपका सवाल पढ़ रहा हूँ…</string>
+    <string name="ai_state_responding">जवाब लिख रहा हूँ…</string>
+    <string name="ai_state_error">कुछ गड़बड़ हो गई</string>
+    <string name="ai_state_ready_tap">तैयार · शुरू करने के लिए दबाएँ</string>
+
+    <!-- ══ Explain-this ══════════════════════════════════════════════════════ -->
+    <string name="explain_title">यह समझाएँ</string>
+    <string name="explain_active">“यह समझाएँ” चालू है</string>
+    <string name="explain_notification_channel">यह समझाएँ</string>
+    <string name="explain_notification_title">जागरुक · यह समझाएँ</string>
+
+    <!-- ══ Settings ══════════════════════════════════════════════════════════ -->
+    <string name="settings_worker_default">मज़दूर</string>
+    <string name="settings_engine_label">फ़ोन में मौजूद मॉडल</string>
+    <!-- A model name is a proper noun and stays as published. -->
+    <string name="settings_engine_value">Gemma 3 1B</string>
+    <string name="settings_version">जागरुक · v%1$s</string>
+
+    <!-- ══ Voice ═════════════════════════════════════════════════════════════ -->
+    <string name="voice_responding">जागरुक जवाब दे रहा है</string>
+
+    <!-- ══ Model availability ════════════════════════════════════════════════ -->
+    <string name="model_missing_title">कोई मॉडल इंस्टॉल नहीं है</string>
+    <string name="model_extracting">मॉडल तैयार हो रहा है, सिर्फ़ एक बार…</string>
+
+    <!-- ══ Accessibility labels ══════════════════════════════════════════════ -->
+    <string name="cd_notifications">सूचनाएँ</string>
+    <string name="cd_send">भेजें</string>
+    <string name="cd_stop">रोकें</string>
+    <string name="cd_back">पीछे</string>
+    <string name="cd_reset">फिर से शुरू करें</string>
+    <string name="cd_voice_input">टाइप करने के बजाय बोलें</string>
+    <string name="cd_app_mark">जागरुक</string>
+
+</resources>

@@ -1,0 +1,57 @@
+*.iml
+.gradle
+.kotlin/
+.idea/
+*.apk
+*.aab
+*.jks
+*.keystore
+*.p12
+.env
+.env.*
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Large model files — download separately from HuggingFace
+*.gguf
+*.bin
+*.safetensors
+*.ggml
+*.pt
+*.onnx
+
+# Compiled native libraries — built locally via NDK
+*.so
+*.a
+*.o
+
+# CMake and Gradle build artifacts, every module
+.cxx/
+build/
+
+# Scratch/staging area for model files at the repo root, kept out of the tree.
+# Anchored with a leading slash so it does NOT also swallow
+# app/src/bundled/assets/models/, whose .gguf is covered by the *.gguf rule above
+# but which may hold tracked files later. See docs/REVAMP_PLAN.md section 7.1.
+/models/
+
+# Scratch build logs from tools/gradle-run.ps1
+_*.log
+_*.exit
+_*.txt
+simulation/node_modules/
+.signing/
+app/.release-build/
+# Camera validation images can contain the tester's surroundings.
+docs/validation/**/phone-camera*.png

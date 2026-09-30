@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authored Santali shell strings. Needs native mine-site vocabulary review before field pilot. -->
+<resources>
+    <string name="scene_offline">3D ᱯᱟᱨᱤᱵᱮᱥ · ᱚᱯᱷᱞᱟᱭᱤᱱ</string>
+    <string name="scene_explore">ᱫᱨᱤᱥᱭ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="scene_notice">ᱱᱚᱶᱟ ᱫᱚ ᱩᱫᱟᱹᱦᱚᱨᱚᱱ ᱫᱨᱤᱥᱭ; ᱠᱮᱢᱮᱨᱟ AR ᱥᱮ ᱯᱩᱨᱟᱹ ᱯᱨᱚᱠᱨᱤᱭᱟ ᱫᱚ ᱵᱟᱝ।</string>
+    <string name="scene_alarm">ᱟᱞᱟᱨᱢ</string>
+    <string name="scene_retreat">ᱛᱟᱭᱚᱢ ᱦᱟᱴᱤᱧ ᱢᱮ</string>
+    <string name="scene_pause">ᱮᱱᱤᱢᱮᱥᱚᱱ ᱛᱷᱮᱦᱚᱨ ᱢᱮ</string>
+    <string name="scene_resume">ᱮᱱᱤᱢᱮᱥᱚᱱ ᱫᱚᱦᱚ ᱢᱮ</string>
+    <string name="scene_reset">ᱫᱨᱤᱥᱭ ᱫᱩᱦᱲᱟᱹ ᱢᱮ</string>
+    <string name="scene_unavailable">ᱱᱚᱶᱟ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ 3D ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ। ᱞᱟᱛᱟᱨ ᱨᱮ ᱟᱵᱷᱭᱟᱥ ᱢᱮᱱᱟᱜᱼᱟ।</string>
+    <string name="scene_catalog">ᱛᱟᱞᱤᱢ ᱯᱟᱨᱤᱵᱮᱥ</string>
+    <string name="scene_count">5 ᱨᱠᱷᱟ ᱡᱟᱭᱜᱟ</string>
+    <string name="safety_quote">ᱢᱩᱞ ᱞᱟᱭᱵᱽᱨᱮᱨᱤ ᱯᱟᱥᱮᱡ · AI ᱵᱟᱪᱷᱟᱣ</string>
+</resources>

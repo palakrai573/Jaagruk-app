@@ -1,0 +1,8 @@
+<resources>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_dark">Dark theme</string>
+    <string name="settings_offline_ai">Offline AI</string>
+    <string name="settings_model_installed">Model installed on this phone</string>
+    <string name="settings_ai_languages">AI answers are available in English and Hindi. Tamil and Santali training are available; AI answers in those languages are not yet supported.</string>
+    <string name="settings_design">Design system</string>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="scene_offline">3D environment · Offline</string>
+    <string name="scene_explore">Explore the scene</string>
+    <string name="scene_notice">Illustrative environment, not camera AR or a complete procedure.</string>
+    <string name="scene_alarm">Alarm</string>
+    <string name="scene_retreat">Step back</string>
+    <string name="scene_pause">Pause animation</string>
+    <string name="scene_resume">Resume animation</string>
+    <string name="scene_reset">Reset view</string>
+    <string name="scene_unavailable">3D is unavailable on this device. Practice is still available below.</string>
+    <string name="scene_catalog">Training environments</string>
+    <string name="scene_count">5 safety domains</string>
+    <string name="safety_quote">Original library passage · AI-selected</string>
+</resources>

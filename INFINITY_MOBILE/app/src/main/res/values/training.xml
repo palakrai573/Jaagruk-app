@@ -1,0 +1,34 @@
+<resources>
+    <string name="safety_library">Related library passages (not generated)</string>
+    <string name="train_general_chat">General chat (unchecked)</string>
+    <string name="train_title">Safety training</string>
+    <string name="train_subtitle">Ready for a safer shift.</string>
+    <string name="train_offline">Offline practice</string>
+    <string name="train_meta">%1$d min · %2$d decisions</string>
+    <string name="train_practice">Practise</string>
+    <string name="train_ask">Safety coach</string>
+    <string name="train_documents">Documents and tools</string>
+    <string name="train_language">Language</string>
+    <string name="train_notice">Untimed practice. This is not an AR assessment and does not issue a certificate.</string>
+    <string name="train_step">Decision %1$d of %2$d</string>
+    <string name="train_order">Choose the actions in order.</string>
+    <string name="train_multi">Choose all required actions.</string>
+    <string name="train_check">Check answer</string>
+    <string name="train_next">Continue</string>
+    <string name="train_correct">Correct</string>
+    <string name="train_review">Review this decision</string>
+    <string name="train_complete">Practice complete</string>
+    <string name="train_result">%1$d of %2$d decisions correct</string>
+    <string name="train_again">Practise again</string>
+    <string name="train_invalid">This practice module is unavailable.</string>
+    <string name="safety_question">Your safety question</string>
+    <string name="safety_ask">Ask</string>
+    <string name="safety_notice">AI assistance, not a permit or certification. Follow your site procedures and confirm decisions with your supervisor.</string>
+    <string name="safety_working">Checking the safety library…</string>
+    <string name="safety_refused">The stored safety guidance cannot answer this question. Ask your supervisor.</string>
+    <string name="safety_failed">No checked answer is available. Try again or ask your supervisor.</string>
+    <string name="safety_unsupported">Santali AI generation is not supported. Translated practice remains available.</string>
+    <string name="safety_model_missing">The offline model is not ready. Check the model in Settings.</string>
+    <string name="safety_sources">Sources</string>
+    <string name="safety_truncated">Incomplete answer. Do not use this as a complete procedure.</string>
+</resources>

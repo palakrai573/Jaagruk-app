@@ -1,0 +1,8 @@
+<resources>
+    <string name="settings_preferences">पसंद</string>
+    <string name="settings_dark">डार्क थीम</string>
+    <string name="settings_offline_ai">ऑफ़लाइन AI</string>
+    <string name="settings_model_installed">मॉडल इस फ़ोन पर स्थापित है</string>
+    <string name="settings_ai_languages">AI उत्तर अंग्रेज़ी और हिन्दी में उपलब्ध हैं। तमिल और संताली में अभ्यास उपलब्ध है, लेकिन AI उत्तर अभी समर्थित नहीं हैं।</string>
+    <string name="settings_design">डिज़ाइन प्रणाली</string>
+</resources>

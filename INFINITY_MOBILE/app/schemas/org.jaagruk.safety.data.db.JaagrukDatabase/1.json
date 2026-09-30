@@ -1,0 +1,1280 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "5064158cefb374dcce7127cfd0aa4708",
+    "entities": [
+      {
+        "tableName": "workers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`workerId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `fullName` TEXT NOT NULL, `workerIdHash` TEXT NOT NULL, `preferredLanguage` TEXT NOT NULL, `pictogramMode` INTEGER NOT NULL, `pinHash` TEXT, `pinSalt` TEXT, `failedPinAttempts` INTEGER NOT NULL, `lockedUntilEpochMs` INTEGER NOT NULL, `lockedUntilElapsedMs` INTEGER NOT NULL, `registeredAtSec` INTEGER NOT NULL, `serverSynced` INTEGER NOT NULL, `active` INTEGER NOT NULL, PRIMARY KEY(`workerId`))",
+        "fields": [
+          {
+            "fieldPath": "workerId",
+            "columnName": "workerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workerIdHash",
+            "columnName": "workerIdHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferredLanguage",
+            "columnName": "preferredLanguage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pictogramMode",
+            "columnName": "pictogramMode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinHash",
+            "columnName": "pinHash",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pinSalt",
+            "columnName": "pinSalt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "failedPinAttempts",
+            "columnName": "failedPinAttempts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lockedUntilEpochMs",
+            "columnName": "lockedUntilEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lockedUntilElapsedMs",
+            "columnName": "lockedUntilElapsedMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registeredAtSec",
+            "columnName": "registeredAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serverSynced",
+            "columnName": "serverSynced",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "workerId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_workers_siteId",
+            "unique": false,
+            "columnNames": [
+              "siteId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_workers_siteId` ON `${TABLE_NAME}` (`siteId`)"
+          },
+          {
+            "name": "index_workers_workerIdHash",
+            "unique": false,
+            "columnNames": [
+              "workerIdHash"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_workers_workerIdHash` ON `${TABLE_NAME}` (`workerIdHash`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sites",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`siteId` TEXT NOT NULL, `name` TEXT NOT NULL, `district` TEXT NOT NULL, `sector` TEXT NOT NULL, `publicKeyHex` TEXT, `keyEpoch` INTEGER NOT NULL, `arScanned` INTEGER NOT NULL, `anchorCount` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `createdAtSec` INTEGER NOT NULL, PRIMARY KEY(`siteId`))",
+        "fields": [
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "district",
+            "columnName": "district",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sector",
+            "columnName": "sector",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKeyHex",
+            "columnName": "publicKeyHex",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keyEpoch",
+            "columnName": "keyEpoch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arScanned",
+            "columnName": "arScanned",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchorCount",
+            "columnName": "anchorCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAtSec",
+            "columnName": "createdAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "siteId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "site_anchors",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`anchorId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `targetKey` TEXT NOT NULL, `cloudAnchorId` TEXT, `deviceScoped` INTEGER NOT NULL, `label` TEXT, `createdAtSec` INTEGER NOT NULL, `lastResolvedAtSec` INTEGER NOT NULL, `resolveFailureCount` INTEGER NOT NULL, PRIMARY KEY(`anchorId`))",
+        "fields": [
+          {
+            "fieldPath": "anchorId",
+            "columnName": "anchorId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetKey",
+            "columnName": "targetKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cloudAnchorId",
+            "columnName": "cloudAnchorId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceScoped",
+            "columnName": "deviceScoped",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAtSec",
+            "columnName": "createdAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastResolvedAtSec",
+            "columnName": "lastResolvedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resolveFailureCount",
+            "columnName": "resolveFailureCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "anchorId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_site_anchors_siteId",
+            "unique": false,
+            "columnNames": [
+              "siteId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_site_anchors_siteId` ON `${TABLE_NAME}` (`siteId`)"
+          },
+          {
+            "name": "index_site_anchors_siteId_targetKey",
+            "unique": true,
+            "columnNames": [
+              "siteId",
+              "targetKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_site_anchors_siteId_targetKey` ON `${TABLE_NAME}` (`siteId`, `targetKey`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "modules",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`moduleId` TEXT NOT NULL, `moduleCode` INTEGER NOT NULL, `catalogVersion` INTEGER NOT NULL, `titleEn` TEXT NOT NULL, `statutoryReference` TEXT NOT NULL, `estimatedMinutes` INTEGER NOT NULL, `supportsBuddyDrill` INTEGER NOT NULL, `fullyImplemented` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, PRIMARY KEY(`moduleId`))",
+        "fields": [
+          {
+            "fieldPath": "moduleId",
+            "columnName": "moduleId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleCode",
+            "columnName": "moduleCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catalogVersion",
+            "columnName": "catalogVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titleEn",
+            "columnName": "titleEn",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statutoryReference",
+            "columnName": "statutoryReference",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estimatedMinutes",
+            "columnName": "estimatedMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supportsBuddyDrill",
+            "columnName": "supportsBuddyDrill",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullyImplemented",
+            "columnName": "fullyImplemented",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "moduleId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "training_progress",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`workerId` TEXT NOT NULL, `moduleId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `moduleCode` INTEGER NOT NULL, `baseScore` INTEGER NOT NULL, `lastPassAtSec` INTEGER NOT NULL, `certifiedAtSec` INTEGER NOT NULL, `refresherStage` INTEGER NOT NULL, `nextDueAtSec` INTEGER NOT NULL, `consecutiveFailures` INTEGER NOT NULL, `attempts` INTEGER NOT NULL, `bestScorePermille` INTEGER NOT NULL, `lastHesitationFlag` INTEGER NOT NULL, `updatedAtSec` INTEGER NOT NULL, PRIMARY KEY(`workerId`, `moduleId`))",
+        "fields": [
+          {
+            "fieldPath": "workerId",
+            "columnName": "workerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleId",
+            "columnName": "moduleId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleCode",
+            "columnName": "moduleCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseScore",
+            "columnName": "baseScore",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPassAtSec",
+            "columnName": "lastPassAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certifiedAtSec",
+            "columnName": "certifiedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refresherStage",
+            "columnName": "refresherStage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextDueAtSec",
+            "columnName": "nextDueAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "consecutiveFailures",
+            "columnName": "consecutiveFailures",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attempts",
+            "columnName": "attempts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestScorePermille",
+            "columnName": "bestScorePermille",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastHesitationFlag",
+            "columnName": "lastHesitationFlag",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtSec",
+            "columnName": "updatedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "workerId",
+            "moduleId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_training_progress_nextDueAtSec",
+            "unique": false,
+            "columnNames": [
+              "nextDueAtSec"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_training_progress_nextDueAtSec` ON `${TABLE_NAME}` (`nextDueAtSec`)"
+          },
+          {
+            "name": "index_training_progress_workerId",
+            "unique": false,
+            "columnNames": [
+              "workerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_training_progress_workerId` ON `${TABLE_NAME}` (`workerId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "assessment_runs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`runId` TEXT NOT NULL, `workerId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `moduleId` TEXT NOT NULL, `moduleCode` INTEGER NOT NULL, `scenarioId` TEXT NOT NULL, `catalogVersion` INTEGER NOT NULL, `mode` TEXT NOT NULL, `presentation` TEXT NOT NULL, `completion` TEXT NOT NULL, `scorePermille` INTEGER NOT NULL, `passed` INTEGER NOT NULL, `hesitationFlag` INTEGER NOT NULL, `hesitationRatio` REAL NOT NULL, `medianLatencyMs` INTEGER NOT NULL, `startedAtSec` INTEGER NOT NULL, `finishedAtSec` INTEGER NOT NULL, `totalDurationMs` INTEGER NOT NULL, `stepsJson` TEXT NOT NULL, `failedCriticalStepsJson` TEXT NOT NULL, `voidReason` TEXT, `abortReason` TEXT, `buddyPeerDeviceId` TEXT, `uploaded` INTEGER NOT NULL, PRIMARY KEY(`runId`))",
+        "fields": [
+          {
+            "fieldPath": "runId",
+            "columnName": "runId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workerId",
+            "columnName": "workerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleId",
+            "columnName": "moduleId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleCode",
+            "columnName": "moduleCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scenarioId",
+            "columnName": "scenarioId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catalogVersion",
+            "columnName": "catalogVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mode",
+            "columnName": "mode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "presentation",
+            "columnName": "presentation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completion",
+            "columnName": "completion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scorePermille",
+            "columnName": "scorePermille",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passed",
+            "columnName": "passed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hesitationFlag",
+            "columnName": "hesitationFlag",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hesitationRatio",
+            "columnName": "hesitationRatio",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medianLatencyMs",
+            "columnName": "medianLatencyMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAtSec",
+            "columnName": "startedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finishedAtSec",
+            "columnName": "finishedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalDurationMs",
+            "columnName": "totalDurationMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stepsJson",
+            "columnName": "stepsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "failedCriticalStepsJson",
+            "columnName": "failedCriticalStepsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "voidReason",
+            "columnName": "voidReason",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "abortReason",
+            "columnName": "abortReason",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buddyPeerDeviceId",
+            "columnName": "buddyPeerDeviceId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uploaded",
+            "columnName": "uploaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "runId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_assessment_runs_workerId",
+            "unique": false,
+            "columnNames": [
+              "workerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assessment_runs_workerId` ON `${TABLE_NAME}` (`workerId`)"
+          },
+          {
+            "name": "index_assessment_runs_moduleId",
+            "unique": false,
+            "columnNames": [
+              "moduleId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assessment_runs_moduleId` ON `${TABLE_NAME}` (`moduleId`)"
+          },
+          {
+            "name": "index_assessment_runs_finishedAtSec",
+            "unique": false,
+            "columnNames": [
+              "finishedAtSec"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assessment_runs_finishedAtSec` ON `${TABLE_NAME}` (`finishedAtSec`)"
+          },
+          {
+            "name": "index_assessment_runs_uploaded",
+            "unique": false,
+            "columnNames": [
+              "uploaded"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assessment_runs_uploaded` ON `${TABLE_NAME}` (`uploaded`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "certificates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`certId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `seq` INTEGER NOT NULL, `keyEpoch` INTEGER NOT NULL, `workerId` TEXT NOT NULL, `workerIdHashHex` TEXT NOT NULL, `moduleCode` INTEGER NOT NULL, `scorePermille` INTEGER NOT NULL, `medianLatencyMs` INTEGER NOT NULL, `outcomeFlags` INTEGER NOT NULL, `issuedAtSec` INTEGER NOT NULL, `prevRecordHashHex` TEXT NOT NULL, `recordHashHex` TEXT NOT NULL, `signatureHex` TEXT NOT NULL, `qrText` TEXT NOT NULL, `runId` TEXT, `uploaded` INTEGER NOT NULL, PRIMARY KEY(`certId`))",
+        "fields": [
+          {
+            "fieldPath": "certId",
+            "columnName": "certId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seq",
+            "columnName": "seq",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keyEpoch",
+            "columnName": "keyEpoch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workerId",
+            "columnName": "workerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workerIdHashHex",
+            "columnName": "workerIdHashHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleCode",
+            "columnName": "moduleCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scorePermille",
+            "columnName": "scorePermille",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medianLatencyMs",
+            "columnName": "medianLatencyMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "outcomeFlags",
+            "columnName": "outcomeFlags",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issuedAtSec",
+            "columnName": "issuedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevRecordHashHex",
+            "columnName": "prevRecordHashHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recordHashHex",
+            "columnName": "recordHashHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "signatureHex",
+            "columnName": "signatureHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "qrText",
+            "columnName": "qrText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runId",
+            "columnName": "runId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uploaded",
+            "columnName": "uploaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "certId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_certificates_siteId_seq",
+            "unique": true,
+            "columnNames": [
+              "siteId",
+              "seq"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_certificates_siteId_seq` ON `${TABLE_NAME}` (`siteId`, `seq`)"
+          },
+          {
+            "name": "index_certificates_recordHashHex",
+            "unique": true,
+            "columnNames": [
+              "recordHashHex"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_certificates_recordHashHex` ON `${TABLE_NAME}` (`recordHashHex`)"
+          },
+          {
+            "name": "index_certificates_workerId",
+            "unique": false,
+            "columnNames": [
+              "workerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_certificates_workerId` ON `${TABLE_NAME}` (`workerId`)"
+          },
+          {
+            "name": "index_certificates_uploaded",
+            "unique": false,
+            "columnNames": [
+              "uploaded"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_certificates_uploaded` ON `${TABLE_NAME}` (`uploaded`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "chain_heads",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`siteId` TEXT NOT NULL, `lastSeq` INTEGER NOT NULL, `lastRecordHashHex` TEXT NOT NULL, `updatedAtSec` INTEGER NOT NULL, PRIMARY KEY(`siteId`))",
+        "fields": [
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastSeq",
+            "columnName": "lastSeq",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastRecordHashHex",
+            "columnName": "lastRecordHashHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtSec",
+            "columnName": "updatedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "siteId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hazard_tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hazardId` TEXT NOT NULL, `siteId` TEXT NOT NULL, `reporterWorkerId` TEXT, `category` TEXT NOT NULL, `severity` TEXT NOT NULL, `note` TEXT, `latitude` REAL, `longitude` REAL, `zoneLabel` TEXT, `arAnchorId` TEXT, `photoPath` TEXT, `voiceNotePath` TEXT, `photoMediaId` TEXT, `voiceMediaId` TEXT, `createdAtSec` INTEGER NOT NULL, `uploaded` INTEGER NOT NULL, `mediaPending` INTEGER NOT NULL, PRIMARY KEY(`hazardId`))",
+        "fields": [
+          {
+            "fieldPath": "hazardId",
+            "columnName": "hazardId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reporterWorkerId",
+            "columnName": "reporterWorkerId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "severity",
+            "columnName": "severity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zoneLabel",
+            "columnName": "zoneLabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "arAnchorId",
+            "columnName": "arAnchorId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoPath",
+            "columnName": "photoPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "voiceNotePath",
+            "columnName": "voiceNotePath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoMediaId",
+            "columnName": "photoMediaId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "voiceMediaId",
+            "columnName": "voiceMediaId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAtSec",
+            "columnName": "createdAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uploaded",
+            "columnName": "uploaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaPending",
+            "columnName": "mediaPending",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "hazardId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_hazard_tags_siteId",
+            "unique": false,
+            "columnNames": [
+              "siteId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_hazard_tags_siteId` ON `${TABLE_NAME}` (`siteId`)"
+          },
+          {
+            "name": "index_hazard_tags_uploaded",
+            "unique": false,
+            "columnNames": [
+              "uploaded"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_hazard_tags_uploaded` ON `${TABLE_NAME}` (`uploaded`)"
+          },
+          {
+            "name": "index_hazard_tags_createdAtSec",
+            "unique": false,
+            "columnNames": [
+              "createdAtSec"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_hazard_tags_createdAtSec` ON `${TABLE_NAME}` (`createdAtSec`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sync_queue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`queueId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `kind` TEXT NOT NULL, `refId` TEXT NOT NULL, `idempotencyKey` TEXT NOT NULL, `payloadJson` TEXT NOT NULL, `attempts` INTEGER NOT NULL, `nextAttemptAtMs` INTEGER NOT NULL, `lastError` TEXT, `abandoned` INTEGER NOT NULL, `createdAtMs` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "queueId",
+            "columnName": "queueId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refId",
+            "columnName": "refId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idempotencyKey",
+            "columnName": "idempotencyKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payloadJson",
+            "columnName": "payloadJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attempts",
+            "columnName": "attempts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextAttemptAtMs",
+            "columnName": "nextAttemptAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastError",
+            "columnName": "lastError",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "abandoned",
+            "columnName": "abandoned",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAtMs",
+            "columnName": "createdAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "queueId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_sync_queue_idempotencyKey",
+            "unique": true,
+            "columnNames": [
+              "idempotencyKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_sync_queue_idempotencyKey` ON `${TABLE_NAME}` (`idempotencyKey`)"
+          },
+          {
+            "name": "index_sync_queue_nextAttemptAtMs",
+            "unique": false,
+            "columnNames": [
+              "nextAttemptAtMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sync_queue_nextAttemptAtMs` ON `${TABLE_NAME}` (`nextAttemptAtMs`)"
+          },
+          {
+            "name": "index_sync_queue_kind",
+            "unique": false,
+            "columnNames": [
+              "kind"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sync_queue_kind` ON `${TABLE_NAME}` (`kind`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "refresher_schedule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`workerId` TEXT NOT NULL, `moduleId` TEXT NOT NULL, `dueAtSec` INTEGER NOT NULL, `stage` INTEGER NOT NULL, `notifiedAtSec` INTEGER NOT NULL, PRIMARY KEY(`workerId`, `moduleId`))",
+        "fields": [
+          {
+            "fieldPath": "workerId",
+            "columnName": "workerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moduleId",
+            "columnName": "moduleId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueAtSec",
+            "columnName": "dueAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stage",
+            "columnName": "stage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifiedAtSec",
+            "columnName": "notifiedAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "workerId",
+            "moduleId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_refresher_schedule_dueAtSec",
+            "unique": false,
+            "columnNames": [
+              "dueAtSec"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_refresher_schedule_dueAtSec` ON `${TABLE_NAME}` (`dueAtSec`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "voice_templates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`templateId` TEXT NOT NULL, `commandKey` TEXT NOT NULL, `languageTag` TEXT NOT NULL, `siteId` TEXT, `mfccBlob` TEXT NOT NULL, `frameCount` INTEGER NOT NULL, `enrolledAtSec` INTEGER NOT NULL, PRIMARY KEY(`templateId`))",
+        "fields": [
+          {
+            "fieldPath": "templateId",
+            "columnName": "templateId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "commandKey",
+            "columnName": "commandKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageTag",
+            "columnName": "languageTag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "siteId",
+            "columnName": "siteId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mfccBlob",
+            "columnName": "mfccBlob",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frameCount",
+            "columnName": "frameCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enrolledAtSec",
+            "columnName": "enrolledAtSec",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "templateId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_voice_templates_commandKey",
+            "unique": false,
+            "columnNames": [
+              "commandKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_voice_templates_commandKey` ON `${TABLE_NAME}` (`commandKey`)"
+          },
+          {
+            "name": "index_voice_templates_languageTag",
+            "unique": false,
+            "columnNames": [
+              "languageTag"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_voice_templates_languageTag` ON `${TABLE_NAME}` (`languageTag`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "app_kv",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `value` TEXT NOT NULL, `updatedAtMs` INTEGER NOT NULL, PRIMARY KEY(`key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtMs",
+            "columnName": "updatedAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5064158cefb374dcce7127cfd0aa4708')"
+    ]
+  }
+}

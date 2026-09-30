@@ -1,0 +1,8 @@
+<resources>
+    <string name="settings_preferences">விருப்பங்கள்</string>
+    <string name="settings_dark">இருண்ட தோற்றம்</string>
+    <string name="settings_offline_ai">இணையமில்லா AI</string>
+    <string name="settings_model_installed">இந்தக் கைப்பேசியில் மாதிரி நிறுவப்பட்டுள்ளது</string>
+    <string name="settings_ai_languages">AI பதில்கள் ஆங்கிலம் மற்றும் இந்தியில் கிடைக்கும். தமிழ் மற்றும் சந்தாலி பயிற்சி கிடைக்கும்; அந்த மொழிகளில் AI பதில்கள் இன்னும் கிடைக்கவில்லை.</string>
+    <string name="settings_design">வடிவமைப்பு அமைப்பு</string>
+</resources>

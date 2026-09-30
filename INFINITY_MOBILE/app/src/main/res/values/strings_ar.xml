@@ -1,0 +1,11 @@
+<resources>
+    <string name="ar_open">Camera AR</string>
+    <string name="ar_permission">Camera access is needed for AR practice. Camera images stay on your phone.</string>
+    <string name="ar_allow">Allow camera</string>
+    <string name="ar_unavailable">AR could not start. Check camera permission and Google Play Services for AR, then reopen this mode. Offline 3D practice is still available.</string>
+    <string name="ar_tracking">Camera tracking paused. Move slowly in a well-lit, clear space.</string>
+    <string name="ar_scan">Point at a textured floor or table and move slowly.</string>
+    <string name="ar_surface">Surface found. Place the training scene here.</string>
+    <string name="ar_anchored">Training props anchored. These are not real hazard detections.</string>
+    <string name="ar_place">Place scene</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="ar_open">கேமரா AR</string>
+    <string name="ar_permission">AR பயிற்சிக்கு கேமரா அனுமதி தேவை. கேமரா படங்கள் உங்கள் கைப்பேசியிலேயே இருக்கும்.</string>
+    <string name="ar_allow">கேமராவை அனுமதி</string>
+    <string name="ar_unavailable">AR தொடங்கவில்லை. கேமரா அனுமதியையும் Google Play Services for AR சேவையையும் சரிபார்த்து மீண்டும் திறக்கவும். இணையமில்லா 3D பயிற்சி கிடைக்கும்.</string>
+    <string name="ar_tracking">கேமரா கண்காணிப்பு நிறுத்தப்பட்டுள்ளது. வெளிச்சமான திறந்த இடத்தில் மெதுவாக நகர்த்தவும்.</string>
+    <string name="ar_scan">தரை அல்லது மேசையை நோக்கி கேமராவை மெதுவாக நகர்த்தவும்.</string>
+    <string name="ar_surface">பரப்பு கண்டறியப்பட்டது. பயிற்சிக் காட்சியை இங்கே வைக்கவும்.</string>
+    <string name="ar_anchored">பயிற்சிப் பொருட்கள் வைக்கப்பட்டன. இவை உண்மையான அபாயங்களைக் கண்டறிவதில்லை.</string>
+    <string name="ar_place">காட்சியை வை</string>
+</resources>

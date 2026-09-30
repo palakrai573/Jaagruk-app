@@ -1,0 +1,11 @@
+<resources>
+    <string name="ar_open">ᱠᱮᱢᱮᱨᱟ AR</string>
+    <string name="ar_permission">AR ᱯᱨᱟᱠᱴᱤᱥ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱢᱮᱨᱟ ᱟᱱᱩᱢᱚᱛᱤ ᱞᱟᱹᱠᱛᱤ᱾ ᱪᱤᱛᱟᱹᱨ ᱟᱢᱟᱜ ᱯᱷᱚᱱ ᱨᱮ ᱛᱟᱦᱮᱱᱟ᱾</string>
+    <string name="ar_allow">ᱠᱮᱢᱮᱨᱟ ᱟᱱᱩᱢᱚᱛᱤ ᱮᱢ</string>
+    <string name="ar_unavailable">AR ᱵᱟᱝ ᱮᱦᱚᱵ ᱞᱮᱱᱟ᱾ ᱠᱮᱢᱮᱨᱟ ᱟᱱᱩᱢᱚᱛᱤ ᱟᱨ Google Play Services for AR ᱧᱮᱞ ᱢᱮ᱾ ᱚᱯᱷᱞᱟᱭᱤᱱ 3D ᱯᱨᱟᱠᱴᱤᱥ ᱢᱮᱱᱟᱜᱼᱟ᱾</string>
+    <string name="ar_tracking">ᱠᱮᱢᱮᱨᱟ ᱴᱨᱮᱠᱤᱝ ᱛᱷᱤᱨᱟ᱾ ᱢᱟᱨᱥᱟᱞ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱟᱭ ᱵᱟᱭ ᱞᱟᱲᱟᱣ ᱢᱮ᱾</string>
+    <string name="ar_scan">ᱚᱛ ᱥᱮ ᱴᱮᱵᱩᱞ ᱥᱮᱫ ᱠᱮᱢᱮᱨᱟ ᱩᱫᱩᱜ ᱠᱟᱛᱮ ᱵᱟᱭ ᱵᱟᱭ ᱞᱟᱲᱟᱣ ᱢᱮ᱾</string>
+    <string name="ar_surface">ᱡᱟᱭᱜᱟ ᱧᱟᱢ ᱮᱱᱟ᱾ ᱱᱚᱰᱮ ᱯᱨᱟᱠᱴᱤᱥ ᱫᱚᱦᱚ ᱢᱮ᱾</string>
+    <string name="ar_anchored">ᱯᱨᱟᱠᱴᱤᱥ ᱡᱤᱱᱤᱥ ᱫᱚᱦᱚ ᱮᱱᱟ᱾ ᱱᱚᱣᱟ ᱥᱟᱹᱨᱤ ᱵᱤᱯᱚᱫ ᱵᱟᱝ ᱪᱤᱱᱦᱟᱹᱣᱟ᱾</string>
+    <string name="ar_place">ᱫᱨᱤᱥᱭᱚ ᱫᱚᱦᱚ</string>
+</resources>

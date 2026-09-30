@@ -1,0 +1,8 @@
+<resources>
+    <string name="settings_preferences">ᱠᱩᱥᱤ</string>
+    <string name="settings_dark">ᱧᱩᱛ ᱛᱷᱤᱢ</string>
+    <string name="settings_offline_ai">ᱚᱯᱷᱞᱟᱭᱤᱱ AI</string>
+    <string name="settings_model_installed">ᱱᱚᱣᱟ ᱯᱷᱚᱱ ᱨᱮ ᱢᱚᱰᱮᱞ ᱢᱮᱱᱟᱜᱼᱟ</string>
+    <string name="settings_ai_languages">AI ᱛᱮᱞᱟ ᱤᱝᱨᱟᱡᱤ ᱟᱨ ᱦᱤᱱᱫᱤ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱛᱟᱢᱤᱞ ᱟᱨ ᱥᱟᱱᱛᱟᱲᱤ ᱨᱮ ᱯᱨᱟᱠᱴᱤᱥ ᱢᱮᱱᱟᱜᱼᱟ; AI ᱛᱮᱞᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾</string>
+    <string name="settings_design">ᱰᱤᱡᱟᱭᱤᱱ</string>
+</resources>

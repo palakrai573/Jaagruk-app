@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Scenario catalog strings, Hindi.
+
+  Technical safety vocabulary follows what is actually said on a Jharkhand site rather than a dictionary:
+  "हार्नेस" not "उपस्कर बंध", "लॉकआउट" not "अवरोधन", "परमिट" not "अनुज्ञप्ति". A worker who has to decode the
+  word has already lost the seconds the drill is measuring.
+
+  Distractors are translated as carefully as correct answers. A wrong option that reads awkwardly is a wrong
+  option nobody picks, and a test whose wrong answers give themselves away measures nothing.
+-->
+<resources>
+
+    <string name="module_fire_title">आग और विस्फोट पर कार्रवाई</string>
+    <string name="module_fire_desc">अलार्म बजाना, सही अग्निशामक चुनना, और उस रास्ते से निकलना जो असल में खुला है।</string>
+    <string name="module_gas_title">गैस और बंद जगह में प्रवेश</string>
+    <string name="module_gas_desc">गैस क्षेत्र पहचानना, प्रवेश का क्रम, साथी जाँच, और गिरे हुए साथी के पीछे अंदर न जाने की वजह।</string>
+    <string name="module_machinery_title">मशीन लॉकआउट और गार्ड</string>
+    <string name="module_machinery_desc">जमा ऊर्जा अलग करना, अपना ताला लगाना, और जाम खोलते समय ख़ुद उसका हिस्सा न बनना।</string>
+    <string name="module_ppe_height_title">सुरक्षा उपकरण और ऊँचाई पर काम</string>
+    <string name="module_ppe_height_desc">काम के हिसाब से सुरक्षा चुनना, हार्नेस जाँचना, और ऐसा ऐंकर चुनना जो टिके।</string>
+    <string name="module_electrical_title">बिजली में पहली कार्रवाई</string>
+    <string name="module_electrical_desc">छूने से पहले सप्लाई बंद करना, ख़राब केबल, परमिट, और झटके या जलने पर पहली मदद।</string>
+
+    <string name="scenario_fire_evac_full_title">सेक्शन में आग — पूरा अभ्यास</string>
+    <string name="scenario_fire_evac_refresher_title">आग पर कार्रवाई — छोटी जाँच</string>
+    <string name="scenario_gas_confined_full_title">बंद जगह में प्रवेश — पूरा अभ्यास</string>
+    <string name="scenario_gas_confined_buddy_title">बंद जगह — दो लोगों का अभ्यास</string>
+    <string name="scenario_gas_confined_refresher_title">गैस और बंद जगह — छोटी जाँच</string>
+    <string name="scenario_machinery_loto_full_title">मरम्मत से पहले लॉकआउट — पूरा अभ्यास</string>
+    <string name="scenario_machinery_loto_refresher_title">लॉकआउट — छोटी जाँच</string>
+    <string name="scenario_ppe_height_full_title">ऊँचाई पर काम — पूरा अभ्यास</string>
+    <string name="scenario_ppe_height_refresher_title">सुरक्षा उपकरण और ऊँचाई — छोटी जाँच</string>
+    <string name="scenario_electrical_full_title">बिजली के झटके पर कार्रवाई — पूरा अभ्यास</string>
+    <string name="scenario_electrical_refresher_title">बिजली पर कार्रवाई — छोटी जाँच</string>
+
+    <string name="step_fire_detect_alarm_prompt">बेल्ट ड्राइव के पास धुआँ और लपटें दिख रही हैं। सबसे पहले क्या करेंगे?</string>
+    <string name="step_fire_detect_alarm_remedy">पहले अलार्म बजाएँ, हमेशा। देर का हर सेकंड वह सेकंड है जब किसी और को पता नहीं।</string>
+    <string name="step_fire_pick_extinguisher_prompt">आग बिजली के पैनल में है। कौन सा अग्निशामक लेंगे?</string>
+    <string name="step_fire_pick_extinguisher_remedy">बिजली की आग पर कार्बन डाइऑक्साइड। जीवित पैनल पर पानी या फ़ोम करंट आपकी तरफ़ लौटा देगा।</string>
+    <string name="step_fire_extinguisher_sequence_prompt">अग्निशामक के चार चरण क्रम में लगाएँ।</string>
+    <string name="step_fire_extinguisher_sequence_remedy">पिन खींचें, निशाना लगाएँ, दबाएँ, फैलाएँ। निशाना लपटों की जड़ पर, धुएँ पर नहीं।</string>
+    <string name="step_fire_locate_exit_prompt">रास्ते में धुआँ भर रहा है। बाहर जाने का रास्ता दिखाएँ।</string>
+    <string name="step_fire_locate_exit_remedy">चिह्नित मुख्य रास्ता लें। लिफ़्ट कभी नहीं, स्टोर रूम कभी नहीं, और वह रास्ता कभी नहीं जिसे आपने खुला देखा न हो।</string>
+    <string name="step_fire_movement_posture_prompt">धुआँ सिर की ऊँचाई पर है। कैसे चलेंगे?</string>
+    <string name="step_fire_movement_posture_remedy">नीचे झुककर रेंगें। साफ़ हवा फ़र्श के पास रहती है; गर्मी और धुआँ ऊपर उठते हैं।</string>
+    <string name="step_fire_door_action_prompt">बाहर निकलते समय एक दरवाज़े से गुज़रते हैं। उसका क्या करेंगे?</string>
+    <string name="step_fire_door_action_remedy">पीछे से बंद कर दें। बंद दरवाज़ा आपके पीछे वाले सबके लिए आग और धुआँ धीमा करता है।</string>
+    <string name="step_fire_assembly_point_prompt">आप बाहर हैं। एकत्र स्थल पर नज़र रखें और उसी पर टिकी रहने दें।</string>
+    <string name="step_fire_assembly_point_remedy">चिह्नित एकत्र स्थल पर जाएँ और वहीं रुकें। गिनती तभी काम करती है जब कोई इधर-उधर न जाए।</string>
+    <string name="step_fire_headcount_prompt">एकत्र स्थल पर क्या होना चाहिए? जो भी लागू हो चुनें।</string>
+    <string name="step_fire_headcount_remedy">मार्शल को सूचना दें और जो कोई गुम है उसकी सूचना दें। सामान के लिए कभी वापस अंदर न जाएँ।</string>
+
+    <string name="opt_raise_alarm">अलार्म बजाएँ</string>
+    <string name="opt_fight_fire_first">पहले बुझाने की कोशिश करें</string>
+    <string name="opt_find_supervisor">सुपरवाइज़र को खोजने जाएँ</string>
+    <string name="opt_photograph_it">रिपोर्ट के लिए फ़ोटो लें</string>
+    <string name="opt_ext_co2">कार्बन डाइऑक्साइड अग्निशामक</string>
+    <string name="opt_ext_water">पानी वाला अग्निशामक</string>
+    <string name="opt_ext_foam">फ़ोम अग्निशामक</string>
+    <string name="opt_ext_dry_powder">सूखा पाउडर अग्निशामक</string>
+    <string name="opt_pass_pull">पिन खींचें</string>
+    <string name="opt_pass_aim">जड़ पर निशाना लगाएँ</string>
+    <string name="opt_pass_squeeze">लीवर दबाएँ</string>
+    <string name="opt_pass_sweep">दाएँ-बाएँ फैलाएँ</string>
+    <string name="opt_exit_primary">चिह्नित निकास मार्ग</string>
+    <string name="opt_exit_blocked">बंद दरवाज़ा</string>
+    <string name="opt_lift_door">लिफ़्ट</string>
+    <string name="opt_store_room">स्टोर रूम</string>
+    <string name="opt_crawl_low">नीचे झुककर रेंगें</string>
+    <string name="opt_walk_upright">सीधे खड़े होकर चलें</string>
+    <string name="opt_run_fast">जितना तेज़ हो सके दौड़ें</string>
+    <string name="opt_stand_and_wait">खड़े रहकर मदद का इंतज़ार करें</string>
+    <string name="opt_close_door_behind">पीछे से बंद कर दें</string>
+    <string name="opt_leave_door_open">दूसरों के लिए खुला छोड़ दें</string>
+    <string name="opt_wedge_door_open">कुछ फँसाकर खुला रखें</string>
+    <string name="opt_lock_door">ताला लगा दें</string>
+    <string name="opt_assembly_marker">एकत्र स्थल का निशान</string>
+    <string name="opt_main_gate">मुख्य गेट</string>
+    <string name="opt_vehicle_park">गाड़ी खड़ी करने की जगह</string>
+    <string name="opt_report_to_marshal">मार्शल को सूचना दें</string>
+    <string name="opt_report_missing_persons">गुम व्यक्ति की सूचना दें</string>
+    <string name="opt_return_for_belongings">सामान के लिए वापस जाएँ</string>
+    <string name="opt_re_enter_to_help">मदद के लिए वापस अंदर जाएँ</string>
+
+    <string name="step_gas_recognise_zone_prompt">वह बंद जगह दिखाएँ जिसमें परमिट के बिना नहीं घुसना है।</string>
+    <string name="step_gas_recognise_zone_remedy">चिह्नित गैस क्षेत्र। रास्ता, सीढ़ी या टूलबॉक्स बंद जगह नहीं है; निशान ही बताता है।</string>
+    <string name="step_gas_first_action_prompt">आपका डिटेक्टर मेथेन का अलार्म दे रहा है। सबसे पहले क्या करेंगे?</string>
+    <string name="step_gas_first_action_remedy">पीछे हटें और अलार्म बजाएँ। जाँचने न जाएँ, और कुछ भी चालू या बंद न करें।</string>
+    <string name="step_gas_ppe_select_prompt">आप बंद जगह में जा रहे हैं। जो चाहिए वह सब चुनें।</string>
+    <string name="step_gas_ppe_select_remedy">श्वास उपकरण, गैस डिटेक्टर और लाइफ़लाइन वाला हार्नेस। धूल का मास्क गैस पर कुछ नहीं करता।</string>
+    <string name="step_gas_entry_sequence_prompt">बंद जगह में प्रवेश के चरण क्रम में लगाएँ।</string>
+    <string name="step_gas_entry_sequence_remedy">परमिट, आइसोलेट, हवा चलाएँ, हवा जाँचें, बाहर निगरान रखें, फिर अंदर जाएँ। इनका क्रम कभी न बदलें।</string>
+    <string name="step_gas_contact_interval_prompt">निगरान और अंदर गए व्यक्ति के बीच संपर्क कितनी बार होना चाहिए?</string>
+    <string name="step_gas_contact_interval_remedy">लगातार। संपर्क टूटे तो प्रवेश रुक जाता है।</string>
+    <string name="step_gas_rescue_decision_prompt">आपका साथी अंदर गिर जाता है। आप क्या करेंगे?</string>
+    <string name="step_gas_rescue_decision_remedy">अलार्म बजाएँ और रेस्क्यू टीम बुलाएँ। बंद जगह में ज़्यादातर मौतें बचाने गए व्यक्ति की होती हैं।</string>
+    <string name="step_gas_ventilation_check_prompt">हवा का पंखा खोजें और उस पर नज़र टिकाएँ।</string>
+    <string name="step_gas_ventilation_check_remedy">भरोसा करने से पहले पक्का करें कि पंखा असल में चल रहा है। बंद पंखा चालू पंखे जैसा ही दिखता है।</string>
+    <string name="step_buddy_periodic_check_prompt">आपका साथी पूछ रहा है कि आप ठीक हैं। जवाब दें।</string>
+    <string name="step_buddy_periodic_check_remedy">हर जाँच का जवाब तुरंत दें। चुप्पी को आपातकाल माना जाता है, और मानना भी चाहिए।</string>
+    <string name="step_buddy_distress_response_prompt">आपका साथी जवाब देना बंद कर चुका है। आप क्या करेंगे?</string>
+    <string name="step_buddy_distress_response_remedy">अलार्म बजाएँ और बाहर से लाइफ़लाइन खींचें। अंदर न जाएँ।</string>
+
+    <string name="opt_gas_zone_marker">चिह्नित गैस क्षेत्र</string>
+    <string name="opt_gas_walkway">रास्ता</string>
+    <string name="opt_gas_ladder">सीढ़ी</string>
+    <string name="opt_gas_toolbox">टूलबॉक्स</string>
+    <string name="opt_withdraw_and_alarm">पीछे हटें और अलार्म बजाएँ</string>
+    <string name="opt_continue_working">काम करते रहें</string>
+    <string name="opt_switch_on_lights">देखने के लिए लाइट चालू करें</string>
+    <string name="opt_open_more_valves">साफ़ करने के लिए और वाल्व खोलें</string>
+    <string name="opt_ppe_scba">स्वयं-निहित श्वास उपकरण</string>
+    <string name="opt_ppe_gas_detector">गैस डिटेक्टर</string>
+    <string name="opt_ppe_harness_lifeline">लाइफ़लाइन वाला हार्नेस</string>
+    <string name="opt_ppe_dust_mask">धूल का मास्क</string>
+    <string name="opt_ppe_cotton_cloth">मुँह पर कपड़ा</string>
+    <string name="opt_ppe_earplugs">कान के प्लग</string>
+    <string name="opt_cs_permit">प्रवेश परमिट लें</string>
+    <string name="opt_cs_isolate">जगह आइसोलेट करें</string>
+    <string name="opt_cs_ventilate">हवा चलाएँ</string>
+    <string name="opt_cs_test_atmosphere">हवा जाँचें</string>
+    <string name="opt_cs_station_attendant">बाहर निगरान रखें</string>
+    <string name="opt_cs_enter">अंदर जाएँ</string>
+    <string name="opt_contact_continuous">लगातार</string>
+    <string name="opt_contact_every_15_min">हर पंद्रह मिनट</string>
+    <string name="opt_contact_every_hour">हर घंटे</string>
+    <string name="opt_contact_only_if_called">सिर्फ़ जब वे पुकारें</string>
+    <string name="opt_signal_alarm_and_call_rescue">अलार्म बजाएँ और रेस्क्यू बुलाएँ</string>
+    <string name="opt_enter_immediately">तुरंत अंदर जाएँ</string>
+    <string name="opt_enter_with_dust_mask">धूल का मास्क लगाकर अंदर जाएँ</string>
+    <string name="opt_pull_victim_by_hand">हाथ डालकर बाहर खींचें</string>
+    <string name="opt_vent_fan">हवा का पंखा</string>
+    <string name="opt_vent_water_pump">पानी का पंप</string>
+    <string name="opt_vent_winch">विंच</string>
+    <string name="opt_buddy_ok_signal">बताएँ कि आप ठीक हैं</string>
+    <string name="opt_buddy_do_nothing">कुछ न करें</string>
+    <string name="opt_buddy_ignore">ध्यान न दें और काम करते रहें</string>
+    <string name="opt_verbal_ok_from_mate">किसी और के जवाब का इंतज़ार करें</string>
+    <string name="opt_raise_alarm_do_not_enter">अलार्म बजाएँ और बाहर रहें</string>
+    <string name="opt_buddy_pull_lifeline_hard">बाहर से लाइफ़लाइन खींचें</string>
+    <string name="opt_buddy_enter_to_pull_out">अंदर जाकर बाहर खींचें</string>
+    <string name="opt_buddy_go_find_supervisor">सुपरवाइज़र को खोजने जाएँ</string>
+
+    <string name="step_loto_identify_hazard_prompt">इस मशीन का वह हिस्सा दिखाएँ जो आपका हाथ ले लेगा।</string>
+    <string name="step_loto_identify_hazard_remedy">दबाव बिंदु, जहाँ दो चलते हिस्से मिलते हैं। गार्ड उसी के लिए लगा है।</string>
+    <string name="step_loto_sequence_prompt">लॉकआउट के चरण क्रम में लगाएँ।</string>
+    <string name="step_loto_sequence_remedy">सूचित करें, बंद करें, आइसोलेट करें, ताला लगाएँ, जमा ऊर्जा निकालें, शून्य ऊर्जा जाँचें। जाँचने का चरण ही लोग छोड़ते हैं।</string>
+    <string name="step_loto_key_control_prompt">आपके ताले की चाबी कौन रखेगा?</string>
+    <string name="step_loto_key_control_remedy">हर कर्मचारी अपना ताला लगाता है और अपनी चाबी रखता है। आपको आपके सिवा कोई नहीं छुड़ा सकता।</string>
+    <string name="step_loto_conveyor_jam_prompt">कन्वेयर जाम हो गया है। आप क्या करेंगे?</string>
+    <string name="step_loto_conveyor_jam_remedy">रोकें, आइसोलेट करें, ताला लगाएँ, फिर जाम खोलें। चलती बेल्ट में कभी हाथ न डालें।</string>
+    <string name="step_loto_guard_missing_prompt">मशीन का गार्ड गायब है। आप क्या करेंगे?</string>
+    <string name="step_loto_guard_missing_remedy">रोकें और सूचना दें। गार्ड के बिना मशीन नहीं चलेगी, शिफ़्ट का टारगेट जो हो।</string>
+
+    <string name="opt_nip_point">दबाव बिंदु</string>
+    <string name="opt_loto_walkway">रास्ता</string>
+    <string name="opt_loto_pipe_run">पाइप लाइन</string>
+    <string name="opt_loto_guard">गार्ड ख़ुद</string>
+    <string name="opt_loto_notify">सब प्रभावित लोगों को सूचित करें</string>
+    <string name="opt_loto_shutdown">मशीन बंद करें</string>
+    <string name="opt_loto_isolate">ऊर्जा स्रोत आइसोलेट करें</string>
+    <string name="opt_loto_lock">अपना ताला लगाएँ</string>
+    <string name="opt_loto_dissipate">जमा ऊर्जा निकालें</string>
+    <string name="opt_loto_verify_zero">शून्य ऊर्जा जाँचें</string>
+    <string name="opt_each_worker_own_lock">हर कर्मचारी अपना ताला लगाता है</string>
+    <string name="opt_supervisor_holds_all_keys">सुपरवाइज़र सारी चाबियाँ रखता है</string>
+    <string name="opt_key_in_panel_door">चाबी पैनल के दरवाज़े में रहती है</string>
+    <string name="opt_no_lock_just_tag">टैग काफ़ी है, ताला नहीं</string>
+    <string name="opt_stop_isolate_then_clear">रोकें, आइसोलेट करें, ताला लगाएँ, फिर खोलें</string>
+    <string name="opt_clear_while_running">चलते-चलते खोल दें</string>
+    <string name="opt_use_bar_while_running">चलते-चलते सरिया लगाएँ</string>
+    <string name="opt_increase_speed">रफ़्तार बढ़ाकर छुड़ाएँ</string>
+    <string name="opt_stop_and_report_guard">रोकें और गायब गार्ड की सूचना दें</string>
+    <string name="opt_run_carefully_without_guard">गार्ड के बिना सावधानी से चलाएँ</string>
+    <string name="opt_finish_shift_then_report">शिफ़्ट पूरी करके सूचना दें</string>
+    <string name="opt_tape_the_crack">खुली जगह पर टेप लगा दें</string>
+
+    <string name="step_ppe_task_match_prompt">आप स्टील पर एंगल ग्राइंडर चला रहे हैं। जो चाहिए वह सब चुनें।</string>
+    <string name="step_ppe_task_match_remedy">हेलमेट, फ़ेस शील्ड, दस्ताने और कान की सुरक्षा। ग्राइंडर के पास ढीला कपड़ा उँगलियाँ ले जाता है।</string>
+    <string name="step_height_anchor_point_prompt">वह ऐंकर दिखाएँ जिससे आप हार्नेस बाँध सकते हैं।</string>
+    <string name="step_height_anchor_point_remedy">गिरने का भार सहने के लिए प्रमाणित ढाँचागत ऐंकर। पाइप, सीढ़ी या स्कैफ़ोल्ड की रेलिंग कभी नहीं।</string>
+    <string name="step_harness_inspection_sequence_prompt">हार्नेस जाँच के चरण क्रम में लगाएँ।</string>
+    <string name="step_harness_inspection_sequence_remedy">लेबल, पट्टा, सिलाई, बकल, लैनयार्ड। लेबल न पढ़ा जाए तो हार्नेस इस्तेमाल से बाहर है।</string>
+    <string name="step_ladder_angle_prompt">टिकी हुई सीढ़ी किस ढाल पर लगानी चाहिए?</string>
+    <string name="step_ladder_angle_remedy">हर चार ऊपर पर एक बाहर। ज़्यादा सीधी पीछे पलटती है; ज़्यादा तिरछी फिसलती है।</string>
+    <string name="step_ppe_defective_item_prompt">आपके हार्नेस के पट्टे में कट है। आप क्या करेंगे?</string>
+    <string name="step_ppe_defective_item_remedy">बदल दें और ख़राब वाला इस्तेमाल से बाहर करें। पट्टे में एक कट का मतलब पूरा हार्नेस गया।</string>
+
+    <string name="opt_ppe_grind_helmet">हेलमेट</string>
+    <string name="opt_ppe_face_shield">फ़ेस शील्ड</string>
+    <string name="opt_ppe_grind_gloves">दस्ताने</string>
+    <string name="opt_ppe_grind_earmuffs">कान की सुरक्षा</string>
+    <string name="opt_ppe_helmet">सिर्फ़ हेलमेट</string>
+    <string name="opt_ppe_loose_scarf">मुँह पर गमछा</string>
+    <string name="opt_ppe_flip_flops">चप्पल</string>
+    <string name="opt_anchor_structural">प्रमाणित ढाँचागत ऐंकर</string>
+    <string name="opt_anchor_pipe">एक पाइप</string>
+    <string name="opt_anchor_ladder">सीढ़ी का डंडा</string>
+    <string name="opt_anchor_scaffold_rail">स्कैफ़ोल्ड की रेलिंग</string>
+    <string name="opt_harness_check_label">लेबल जाँचें</string>
+    <string name="opt_harness_check_webbing">पट्टा जाँचें</string>
+    <string name="opt_harness_check_stitching">सिलाई जाँचें</string>
+    <string name="opt_harness_check_hardware">बकल और डी-रिंग जाँचें</string>
+    <string name="opt_harness_check_lanyard">लैनयार्ड और शॉक ऐब्ज़ॉर्बर जाँचें</string>
+    <string name="opt_ladder_one_in_four">चार ऊपर पर एक बाहर</string>
+    <string name="opt_ladder_one_in_eight">आठ ऊपर पर एक बाहर</string>
+    <string name="opt_ladder_one_in_one">पैंतालीस डिग्री</string>
+    <string name="opt_ladder_vertical">दीवार से सटाकर सीधी</string>
+    <string name="opt_replace_defective_ppe">बदल दें और इस्तेमाल से बाहर करें</string>
+    <string name="opt_use_for_one_shift">सिर्फ़ इस शिफ़्ट के लिए इस्तेमाल करें</string>
+    <string name="opt_swap_with_colleague">साथी के हार्नेस से बदल लें</string>
+
+    <string name="step_elec_shock_first_action_prompt">एक साथी को झटका लग रहा है और वह छोड़ नहीं पा रहा। सबसे पहले क्या करेंगे?</string>
+    <string name="step_elec_shock_first_action_remedy">पहले सप्लाई बंद करें। करंट चालू रहते उन्हें छूने से दो घायल हो जाएँगे।</string>
+    <string name="step_elec_cable_damage_prompt">वह दिखाएँ जिसे छूना नहीं है।</string>
+    <string name="step_elec_cable_damage_remedy">ख़राब केबल। खुले हुए किसी भी तार को जीवित मानें जब तक मरा हुआ साबित न हो।</string>
+    <string name="step_first_response_sequence_prompt">सप्लाई बंद है और वे बेहोश हैं। अपनी कार्रवाई क्रम में लगाएँ।</string>
+    <string name="step_first_response_sequence_remedy">ख़तरा, प्रतिक्रिया, मदद के लिए पुकार, हवा का रास्ता, साँस, छाती दबाना। पहले ख़तरा जाँचना ही आपको बचाता है।</string>
+    <string name="step_elec_permit_to_work_prompt">बिजली के पैनल पर काम से पहले क्या चाहिए?</string>
+    <string name="step_elec_permit_to_work_remedy">परमिट और साबित की गई आइसोलेशन। कम वोल्टेज का मतलब सुरक्षित नहीं होता।</string>
+    <string name="step_burn_first_aid_prompt">एक साथी की बाँह पर बिजली से जलने का घाव है। आप क्या करेंगे?</string>
+    <string name="step_burn_first_aid_remedy">बीस मिनट साफ़ बहते पानी से ठंडा करें। बर्फ़ नहीं, तेल नहीं, लेप नहीं, छाला न फोड़ें।</string>
+
+    <string name="opt_isolate_supply_first">पहले सप्लाई बंद करें</string>
+    <string name="opt_throw_water">उन पर पानी डालें</string>
+    <string name="opt_run_for_help_first">पहले मदद के लिए दौड़ें</string>
+    <string name="opt_damaged_cable">ख़राब केबल</string>
+    <string name="opt_elec_lv_panel">बंद पैनल</string>
+    <string name="opt_elec_pipe_run">पाइप लाइन</string>
+    <string name="opt_elec_toolbox">टूलबॉक्स</string>
+    <string name="opt_fr_check_danger">ख़तरा जाँचें</string>
+    <string name="opt_fr_check_response">प्रतिक्रिया जाँचें</string>
+    <string name="opt_fr_shout_for_help">मदद के लिए पुकारें</string>
+    <string name="opt_fr_open_airway">हवा का रास्ता खोलें</string>
+    <string name="opt_fr_check_breathing">साँस जाँचें</string>
+    <string name="opt_fr_start_compressions">छाती दबाना शुरू करें</string>
+    <string name="opt_permit_and_isolation">परमिट और साबित की गई आइसोलेशन</string>
+    <string name="opt_no_permit_needed_lv">कम वोल्टेज पर परमिट ज़रूरी नहीं</string>
+    <string name="opt_work_live_carefully">चालू हालत में सावधानी से काम करें</string>
+    <string name="opt_cool_with_water_20min">बीस मिनट साफ़ पानी से ठंडा करें</string>
+    <string name="opt_apply_ice_directly">बर्फ़ लगाएँ</string>
+    <string name="opt_apply_oil_or_paste">तेल या लेप लगाएँ</string>
+    <string name="opt_burst_the_blister">छाला फोड़ दें</string>
+    <string name="opt_cover_with_cloth">कपड़े से ढककर काम जारी रखें</string>
+    <string name="opt_wait_and_watch">देखते रहें कि क्या होता है</string>
+
+    <string name="voice_cmd_one">एक</string>
+    <string name="voice_cmd_two">दो</string>
+    <string name="voice_cmd_three">तीन</string>
+    <string name="voice_cmd_four">चार</string>
+    <string name="voice_cmd_left">बाएँ</string>
+    <string name="voice_cmd_right">दाएँ</string>
+    <string name="voice_cmd_straight">सीधे</string>
+    <string name="voice_cmd_yes">हाँ</string>
+    <string name="voice_cmd_no">नहीं</string>
+    <string name="voice_cmd_back">पीछे</string>
+    <string name="voice_cmd_next">आगे</string>
+    <string name="voice_cmd_stop">रुको</string>
+    <string name="voice_cmd_exit">निकास</string>
+    <string name="voice_cmd_fire">आग</string>
+    <string name="voice_cmd_gas">गैस</string>
+    <string name="voice_cmd_mask">मास्क</string>
+    <string name="voice_cmd_buddy">साथी</string>
+    <string name="voice_cmd_help">मदद</string>
+    <string name="voice_cmd_repeat">दोहराओ</string>
+
+    <string name="hazard_cat_exposed_wiring">खुला तार</string>
+    <string name="hazard_cat_blocked_exit">बंद निकास मार्ग</string>
+    <string name="hazard_cat_missing_extinguisher">अग्निशामक गायब</string>
+    <string name="hazard_cat_missing_guard">मशीन गार्ड गायब</string>
+    <string name="hazard_cat_gas_smell">गैस की गंध</string>
+    <string name="hazard_cat_water_accumulation">जमा पानी</string>
+    <string name="hazard_cat_roof_support">छत के सहारे में गड़बड़</string>
+    <string name="hazard_cat_spill">गिरा हुआ पदार्थ</string>
+    <string name="hazard_cat_damaged_ppe">ख़राब सुरक्षा उपकरण</string>
+    <string name="hazard_cat_unsafe_act">असुरक्षित काम</string>
+    <string name="hazard_cat_other">कुछ और</string>
+
+    <string name="hazard_sev_low">कम</string>
+    <string name="hazard_sev_medium">मध्यम</string>
+    <string name="hazard_sev_high">ज़्यादा</string>
+    <string name="hazard_sev_critical">बहुत गंभीर</string>
+
+</resources>

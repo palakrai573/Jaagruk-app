@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--
+      Every one of these is required="false", deliberately.
+
+      Declaring a permission implies the matching hardware is mandatory unless this says
+      otherwise, and Play would then hide the app from handsets that lack it. That is the
+      opposite of what this app needs: roughly a third of mid-range Android stock in this
+      market is not ARCore certified, disproportionately the phones a contract worker
+      actually owns, and the fidelity ladder in docs/REVAMP_PLAN.md section 6.1 exists so a
+      drill still runs on them. A camera-less or ARCore-less phone falls back to
+      SENSOR_FALLBACK or PICTOGRAM_2D and takes the identical assessment.
+
+      An app that is invisible on Play to its intended audience has no fidelity ladder at all.
+    -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".JaagrukApplication"
+        android:allowBackup="true"
+        android:largeHeap="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Jaagruk"
+        android:localeConfig="@xml/locales_config"
+        tools:targetApi="33">
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Jaagruk">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Circle Learn transparent overlay activity -->
+        <activity
+            android:name=".circle.CircleLearnActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:screenOrientation="locked"
+            android:excludeFromRecents="true" />
+
+        <!-- Circle Learn foreground service -->
+        <service
+            android:name=".circle.JaagrukOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+    </application>
+
+</manifest>

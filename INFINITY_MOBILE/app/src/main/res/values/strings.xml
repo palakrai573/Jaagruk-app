@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  English strings.
+
+  Scope note, so this file is not mistaken for a finished localisation: these are the
+  brand-carrying and shell strings extracted during the phase 2 rebrand. The screens
+  themselves still hold a lot of hardcoded English, and that text is deliberately NOT
+  extracted yet - phases 5 and 10 rebuild those screens, and extracting strings from a
+  screen that is about to be replaced would be work thrown away twice.
+
+  Every key here exists in values-hi and values-sat with the same name. MissingTranslation
+  is a fatal lint check, so adding a key without translating it breaks the build rather
+  than shipping an English string to a Santali speaker.
+-->
+<resources>
+
+    <!-- ══ Identity ══════════════════════════════════════════════════════════ -->
+    <!-- "Jaagruk" means alert, watchful. Not "trained once". -->
+    <string name="app_name">Jaagruk</string>
+    <string name="app_tagline">Safety training that stays with you</string>
+
+    <!-- ══ Bottom navigation ═════════════════════════════════════════════════ -->
+    <!--
+      These keep the current five destinations. The information architecture in
+      docs/REVAMP_PLAN.md section 5 renames them to TRAIN / SITE / RECORDS / ASK / ME,
+      but that lands in phase 10 with the screens behind them: a tab labelled TRAIN
+      that opens a generic assistant would be a worse lie than one labelled Chat.
+    -->
+    <string name="nav_home">Home</string>
+    <string name="nav_chat">Ask</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_library">Records</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- ══ Dashboard ═════════════════════════════════════════════════════════ -->
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+    <string name="dashboard_headline">What can I help you with?</string>
+    <string name="dashboard_ask_hint">Ask about a hazard, a permit, a machine…</string>
+    <string name="dashboard_chat_card_title">Ask Jaagruk</string>
+    <string name="dashboard_chat_card_body">Ask anything — runs on this phone, no signal needed.</string>
+
+    <!-- ══ Ask / chat ════════════════════════════════════════════════════════ -->
+    <string name="chat_title">Ask Jaagruk</string>
+    <string name="chat_assistant_name">Jaagruk</string>
+    <string name="chat_input_hint">Ask a safety question…</string>
+    <string name="chat_input_hint_generating">Working…</string>
+    <string name="chat_welcome">Ask me about a hazard, a permit or a machine. I answer from the safety guidance stored on this phone.</string>
+    <string name="chat_source_label">Jaagruk chat</string>
+
+    <!-- ══ Engine state ══════════════════════════════════════════════════════ -->
+    <string name="ai_state_ready">Ready</string>
+    <string name="ai_state_loading">Loading the model…</string>
+    <string name="ai_state_thinking">Reading your question…</string>
+    <string name="ai_state_responding">Writing an answer…</string>
+    <string name="ai_state_error">Something went wrong</string>
+    <string name="ai_state_ready_tap">Ready · tap to start</string>
+
+    <!-- ══ Explain-this (the retained comprehension aid) ═════════════════════ -->
+    <!--
+      Kept deliberately. It is the only path in the app that handles text nobody here
+      wrote: a DGMS circular, a supplier's safety sheet, a label on a machine.
+      See docs/REVAMP_PLAN.md section 3.1.
+    -->
+    <string name="explain_title">Explain this</string>
+    <string name="explain_active">Explain this is running</string>
+    <string name="explain_notification_channel">Explain this</string>
+    <string name="explain_notification_title">Jaagruk · Explain this</string>
+
+    <!-- ══ Settings ══════════════════════════════════════════════════════════ -->
+    <string name="settings_worker_default">Worker</string>
+    <string name="settings_engine_label">On-device model</string>
+    <string name="settings_engine_value">Gemma 3 1B</string>
+    <string name="settings_version">Jaagruk · v%1$s</string>
+
+    <!-- ══ Voice ═════════════════════════════════════════════════════════════ -->
+    <string name="voice_responding">Jaagruk is answering</string>
+
+    <!-- ══ Model availability ════════════════════════════════════════════════ -->
+    <string name="model_missing_title">No model installed</string>
+    <string name="model_extracting">Preparing the model, one time only…</string>
+
+    <!-- ══ Accessibility labels ══════════════════════════════════════════════ -->
+    <!-- ContentDescription is a fatal lint check: an unlabelled control is a control a
+         worker using TalkBack cannot operate. -->
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_send">Send</string>
+    <string name="cd_stop">Stop</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_reset">Start over</string>
+    <string name="cd_voice_input">Speak instead of typing</string>
+    <string name="cd_app_mark">Jaagruk</string>
+
+</resources>

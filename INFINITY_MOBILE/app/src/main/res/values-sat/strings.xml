@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Santali, Ol Chiki script (ISO 639 "sat").
+
+  ═══ READ THIS BEFORE TRUSTING ANY LINE IN THIS FILE ═══
+
+  These translations are authored, NOT reviewed by a native Santali speaker with mine-site
+  vocabulary. docs/REVAMP_PLAN.md section 11 states this as a known limitation and it is
+  repeated here so nobody working in this file has to go and find it.
+
+  Santali has roughly seven million speakers concentrated in exactly the districts this app
+  targets, and no speech engine supports it. That is why voice input is a fixed 19-word
+  vocabulary recorded per site rather than general recognition, and why no language model in
+  this class is ever asked to generate Santali - none of them can write Ol Chiki. Everything
+  a Santali speaker reads in this app is authored text or a pictogram.
+
+  Rendering: Ol Chiki needs Noto Sans Ol Chiki, which ships in AOSP from Android 10. That is
+  the reason minSdk is 29. Below it, every glyph here renders as an empty box.
+-->
+<resources>
+
+    <!-- ══ Identity ══════════════════════════════════════════════════════════ -->
+    <string name="app_name">ᱡᱟᱜᱨᱩᱠ</string>
+    <string name="app_tagline">ᱨᱠᱷᱟ ᱛᱟᱞᱤᱢ, ᱡᱟᱦᱟᱸ ᱟᱢ ᱥᱟᱶ ᱛᱟᱦᱮᱸᱱᱟ</string>
+
+    <!-- ══ Bottom navigation ═════════════════════════════════════════════════ -->
+    <string name="nav_home">ᱚᱲᱟᱜ</string>
+    <string name="nav_chat">ᱠᱩᱞᱤ</string>
+    <string name="nav_tools">ᱦᱟᱛᱭᱟᱨ</string>
+    <string name="nav_library">ᱨᱮᱠᱚᱰ</string>
+    <string name="nav_settings">ᱥᱟᱡᱟᱣ</string>
+
+    <!-- ══ Dashboard ═════════════════════════════════════════════════════════ -->
+    <string name="greeting_morning">ᱡᱚᱦᱟᱨ</string>
+    <string name="greeting_afternoon">ᱡᱚᱦᱟᱨ</string>
+    <string name="greeting_evening">ᱡᱚᱦᱟᱨ</string>
+    <string name="dashboard_headline">ᱟᱢ ᱚᱠᱟ ᱨᱮ ᱜᱚᱲᱚ ᱞᱟᱹᱠᱛᱤ?</string>
+    <string name="dashboard_ask_hint">ᱡᱚᱠᱷᱚᱢ, ᱯᱟᱨᱢᱤᱴ ᱥᱮ ᱢᱮᱥᱤᱱ ᱵᱟᱹᱵᱩᱛ ᱠᱩᱞᱤ ᱢᱮ…</string>
+    <string name="dashboard_chat_card_title">ᱡᱟᱜᱨᱩᱠ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ</string>
+    <string name="dashboard_chat_card_body">ᱡᱟᱦᱟᱸ ᱠᱩᱞᱤ ᱢᱮ — ᱱᱚᱶᱟ ᱯᱷᱳᱱ ᱨᱮ ᱜᱮ ᱠᱟᱹᱢᱤᱭᱟ, ᱥᱤᱜᱱᱟᱞ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤ।</string>
+
+    <!-- ══ Ask / chat ════════════════════════════════════════════════════════ -->
+    <string name="chat_title">ᱡᱟᱜᱨᱩᱠ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ</string>
+    <string name="chat_assistant_name">ᱡᱟᱜᱨᱩᱠ</string>
+    <string name="chat_input_hint">ᱨᱠᱷᱟ ᱵᱟᱹᱵᱩᱛ ᱠᱩᱞᱤ ᱢᱮ…</string>
+    <string name="chat_input_hint_generating">ᱠᱟᱹᱢᱤ ᱮᱦᱚᱵ ᱠᱟᱱᱟ…</string>
+    <string name="chat_welcome">ᱡᱚᱠᱷᱚᱢ, ᱯᱟᱨᱢᱤᱴ ᱥᱮ ᱢᱮᱥᱤᱱ ᱵᱟᱹᱵᱩᱛ ᱠᱩᱞᱤ ᱢᱮ। ᱛᱮᱞᱟ ᱱᱚᱶᱟ ᱯᱷᱳᱱ ᱨᱮ ᱫᱚᱦᱚ ᱠᱟᱱ ᱨᱠᱷᱟ ᱠᱟᱛᱷᱟ ᱠᱷᱚᱱ ᱦᱩᱭᱩᱜᱼᱟ।</string>
+    <string name="chat_source_label">ᱡᱟᱜᱨᱩᱠ ᱜᱟᱞᱢᱟᱨᱟᱣ</string>
+
+    <!-- ══ Engine state ══════════════════════════════════════════════════════ -->
+    <string name="ai_state_ready">ᱛᱮᱭᱟᱨ</string>
+    <string name="ai_state_loading">ᱢᱳᱰᱮᱞ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱠᱟᱱᱟ…</string>
+    <string name="ai_state_thinking">ᱟᱢᱟᱜ ᱠᱩᱞᱤ ᱯᱟᱲᱦᱟᱣ ᱠᱟᱱᱟ…</string>
+    <string name="ai_state_responding">ᱛᱮᱞᱟ ᱚᱞ ᱠᱟᱱᱟ…</string>
+    <string name="ai_state_error">ᱚᱠᱟ ᱦᱚᱸ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ</string>
+    <string name="ai_state_ready_tap">ᱛᱮᱭᱟᱨ · ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱚᱛᱟᱭ ᱢᱮ</string>
+
+    <!-- ══ Explain-this ══════════════════════════════════════════════════════ -->
+    <string name="explain_title">ᱱᱚᱶᱟ ᱵᱩᱡᱷᱟᱹᱣ ᱢᱮ</string>
+    <string name="explain_active">“ᱱᱚᱶᱟ ᱵᱩᱡᱷᱟᱹᱣ ᱢᱮ” ᱮᱦᱚᱵ ᱠᱟᱱᱟ</string>
+    <string name="explain_notification_channel">ᱱᱚᱶᱟ ᱵᱩᱡᱷᱟᱹᱣ ᱢᱮ</string>
+    <string name="explain_notification_title">ᱡᱟᱜᱨᱩᱠ · ᱱᱚᱶᱟ ᱵᱩᱡᱷᱟᱹᱣ ᱢᱮ</string>
+
+    <!-- ══ Settings ══════════════════════════════════════════════════════════ -->
+    <string name="settings_worker_default">ᱠᱟᱹᱢᱤᱭᱟᱹ</string>
+    <string name="settings_engine_label">ᱯᱷᱳᱱ ᱨᱮᱱᱟᱜ ᱢᱳᱰᱮᱞ</string>
+    <string name="settings_engine_value">Gemma 3 1B</string>
+    <string name="settings_version">ᱡᱟᱜᱨᱩᱠ · v%1$s</string>
+
+    <!-- ══ Voice ═════════════════════════════════════════════════════════════ -->
+    <string name="voice_responding">ᱡᱟᱜᱨᱩᱠ ᱛᱮᱞᱟ ᱮᱢ ᱠᱟᱱᱟ</string>
+
+    <!-- ══ Model availability ════════════════════════════════════════════════ -->
+    <string name="model_missing_title">ᱛᱤᱱᱟᱜ ᱢᱳᱰᱮᱞ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ</string>
+    <string name="model_extracting">ᱢᱳᱰᱮᱞ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱠᱟᱱᱟ, ᱮᱠᱮᱱ ᱢᱤᱫᱛᱮ…</string>
+
+    <!-- ══ Accessibility labels ══════════════════════════════════════════════ -->
+    <string name="cd_notifications">ᱠᱷᱚᱵᱚᱨ</string>
+    <string name="cd_send">ᱠᱩᱞ ᱢᱮ</string>
+    <string name="cd_stop">ᱛᱷᱮᱦᱚᱨ ᱢᱮ</string>
+    <string name="cd_back">ᱛᱟᱭᱚᱢ</string>
+    <string name="cd_reset">ᱫᱩᱦᱲᱟᱹ ᱮᱦᱚᱵ ᱢᱮ</string>
+    <string name="cd_voice_input">ᱚᱞ ᱵᱚᱫᱚᱞ ᱛᱮ ᱨᱚᱲ ᱢᱮ</string>
+    <string name="cd_app_mark">ᱡᱟᱜᱨᱩᱠ</string>
+
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Per-app language support (Android 13+). Declaring it here puts Jaagruk in the system
+  Settings > Apps > Jaagruk > Language picker, so a worker can choose Santali for this app
+  without changing the language of the whole handset - which matters on a shared site phone.
+
+  Order is the order the picker shows. English first because a supervisor's device is usually
+  set up in English, then Hindi, then Santali.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="hi" />
+    <locale android:name="sat" />
+    <locale android:name="ta" />
+</locale-config>

@@ -1,0 +1,34 @@
+<resources>
+    <string name="safety_library">संबंधित मूल सामग्री (AI उत्तर नहीं)</string>
+    <string name="train_general_chat">सामान्य बातचीत (बिना जाँच)</string>
+    <string name="train_title">सुरक्षा प्रशिक्षण</string>
+    <string name="train_subtitle">सुरक्षित पाली के लिए तैयार।</string>
+    <string name="train_offline">ऑफ़लाइन अभ्यास</string>
+    <string name="train_meta">%1$d मिनट · %2$d निर्णय</string>
+    <string name="train_practice">अभ्यास करें</string>
+    <string name="train_ask">सुरक्षा सहायक</string>
+    <string name="train_documents">दस्तावेज़ और उपकरण</string>
+    <string name="train_language">भाषा</string>
+    <string name="train_notice">बिना समय सीमा का अभ्यास। यह AR मूल्यांकन नहीं है और इससे प्रमाणपत्र नहीं मिलता।</string>
+    <string name="train_step">निर्णय %1$d / %2$d</string>
+    <string name="train_order">कार्यों को सही क्रम में चुनें।</string>
+    <string name="train_multi">सभी आवश्यक कार्य चुनें।</string>
+    <string name="train_check">उत्तर जाँचें</string>
+    <string name="train_next">आगे बढ़ें</string>
+    <string name="train_correct">सही</string>
+    <string name="train_review">इस निर्णय की समीक्षा करें</string>
+    <string name="train_complete">अभ्यास पूरा हुआ</string>
+    <string name="train_result">%2$d में से %1$d निर्णय सही</string>
+    <string name="train_again">फिर अभ्यास करें</string>
+    <string name="train_invalid">यह अभ्यास उपलब्ध नहीं है।</string>
+    <string name="safety_question">आपका सुरक्षा प्रश्न</string>
+    <string name="safety_ask">पूछें</string>
+    <string name="safety_notice">AI सहायता है, अनुमति या प्रमाणपत्र नहीं। स्थल की प्रक्रिया मानें और निर्णय की पुष्टि पर्यवेक्षक से करें।</string>
+    <string name="safety_working">सुरक्षा सामग्री जाँची जा रही है…</string>
+    <string name="safety_refused">संग्रहीत सुरक्षा सामग्री में इस प्रश्न का उत्तर नहीं है। पर्यवेक्षक से पूछें।</string>
+    <string name="safety_failed">जाँचा हुआ उत्तर उपलब्ध नहीं है। फिर कोशिश करें या पर्यवेक्षक से पूछें।</string>
+    <string name="safety_unsupported">संताली में AI उत्तर उपलब्ध नहीं है। अनूदित अभ्यास उपलब्ध है।</string>
+    <string name="safety_model_missing">ऑफ़लाइन मॉडल तैयार नहीं है। सेटिंग में मॉडल जाँचें।</string>
+    <string name="safety_sources">स्रोत</string>
+    <string name="safety_truncated">उत्तर अधूरा है। इसे पूरी प्रक्रिया न मानें।</string>
+</resources>
