@@ -5,8 +5,8 @@
 # libjaagruk_llm.so against actual weights on actual hardware.
 param(
     [string]$Serial = 'RZCY90QZFRD',
-    [string]$Package = 'com.infinity.ai',
-    [string]$Activity = 'com.infinity.ai.MainActivity',
+    [string]$Package = 'org.jaagruk.safety',
+    [string]$Activity = 'org.jaagruk.safety.MainActivity',
     [int]$WaitSeconds = 75
 )
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
