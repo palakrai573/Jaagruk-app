@@ -1,1090 +1,647 @@
 <div align="center">
 
-# जागरुक · Jaagruk · ᱡᱟᱜᱨᱩᱠ
+# Jaagruk
 
-**AR-based vocational safety training and certification for Jharkhand's mining, steel and mica operations.**
+### Offline-first safety training. Spatial practice. Source-grounded assistance.
 
-Offline-first. Android 10+. No headset. Certificates that verify with no network at all.
+A Kotlin Android project for vocational safety training in Jharkhand's mining and manufacturing sector, developed for **Smart India Hackathon · Problem Statement 26041**.
 
-`SIH problem statement 26041`
+**Android 10+ training app · Five safety modules · Native camera AR · Four training locales**
 
-**606** core tests · **52** AI tests · **81** Android tests · **217** backend tests · **56/56** live smoke checks · **0** lint errors · **32 MB** APK
+[Active Mobile App](Jaagruk-Mobile/README.md) · [Architecture](#architecture) · [Measured Results](#measured-results) · [Build & Run](#build--run) · [Companion Web App](https://github.com/palakrai573/Jaagruk)
 
 </div>
 
----
-
-> *Jaagruk* means **alert**, **watchful**. Not "trained once".
-
----
+> **Project status — 1 October 2026:** The active mobile app has recorded physical-device checks for training, language switching, offline 3D and AR camera startup. The repository also contains a separate assessment/compliance implementation. These are **two Gradle projects, not one fully integrated release**. Physical AR anchor stability, release-device acceptance and expert translation review remain outstanding.
 
 ## Contents
 
-## Active Android App
+- [Product Overview](#product-overview)
+- [Interface Gallery](#interface-gallery)
+- [Choose the Right Project](#choose-the-right-project)
+- [Capabilities & Training Modules](#capabilities--training-modules)
+- [Architecture](#architecture)
+- [How Training Works](#how-training-works)
+- [How the Safety Coach Works](#how-the-safety-coach-works)
+- [Assessment, Certificates & Compliance](#assessment-certificates--compliance)
+- [Technology Stack](#technology-stack)
+- [Offline & Language Behavior](#offline--language-behavior)
+- [Measured Results](#measured-results)
+- [Size, Compression & Efficiency](#size-compression--efficiency)
+- [Implementation Comparisons](#implementation-comparisons)
+- [Build & Run](#build--run)
+- [Repository Map](#repository-map)
+- [Limitations & Future Scope](#limitations--future-scope)
+- [Documentation & Contribution](#documentation--contribution)
 
-The latest phone-tested Kotlin app is **[Jaagruk-Mobile](Jaagruk-Mobile/README.md)**.
-Open that directory as its own Android Studio project. It includes public training without
-sign-in, five offline 3D modules, native camera AR, a grounded on-device safety coach,
-and English, Hindi, Santali and Tamil training resources.
+## Product Overview
 
-See its [validation report](Jaagruk-Mobile/docs/VALIDATION.md) and
-[AR architecture and release guide](Jaagruk-Mobile/docs/AR-AND-RELEASE.md).
-The signed bundled APK is approximately 864 MB because it includes the local AI model;
-model weights, signing keys and APKs are not stored in Git.
+Jaagruk makes safety procedures available for repeated practice on a smartphone: explore a local 3D scene, place illustrative props in the camera view, rehearse decisions, and consult relevant safety-library passages without requiring a cloud model.
 
-The original root-level `android-app`, backend and dashboard are preserved below.
-Their earlier test counts and 32 MB APK figures above do not describe `Jaagruk-Mobile`.
-Physical AR anchor stability, release installation and native-speaker translation review
-remain pending; camera startup tests alone do not establish complete AR validation.
+The broader repository explores the administrative side of training as well: deterministic assessments, signed certificates, readiness tracking, delayed synchronization and an operator dashboard.
 
-### Original Project Contents
+**The design principle:** keep learning available without sign-in or continuous connectivity, while keeping practice, AI assistance and certified assessment explicitly separate.
 
-| | |
-|---|---|
-| [1. The problem, precisely](#1-the-problem-precisely) | [8. Voice, and why it had to be built from scratch](#8-voice-and-why-it-had-to-be-built-from-scratch) |
-| [2. What Jaagruk is, in 60 seconds](#2-what-jaagruk-is-in-60-seconds) | [9. Comparison: how else this gets done](#9-comparison-how-else-this-gets-done) |
-| [3. How it works](#3-how-it-works) | [10. Efficiency and footprint](#10-efficiency-and-footprint) |
-| [4. The certificate](#4-the-certificate) | [11. Quality gates](#11-quality-gates) |
-| [5. Measuring the decision, not the answer](#5-measuring-the-decision-not-the-answer) | [12. Getting it running](#12-getting-it-running) |
-| [6. Readiness decay: the finding nobody else surfaces](#6-readiness-decay-the-finding-nobody-else-surfaces) | [13. Repository layout](#13-repository-layout) |
-| [7. The AR fidelity ladder](#7-the-ar-fidelity-ladder) | [14. The offline assistant, and the fence around it](#14-the-offline-assistant-and-the-fence-around-it) |
-| | [15. Decisions worth defending](#15-decisions-worth-defending) |
-| | [16. Honest limitations](#16-honest-limitations) |
+| Audience | Intended workflow | Current implementation boundary |
+|---|---|---|
+| New workers and trainees | Explore hazards, rehearse decisions, repeat a module | Active mobile app |
+| Workers revising procedures | Ask an English/Hindi safety question and inspect its source | Active mobile app; installed model required for selection |
+| Trainers | Demonstrate an offline scene or camera-anchored tabletop model | Active mobile app; physical placement acceptance pending |
+| Safety supervisors | Review assessed records, readiness, hazards and certificates | Root assessment app, backend and dashboard |
+| Verifiers | Scan a signed certificate and inspect verification status | Root assessment/compliance implementation |
 
----
+This is a training prototype, **not a hazard detector, work permit, emergency-response authority or government-approved certification system**. Follow site procedures and qualified supervision.
 
-## 1. The problem, precisely
-
-Safety training in this sector does not fail because workers are untrained. Most have sat through an
-induction. It fails in four specific, addressable ways.
-
-```mermaid
-flowchart LR
-    A["Training delivered<br/>where there is signal"] -->|"worker acts 400 m<br/>underground"| B["Knowledge is not<br/>where it is needed"]
-    C["Certificate = passed<br/>a test once"] -->|"11 months later"| D["Says nothing about<br/>today"]
-    E["Quiz measures<br/>the answer"] -->|"4-second freeze"| F["Misses the failure<br/>that hurts people"]
-    G["Text-heavy UI"] -->|"low literacy,<br/>Santali speakers"| H["Unusable by the<br/>intended audience"]
-```
-
-| # | The failure | What it actually looks like | What Jaagruk does about it |
-|---|---|---|---|
-| 1 | **Delivery / need mismatch** | Learned in a canteen with Wi-Fi, needed in a haulage road with none | Everything load-bearing runs with the radio off — drills, scoring, signing, verification |
-| 2 | **Certificates are binary and stale** | "Valid until March" tells you nothing about competence in February | Readiness decays on a curve and is recomputed on read; statutory validity is reported *separately* |
-| 3 | **Knowing ≠ acting** | Worker knows to raise the alarm, hesitates four seconds | Every step timed against an expert baseline; correct-but-slow is its own outcome class |
-| 4 | **Literacy and language** | A large share cannot comfortably read; many speak Santali, which no speech engine supports | Zero-text pictogram mode, three languages at 603 keys each, per-site voice enrolment |
-
-Everything below follows from those four. The AR is a delivery mechanism, not the point.
-
----
-
-## 2. What Jaagruk is, in 60 seconds
+## Interface Gallery
 
 <table>
-<tr><td width="50%" valign="top">
-
-**Trains in AR on the phone the worker already owns.**
-5 modules, 11 scenarios. Fire evacuation and confined-space gas entry ship as complete AR experiences with
-markers pinned to the site's real exits and vents.
-
-**Measures decisions, not answers.**
-Monotonic-clock timing against expert baselines. Hesitation surfaces as its own dashboard cohort.
-
-**Certificates verify with nothing.**
-The QR *is* the certificate — 158 signed bytes, not a lookup key. Linked into a per-site tamper-evident hash
-chain.
-
-</td><td width="50%" valign="top">
-
-**Works offline, then delivers.**
-Durable queue, idempotent upload, or peer-to-peer relay out of a shaft on a supervisor's handset. A
-contractor arriving mid-shift is enrolled on the handset itself, with no uplink, and reconciles later.
-
-**Tracks readiness, not just certification.**
-Decay computed on read. No job that could have failed silently.
-
-**Speaks the worker's language — or none.**
-English, Hindi, Santali (Ol Chiki). 73 ISO 7010 pictograms for zero-text mode.
-
-**Near-miss reporting in one hand, in gloves.**
-Pictogram category grid, a fifteen-second voice note instead of typing, and an optional photo. Text and
-media sync separately so an image cannot hold up the line that says an exit is blocked.
-
-**Runs a real two-phone buddy drill.**
-Bluetooth + Wi-Fi Direct, no internet. An NPC partner would train none of the skill.
-
-**Answers the question a worker actually has, offline.**
-A 769 MiB language model, grounded in 68 authored safety passages, that refuses when they do not cover
-the question. It never touches a score or a certificate, and it is released before an AR drill starts.
-Sideloaded, never bundled, and the app is fully functional without it.
-
-</td></tr>
+  <tr>
+    <td align="center" width="33%"><img src="docs/Jaagruk%20Safety%20Coach%20Interface%20%281%29.png" alt="Jaagruk safety coach presentation visual with source-library search and stop control" width="250" /></td>
+    <td align="center" width="33%"><img src="docs/Fire%20and%20Explosion%20Response%20Training.png" alt="Fire training presentation visual showing the offline scene, camera AR entry and practice action" width="250" /></td>
+    <td align="center" width="33%"><img src="docs/Jaagruk%20Tools%20Screen%20on%20iPhone.png" alt="Jaagruk tools presentation visual with Circle Learn, file analysis and OCR" width="250" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Source-grounded coach</strong></td>
+    <td align="center"><strong>Explore, then practise</strong></td>
+    <td align="center"><strong>Supporting learning tools</strong></td>
+  </tr>
 </table>
 
----
+**Image provenance:** These are user-supplied presentation visuals in iPhone-style frames, not evidence of an iOS build or screenshots from the tested Samsung. Actual layouts and labels can differ. This repository's app implementation is Android/Kotlin.
 
-## 3. How it works
+The three supplied Tools PNGs are byte-identical, so the gallery displays one rather than repeating it. All originals remain available: [Tools](docs/Jaagruk%20Tools%20Screen%20on%20iPhone.png), [Tools (1)](docs/Jaagruk%20Tools%20Screen%20on%20iPhone%20%281%29.png), [Tools (2)](docs/Jaagruk%20Tools%20Screen%20on%20iPhone%20%282%29.png).
 
-### 3.1 The shape of the system
+## Choose the Right Project
+
+| Project | Open/build from | Purpose | Important distinction |
+|---|---|---|---|
+| **Jaagruk-Mobile** | `Jaagruk-Mobile/` | Current phone-tested training experience, 3D scenes, camera AR and extractive coach | Modules are `:app`, `:ai`, `:core`; guest practice does not issue certificates |
+| **Root assessment app** | Repository root | Assessed drills, worker identity, QR verification, readiness and offline records | Modules are `:android-app`, `:ai`, `:core`; different UI and validation history |
+| **Compliance backend** | `backend/` | Authentication, batch ingestion, records, verification and reports | Requires its own server/database configuration |
+| **Compliance dashboard** | `dashboard/` | Browser-based oversight and reporting | Separate React application, backed by the API |
+| **Companion web training app** | [Separate repository](https://github.com/palakrai573/Jaagruk) | Product/UI reference and browser experience | Not the same project as this repository's compliance dashboard |
+
+The two copies of `:core` and `:ai` are separate source trees; one is not automatically linked into the other. Passing tests in one tree does not validate the other. Their feature consolidation is future work.
+
+**Documentation snapshot:** Root-app results and the native-experience note include locally tested changes that are not all published in this documentation-only commit. This update does not publish those unrelated implementation changes. Re-run the relevant gates on your checkout before treating historical counts or local workflow descriptions as release acceptance.
+
+## Capabilities & Training Modules
+
+### Capability matrix
+
+| Capability | Active mobile app | Root assessment/compliance project |
+|---|---|---|
+| Public training entry | Starts on training without sign-in | Public explore/practice routes in the local implementation |
+| Five rehearsal modules | Implemented, including complete practice/restart flows | Catalog and guest practice implementation |
+| Interactive offline 3D | Bundled Three.js scenes in a network-blocked WebView | Different presentation implementation; not the same scene bundle |
+| Live camera AR | SceneView/ARCore plane placement and native props | ARCore controller with sensor/pictogram fallbacks |
+| Assessed spatial interaction | Not connected to the active practice screen | Controller/session/repository implementation |
+| Safety coach | Model selects an authored passage; exact text displayed | Retrieval, bounded generation and answer guard |
+| Signed QR certificates | Not exposed as a completed mobile workflow | Core codec, signing, verification and Android screens |
+| Backend synchronization | Do not infer a complete workflow from data-layer classes | WorkManager queue and FastAPI ingestion |
+| Administration | Not an in-app compliance dashboard | React dashboard and API |
+| General learning tools | Chat, OCR, document/screenshot tools and Circle Learn | Separate safety-focused UI |
+| Complete field acceptance | Not yet | Not yet |
+
+### Five training domains
+
+| Module ID | Domain | Learning focus | Active camera props |
+|---|---|---|---|
+| `fire-evacuation` | Fire and explosion response | Alarm, evacuation and extinguisher-related decisions | Extinguisher and exit |
+| `gas-confined-space` | Gas and confined spaces | Entry precautions, PPE and buddy procedures | Vessel and detector |
+| `machinery-loto` | Machinery and isolation | Lockout/tagout and safe intervention sequence | Conveyor and isolator |
+| `ppe-height` | PPE and work at height | Protection selection and fall-prevention decisions | Raised platform and anchor |
+| `electrical-first-response` | Electrical safety | Isolation and electrical hazard decisions | Panel and cable |
+
+See the [module catalog](Jaagruk-Mobile/core/src/main/kotlin/org/jaagruk/core/catalog/ModuleCatalog.kt) for actual scenarios and answer definitions. Scene props are illustrative, not a complete depiction of every procedure.
+
+## Architecture
+
+### Two application paths, one product direction
 
 ```mermaid
 flowchart TB
-    subgraph PHONE["android-app — works with the radio off"]
-        direction TB
-        UI["Compose UI · 11 screens · en/hi/sat"]
-        AR["AR layer — 3 fidelity tiers"]
-        IN["Input — touch · voice · gesture"]
-        UI --- AR
-        UI --- IN
-        ENG[":core — the load-bearing logic"]
-        UI --> ENG
-        AR --> ENG
-        IN --> ENG
-        ROOM["Room · 13 tables · durable queue"]
-        KS["Keystore · site Ed25519 key"]
-        ENG --> ROOM
-        ENG --> KS
+    subgraph MOBILE["Active project: Jaagruk-Mobile"]
+        UI["Compose Material 3 UI"]
+        PRACTICE["Catalog + practice matcher"]
+        WEBVIEW["Network-blocked WebView"]
+        THREE["Bundled Three.js scenes"]
+        AR["SceneView + ARCore + Filament"]
+        COACH["AIRepository + extractive coach"]
+        ENGINE["llama.cpp JNI + local GGUF"]
+        LOCAL["Local preferences and library"]
+        UI --> PRACTICE
+        UI --> WEBVIEW --> THREE
+        UI --> AR
+        UI --> COACH --> ENGINE
+        UI --> LOCAL
     end
 
-    subgraph SERVER["backend — FastAPI · 38 endpoints · 15 tables"]
-        SYNC["Idempotent batch ingest"]
-        CHAIN["Chain re-verification"]
-        COMP["Readiness · compliance"]
+    subgraph COMPLIANCE["Separate root project"]
+        APP["android-app"]
+        CORE["Pure Kotlin assessment / crypto / readiness"]
+        ROOM["Room records + sync queue"]
+        APP --> CORE
+        APP --> ROOM
     end
 
-    subgraph WEB["dashboard — React + TS"]
-        OV["Overview · sites · workers"]
-        HR["Hesitation risk"]
-        CI["Chain integrity"]
-        MAP["Hazard map"]
-    end
-
-    ROOM -.->|"queued records,<br/>when signal exists"| SYNC
-    ROOM -.->|"Nearby Connections,<br/>when it does not"| ROOM
-    SYNC --> CHAIN
-    SYNC --> COMP
-    COMP --> WEB
-    CHAIN --> CI
-
-    style ENG fill:#00696e,color:#fff
-    style PHONE fill:#f0f7f8
-    style SERVER fill:#fff6ec
-    style WEB fill:#f4f0ff
+    ROOM -->|"WorkManager / authenticated sync"| API["FastAPI"]
+    API --> DB["SQLAlchemy: SQLite or PostgreSQL"]
+    DASH["React compliance dashboard"] -->|"HTTP + live events"| API
+    MOBILE -. "Workflow consolidation pending" .-> COMPLIANCE
 ```
 
-The dashed arrows are the only network dependencies in the diagram, and neither is on the training path.
+### Key components and ownership
 
-### 3.2 Why `:core` is a plain JVM module
-
-Every rule that decides whether a worker is certified — scoring, hesitation classification, Ed25519 signing,
-chain linkage, QR encoding, readiness decay, keyword spotting, buddy-drill sequencing — lives in `core/`,
-which has **no Android dependency at all**.
-
-| | Logic in the app module | Logic in `:core` (chosen) |
+| Component | Responsibility | Source |
 |---|---|---|
-| Test runtime | Emulator or device, minutes | Plain JVM, **1.4 s for 606 tests** |
-| Determinism | Real clocks, real sensors | Injected `MonotonicTimeSource` / `WallClock` |
-| Can you test a 6-week decay? | Only by waiting | `FixedWallClock`, instantly |
-| Can you test a 2-phone drill? | Two devices | Two machines + one fake clock |
-| Cross-language byte parity | Impossible to assert | Same fixtures asserted from Kotlin **and** Python |
+| Navigation | Public startup and routes into simulation, practice, AR and tools | [AppNavigation.kt](Jaagruk-Mobile/app/src/main/java/org/jaagruk/safety/ui/navigation/AppNavigation.kt) |
+| Offline scene host | Local assets, lifecycle pause/resume, renderer commands and blocked network requests | [SimulationScreen.kt](Jaagruk-Mobile/app/src/main/java/org/jaagruk/safety/ui/screens/SimulationScreen.kt) |
+| Camera practice | Permission, AR session, horizontal-plane hit testing, anchoring and prop lifecycle | [CameraArScreen.kt](Jaagruk-Mobile/app/src/main/java/org/jaagruk/safety/ui/screens/CameraArScreen.kt) |
+| Safety request owner | Serializes coach requests and checks displayed text against retrieved passages | [AIRepository.kt](Jaagruk-Mobile/app/src/main/java/org/jaagruk/safety/ai/repository/AIRepository.kt) |
+| Extractive selection | Turns a bounded model selection into an unchanged source passage | [ExtractiveSafetyCoach.kt](Jaagruk-Mobile/ai/src/main/java/org/jaagruk/ai/ExtractiveSafetyCoach.kt) |
+| Native inference | JNI bridge and vendored CPU inference backend | [Native AI sources](Jaagruk-Mobile/ai/src/main/cpp) |
+| Assessment rules | Exact answer matching, latency scoring and outcome aggregation | [ScoreCalculator.kt](core/src/main/kotlin/org/jaagruk/core/assessment/ScoreCalculator.kt) |
+| Certificate encoding | Canonical signed payload and compact QR representation | [QrCodec.kt](core/src/main/kotlin/org/jaagruk/core/cert/QrCodec.kt) |
+| Sync ingestion | Idempotent batches, per-item outcomes and additive records | [sync.py](backend/app/services/sync.py) |
 
-A scoring engine you can only test on a device is a scoring engine nobody tests.
+**Why a pure Kotlin core?** Scenario rules, scoring, certificate encoding and readiness arithmetic can be tested without Android, a camera, a GPU or a running backend. Android owns device lifecycle and input; the core owns deterministic decisions.
 
-### 3.3 One drill, end to end
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant W as Worker
-    participant UI as Compose UI
-    participant AR as ArController
-    participant S as AssessmentSession<br/>(:core)
-    participant DB as Room
-    participant K as Keystore
-
-    W->>UI: sign in (local PIN, no network)
-    UI->>DB: write run row as INCOMPLETE
-    Note over DB: before step 1 — process death<br/>leaves a resumable record
-    UI->>S: start()
-    loop each step
-        S->>AR: setMarkers(targets)
-        AR-->>UI: projected screen positions
-        W->>AR: point / tap / speak / gesture
-        AR->>S: submit(stepId, options, inputMethod)
-        Note over S: latency from monotonic clock<br/>naming the step blocks double-taps
-    end
-    S->>S: aggregate → score, hesitation, pass
-    S->>DB: seal run + enqueue upload
-    alt certifiable
-        S->>K: sign canonical attestation
-        K-->>DB: append to chain, advance head
-        Note over DB: chain append + head + insert<br/>commit as one transaction
-    else no site key yet
-        DB->>DB: store pass, mint certificate later
-    end
-```
-
-Two details in that diagram are the difference between a demo and something usable:
-
-- **The run row is written before step 1.** A process kill mid-drill leaves a resumable record with the
-  latencies already measured, instead of nothing.
-- **`submit()` must name the step it is answering.** A glove double-tap or a voice command recognised 80 ms
-  late becomes an explicit `STALE_STEP` rather than accidentally answering the *next* step in zero
-  milliseconds — which is exactly how a scoring engine certifies somebody who never saw the question.
-
----
-
-## 4. The certificate
-
-### 4.1 Anatomy
-
-The QR carries the certificate itself. There is no server lookup, no database row to trust, no network.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  JGK1:  <base64url payload>                    216 characters   │
-└─────────────────────────────────────────────────────────────────┘
-             │
-             ▼  158 bytes, canonical big-endian, length-prefixed
-┌───────────────────────────┬──────────┬──────────────────────────┐
-│ field                     │  bytes   │ why                      │
-├───────────────────────────┼──────────┼──────────────────────────┤
-│ formatVersion             │     1    │ refuse a future format   │
-│ siteId          (len+utf8)│  2 + ≤16 │ capped by the QR budget  │
-│ seq                       │     4    │ position in the chain    │
-│ workerIdHash              │    32    │ SHA-256 — never the id   │
-│ moduleCode                │     1    │ frozen 1..5              │
-│ scorePermille             │     2    │ 0..1000                  │
-│ medianLatencyMs           │     4    │ the decision measurement │
-│ outcomeFlags              │     1    │ passed/hesitation/buddy/ │
-│                           │          │ site-scanned/refresher/  │
-│                           │          │ assisted                 │
-│ issuedAtEpochMin          │     4    │ minutes, not seconds     │
-│ prevRecordHash            │    32    │ chain linkage            │
-│ signature (Ed25519)       │    64    │ over all of the above    │
-└───────────────────────────┴──────────┴──────────────────────────┘
-```
-
-**128 of 158 bytes — 81 % — is cryptographic material** (two 32-byte hashes + a 64-byte signature). The
-format overhead is the remaining 30 bytes. There is almost nothing to trim, which is the point of designing
-the encoding before choosing the container.
-
-### 4.2 Why not JWT, or X.509, or a URL
-
-| Approach | Would it fit a scannable QR? | Verifies offline? | Leaks worker identity? | Verdict |
-|---|---|---|---|---|
-| **Jaagruk canonical + Ed25519** | **158 B → 216 chars** ✅ | ✅ | ✅ hash only | chosen |
-| Signed JWT (`EdDSA`) | Hex hashes double, JSON keys repeat, then base64 on top — roughly **2× larger** *(estimate)* | ✅ | ✅ | rejected: no benefit, worse density |
-| X.509 certificate | ASN.1 + DER + subject/issuer chain — far larger | ✅ | depends on subject | rejected: enormous for 10 fields |
-| RSA-2048 signature | 256-byte signature alone exceeds our whole payload | ✅ | ✅ | rejected: won't fit |
-| URL → server lookup | Tiny QR ✅ | ❌ **needs network** | ❌ id in the URL | rejected: fails at the mine gate |
-
-The URL row is the one that matters. A verification scheme that needs connectivity does not work at the
-place verification happens.
-
-> A `https://…/v/<payload>` form **is** supported — but only as a convenience so a stock camera app can hand
-> off to Jaagruk. The signed bytes travel inside it, and verification is still entirely local. The URL is
-> never part of the trust path.
-
-### 4.3 The chain
+## How Training Works
 
 ```mermaid
 flowchart LR
-    G["seq 1<br/>prev = 32 zero bytes"] --> R2["seq 2<br/>prev = H₁"] --> R3["seq 3<br/>prev = H₂"] --> R4["seq 4<br/>prev = H₃"]
-    R4 --> R5["seq 5<br/>prev = H₄"]
-    style G fill:#e8f5e9
-    style R5 fill:#e8f5e9
+    OPEN["Open app"] --> HOME["Public training home"]
+    HOME --> LANG["Choose language"]
+    LANG --> MODULE["Choose module"]
+    MODULE --> SCENE["Explore offline 3D"]
+    SCENE --> PRACTICE["Answer practice decisions"]
+    SCENE --> CAMERA["Open Camera AR"]
+    CAMERA --> PERMISSION["Permission + compatible AR runtime"]
+    PERMISSION --> SCAN["Scan horizontal surface"]
+    SCAN --> PLACE["Place anchored props"]
+    PLACE --> PRACTICE
+    PRACTICE --> FEEDBACK["Authored feedback"]
+    FEEDBACK --> REPEAT["Complete or restart"]
 ```
 
-`record_hash = SHA-256(canonical_bytes ‖ signature)`
+### Offline 3D rendering
 
-Hashing the **payload plus the signature** — not the payload alone — is deliberate. If the chain committed
-only to payload bytes, a record could be re-signed under a different key and spliced into another chain
-undetected.
+The scene source lives under [simulation/](Jaagruk-Mobile/simulation). React Three Fiber and Three.js are bundled by esbuild into `app/src/main/assets/simulation/`. The native UI hosts the local page in a WebView and sends scene actions through a JavaScript command bridge.
 
-Seven verdicts, not two:
+The host blocks network loading, disallows universal file-URL access and rejects navigation away from the scene asset. The scene responds to orbit, actions, pause and reset. Activity lifecycle changes pause/resume rendering; leaving the view destroys the WebView.
 
-| Verdict | Means | Inspector action |
-|---|---|---|
-| `VERIFIED` | Signature valid, links correctly into the chain this device holds | Accept |
-| `SIGNATURE_VALID_CHAIN_UNKNOWN` | Signature genuine; this device holds no chain copy | Accept — sync later to cross-check |
-| `SEQUENCE_GAP` | Valid and linked, but records in between are missing here | Accept with note |
-| `BROKEN_LINK` | Does not link to its predecessor | **Refuse** — indicates interference |
-| `BAD_SIGNATURE` | Altered, or signed by the wrong key | **Refuse** |
-| `UNKNOWN_SITE_KEY` | No public key for that site on this device | Sync once, re-check |
-| `MALFORMED` | Not a Jaagruk certificate | Not our code |
+This is **interactive 3D**, not camera tracking. The separate **Camera AR** entry starts the native AR path.
 
-Collapsing these into valid/invalid would either cry wolf on every fresh handset (`CHAIN_UNKNOWN`) or hide
-real tampering (`BROKEN_LINK`). Either way inspectors stop trusting the tool.
+### Native camera AR
 
-**It is a hash chain. It is not a blockchain, and nothing in this repository says it is.** No consensus, no
-distributed ledger, no proof of anything. A per-site append-only chain with signed links — which is exactly
-what the problem needs, and overselling it would be the first thing an assessor took apart.
+1. Request camera permission and acquire the AI/AR memory interlock.
+2. Start a lifecycle-bound ARCore session through SceneView.
+3. Wait for camera tracking and an upward-facing horizontal plane.
+4. Hit-test the viewport centre against a tracked plane.
+5. Create an ARCore anchor and attach metre-scaled cube/cylinder props.
+6. Keep the camera visible while the existing decision-practice UI is shown.
+7. Reset detaches the anchor and destroys prop nodes; leaving AR releases the interlock.
 
----
+The current models are procedural tabletop representations, not photorealistic characters or reconstructed industrial sites. Practice answers still use decision controls: object picking, timed spatial assessment and certified AR gestures are not implemented in this screen.
 
-## 5. Measuring the decision, not the answer
+## How the Safety Coach Works
 
-### 5.1 The scoring model
-
-```
-step score = 0.70 × accuracy  +  0.30 × latency term
-```
-
-| Constant | Value | Reasoning |
-|---|---|---|
-| `ACCURACY_WEIGHT` | `0.70` | Being right dominates. Speed is a modifier, not the goal. |
-| `LATENCY_WEIGHT` | `0.30` | Enough to separate a confident worker from a hesitant one |
-| `SLOW_FACTOR` | `2.0` | Beyond 2× the expert baseline the answer is `CORRECT_SLOW` |
-| `SUSPICIOUS_FAST_MS` | `250` | Below human reaction time — this is tapping, not deciding |
-| `SUSPICIOUS_FAST_VOID_THRESHOLD` | `3` | Three such answers voids the run as `GUESS_PATTERN` |
-| `DEFAULT_PASS_THRESHOLD_PERMILLE` | `700` | 70 % |
-| `DEFAULT_HESITATION_RATIO_LIMIT` | `0.34` | Hesitating on a third of steps fails, even if all are correct |
-| `BACKGROUND_ABORT_MS` | `5 min` | Longer away is a different session, not an interruption |
-
-### 5.2 Five outcomes, not two
-
-| Outcome | Right? | Answered? | Counted in score? | Why it is separate |
-|---|---|---|---|---|
-| `CORRECT_FAST` | ✅ | ✅ | ✅ | Genuinely ready |
-| `CORRECT_SLOW` | ✅ | ✅ | ✅ | **Knows it, may freeze when it counts** |
-| `INCORRECT` | ❌ | ✅ | ✅ | Wrong |
-| `TIMEOUT` | ❌ | ❌ | ✅ | No answer — recorded distinctly from wrong |
-| `SKIPPED` | — | ❌ | ❌ excluded | Never reached; must not dilute the denominator |
-
-`CORRECT_SLOW` is the whole reason this project exists. A quiz records it as correct. Jaagruk records it, flags
-the certificate, and puts the worker on a dashboard cohort a site officer can act on.
-
-### 5.3 What the clock does and does not count
+The active coach uses the model as a **document selector**, not as an unrestricted author of safety instructions.
 
 ```mermaid
-gantt
-    dateFormat  X
-    axisFormat  %Ss
-    title Step latency — paused time is folded out
-    section Counted
-    thinking          :0, 3
-    more thinking     :7, 9
-    section NOT counted
-    tracking lost     :3, 5
-    supervisor calls  :5, 7
+sequenceDiagram
+    actor Worker
+    participant UI as Safety coach UI
+    participant Repo as AIRepository
+    participant Corpus as Local safety corpus
+    participant Model as Gemma via llama.cpp
+    Worker->>UI: Ask in English or Hindi
+    UI->>Repo: Cancellable safety request
+    Repo->>Repo: Check language, model and interlock
+    Repo->>Corpus: Retrieve relevant passages
+    Corpus-->>Repo: Up to 3 candidates
+    Repo->>Model: Select a document number; max 8 tokens
+    Model-->>Repo: Number, refusal or invalid output
+    Repo->>Repo: Validate exact selection and displayed passage
+    Repo-->>UI: Unchanged source text + citation, or explicit failure/refusal
 ```
 
-Being interrupted is not hesitation. Tracking loss, backgrounding, a lost peer, or stepping outside the
-cleared zone all stop the clock — and the pause overlay says *"paused time is not counted against you"*,
-because a worker who thinks it is running will rush back and answer badly.
+### Guardrails implemented in the active path
 
-All timing comes from a **monotonic** clock. Wall time only dates the run. On a shared site phone whose clock
-is corrected mid-shift, a wall-clock delta can go **negative** — and a negative decision latency would corrupt
-the one measurement the whole platform rests on.
+- Language-scoped retrieval grounds the request in the bundled corpus.
+- Only the top three candidates enter the selector prompt.
+- Generation uses greedy sampling and an eight-token budget.
+- `0` means refusal; only a standalone valid candidate number is accepted.
+- Cancellation, token-limit termination and malformed selections are rejected.
+- Displayed answer text comes from the selected passage, not a generated paraphrase.
+- The repository applies an additional exact-passage display check.
+- AR entry releases model resources through the session interlock.
+- Stopping, leaving or backgrounding the coach cancels its request.
 
----
+This limits generated safety prose, but **does not prove retrieval relevance, corpus correctness or suitability for a particular mine**. A model can select the wrong authored passage. The small regression evaluation is not a comprehensive safety benchmark.
 
-## 6. Readiness decay: the finding nobody else surfaces
+The root project's [AiCoach](ai/src/main/java/org/jaagruk/ai/AiCoach.kt) follows a different retrieval/prompt/guard pipeline. Its tests and behavior must not be attributed to the active extractive coach.
 
-### 6.1 The model
+### General tools are a different trust boundary
 
+OCR, document summaries, screenshot explanation, Circle Learn and general chat are learning aids. Their outputs do not inherit the safety coach's exact-passage guarantee, do not establish permit conditions and cannot issue certificates. Voice recognition availability depends on the device/service; fully offline speech is not established for every language.
+
+## Assessment, Certificates & Compliance
+
+**This section describes the root assessment project, not completed workflows in the active mobile practice screen.**
+
+```mermaid
+flowchart LR
+    ID["Worker identity"] --> DRILL["Assessed drill"]
+    DRILL --> SESSION["AssessmentSession"]
+    SESSION --> SCORE["Accuracy + latency + critical-step rules"]
+    SCORE --> RESULT["Persist result in Room"]
+    RESULT --> ELIGIBLE{"Eligible?"}
+    ELIGIBLE -->|"yes"| SIGN["Site-key signed attestation"]
+    SIGN --> QR["Offline-readable QR"]
+    RESULT --> QUEUE["Sync queue"]
+    SIGN --> QUEUE
+    QUEUE --> SERVER["Idempotent backend ingest"]
+    SERVER --> DASHBOARD["Compliance dashboard"]
 ```
-readiness(t) = baseScore × 0.5 ^ (elapsed_days / half_life)
+
+### Deterministic scoring
+
+Answer matching rejects unknown options and duplicates. Ordered steps require the exact sequence; unordered steps require the exact answer set. There is no partial credit for an incomplete option set.
+
+For a correct decision, the core uses:
+
+```text
+step score = 0.70 + 0.30 × latency factor
+latency factor = 1 at/before the expert baseline
+                 0 at/after the timeout
+                 linear interpolation between them
+wrong answer = 0
 ```
 
-| Constant | Value |
+Completion and certification eligibility are separate from the numeric score. Narration, tracking loss and background interruptions are handled by the assessment lifecycle, rather than automatically treating every elapsed millisecond as hesitation.
+
+Readiness is computed locally from prior performance and refresher state. It is an implemented scheduling heuristic, **not a validated prediction of accident risk or a statutory validity determination**.
+
+### Compact signed certificates
+
+| Property | Implementation |
 |---|---|
-| `INITIAL_HALF_LIFE_DAYS` | `45.0` |
-| `HALF_LIFE_GROWTH_PER_STAGE` | `0.5` (each refresher extends it by 50 %) |
-| `MAX_HALF_LIFE_DAYS` | `180.0` — never claim a skill is permanent |
-| Bands | `READY ≥ 700` · `DUE ≥ 500` · `STALE ≥ 300` · else `EXPIRED` |
+| Signature | Ed25519 |
+| Encoding | Canonical binary payload, Base64URL text with `JGK1:` prefix |
+| Fixture size | **158 binary bytes → 216 text characters**, asserted in the QR codec test |
+| Binary ceiling | 512 bytes |
+| Chain | Per-site hash-linked records |
+| Offline prerequisite | Locally trusted site public key; chain context determines linkage confidence |
+| Important limit | A valid signature authenticates a signed record, not competence or regulatory approval |
 
-Computed **on read**, never stored. There is no nightly decay job that could have failed silently; a handset
-that spent six weeks underground reports correctly the instant it powers on.
+Verification distinguishes malformed input, unknown site key, bad signature, broken link, sequence gap, signature-valid/chain-unknown and verified linkage. Offline verification cannot discover revocations or records that have never reached the device.
 
-### 6.2 The chart that makes the argument
+See [certificate tests](core/src/test/kotlin/org/jaagruk/core/cert/QrCodecTest.kt), [chain verification](core/src/main/kotlin/org/jaagruk/core/crypto/ChainVerifier.kt) and [calibration guidance](docs/CALIBRATION.md).
 
-A worker who passes at **850 ‰** and does no refreshers *(derived from the formula above)*:
+### Backend and dashboard
 
-```
-readiness ‰   one █ = 20 ‰   base score 850 ‰   refresher stage 0
-                          300       500       700        band thresholds
-                           ▼         ▼         ▼
+The backend uses FastAPI, SQLAlchemy and a configurable database. Sync ingestion uses a device/batch identifier for replay handling, reports results per item and does not provide a client-driven history rewrite path.
 
-day   0  850 ██████████████████████████████████████████  READY
-day   7  763 ██████████████████████████████████████      READY
-day  13  696 ██████████████████████████████████          DUE      first day under 700
-day  30  535 ██████████████████████████                  DUE
-day  35  496 ████████████████████████                    STALE    first day under 500
-day  45  425 █████████████████████                       STALE
-day  68  298 ██████████████                              EXPIRED  first day under 300
-day  90  213 ██████████                                  EXPIRED
-day 180   53 ██                                          EXPIRED
-day 365    3                                             EXPIRED  certificate still valid
-```
+The dashboard includes overview, workers, sites, modules, readiness/hesitation views, hazards, chain integrity, verification and reports. These pages require a configured API and appropriate access. Seeded demonstrations are not production records.
 
-| Day | Readiness | Band | Statutory certificate |
-|---:|---:|---|---|
-| 0 | **850** | READY | valid |
-| 7 | 763 | READY | valid |
-| **13** | 696 | **DUE** — first day below 700 | valid |
-| 30 | 535 | DUE | valid |
-| **35** | 496 | **STALE** — first day below 500 | valid |
-| 45 | 425 | STALE | valid |
-| **68** | 298 | **EXPIRED** — first day below 300 | valid |
-| 90 | 213 | EXPIRED | valid |
-| 180 | 53 | EXPIRED | valid |
-| **365** | **3** | EXPIRED | **still valid** |
+## Technology Stack
 
-**That last row is the entire argument.** At day 364 this worker is legally cleared to enter a confined space
-and would, by this model, retain almost nothing. A pass/fail record shows a tick. Jaagruk shows both numbers
-and never merges them, because the cohort that is *statutorily valid and operationally stale* is precisely the
-one a blended score hides.
+| Layer | Active mobile implementation / repository stack |
+|---|---|
+| Android UI | Kotlin 2.0.21, Jetpack Compose, Material 3, Navigation Compose |
+| Build | AGP 8.10.1, Gradle wrapper, JDK 17; compile/target SDK 36; minimum SDK 29 |
+| Camera AR | SceneView 2.3.0, ARCore 1.47.0, Filament |
+| Offline 3D | Three.js 0.170.0, React 18.3.1, React Three Fiber 8.18.0, Drei 9.122.0 |
+| Scene packaging | esbuild 0.25.12; bundled local HTML/JavaScript |
+| On-device inference | Gemma 3 1B IT Q4_K_M GGUF, llama.cpp CPU backend, JNI/C++ |
+| State and persistence | Coroutines, StateFlow, DataStore; Room in repository data layers |
+| Android services | WorkManager, CameraX, ML Kit; capabilities depend on the workflow |
+| Root compliance API | Python, FastAPI 0.115.6, SQLAlchemy 2.0.36, Alembic, Pydantic |
+| Database | SQLite for local development; PostgreSQL configuration available |
+| Dashboard | React 18, TypeScript, Vite, TanStack Query, Recharts, Leaflet |
+| Cryptography / QR | Ed25519, canonical codecs, hash chains, ZXing |
+| Testing | JUnit, MockK, Robolectric, Compose instrumentation, backend pytest |
 
-The dashboard surfaces it as its own count: **`statutorilyValidButStale`**.
+Version references: [mobile catalog](Jaagruk-Mobile/gradle/libs.versions.toml), [scene dependencies](Jaagruk-Mobile/simulation/package.json), [backend requirements](backend/requirements.txt), [dashboard package](dashboard/package.json). The root Android project's version catalog is independent.
 
-### 6.3 What refreshers actually buy
+## Offline & Language Behavior
 
-Half-life grows with each completed refresher stage. Readiness at **day 90** *(derived)*:
-
-| Refresher stage | Half-life | Readiness at day 90 | Band |
-|---:|---:|---:|---|
-| 0 (never refreshed) | 45 d | 213 | EXPIRED |
-| 1 | 67.5 d | 337 | STALE |
-| 2 | 90 d | 425 | STALE |
-| 3 | 112.5 d | 488 | STALE |
-| 4 | 135 d | 535 | DUE |
-| 6+ (capped) | 180 d | 601 | DUE |
-
-A two-minute refresher every few weeks is worth more than an annual re-certification — which is the
-spaced-repetition literature's actual claim, applied.
-
-> **A refresher renews readiness. It never renews the statutory clock.** Only a full module re-run does.
-> Otherwise a two-minute check would silently extend a twelve-month legal certificate, and the button in the
-> app says so.
-
----
-
-## 7. The AR fidelity ladder
-
-Roughly a third of mid-range Android stock in this market is not ARCore certified — disproportionately the
-handsets a contract worker actually owns. Requiring ARCore would make the app invisible on Play to exactly the
-audience the problem statement is about.
-
-```mermaid
-flowchart TD
-    P["probe device"] --> Q1{"GLES3 +<br/>camera?"}
-    Q1 -->|no| T4["PICTOGRAM_2D<br/>flat card drill"]
-    Q1 -->|yes| Q2{"ARCore<br/>certified?"}
-    Q2 -->|no| T3["SENSOR_FALLBACK<br/>camera + rotation vector"]
-    Q2 -->|yes| Q3{"site anchors<br/>resolved?"}
-    Q3 -->|no| T2["ARCORE_GENERIC<br/>template placement"]
-    Q3 -->|yes| T1["SITE_SCANNED<br/>markers on the real doorway"]
-    style T1 fill:#c8e6c9
-    style T2 fill:#dcedc8
-    style T3 fill:#fff9c4
-    style T4 fill:#ffe0b2
-```
-
-| Tier | Camera | Turning looks around | Walking moves the scene | Anchored to real objects | Assessment |
-|---|:-:|:-:|:-:|:-:|---|
-| `SITE_SCANNED` | ✅ | ✅ | ✅ | ✅ | **identical** |
-| `ARCORE_GENERIC` | ✅ | ✅ | ✅ | ❌ | **identical** |
-| `SENSOR_FALLBACK` | ✅ | ✅ | ❌ | ❌ | **identical** |
-| `PICTOGRAM_2D` | ❌ | — | — | ❌ | **identical** |
-
-Same steps, same timeouts, same expert baselines, same hesitation detection, same scoring, same certificate.
-**Only the presentation differs — and which tier was used is signed into the certificate**, so a run that fell
-back to sensors can never claim it happened in a site-scanned scene.
-
-### Why markers are Compose, not OpenGL
-
-ARCore will only hand its camera image to a GL texture, so there is exactly one GLES3 shader in this
-codebase: a full-screen quad for the camera background. Markers are ordinary composables, positioned by
-projecting the anchor into screen space with the same view/projection matrices GL would have used.
-
-| | GL-rendered markers | Compose markers (chosen) |
+| Capability | Offline behavior | Prerequisites / limits |
 |---|---|---|
-| Screen reader | ❌ a quad has no semantics | ✅ real content descriptions |
-| Devanagari / Ol Chiki | ❌ hand-rolled text pipeline | ✅ platform shaping |
-| Touch targets | manual hit-boxes | ✅ standard, 64 dp enforced |
-| Frame budget | spent on glyph atlases | ✅ spent on nothing |
+| Training catalog and decisions | Bundled locally | No sign-in required for active-app practice |
+| Three.js scenes | Bundled locally; scene network requests blocked | Working Android WebView/WebGL |
+| Native camera AR | Local props and tracking | Compatible device and installed Google Play Services for AR; initial setup may require network |
+| Safety coach | Local retrieval and local inference | Valid installed/extracted model and sufficient memory |
+| General voice recognition | Device/service-dependent | Do not assume offline support |
+| Root QR verification | Local cryptographic verification | Trusted site key and available chain data |
+| Root synchronization | Queued locally, transmitted later | Network, configured API and authentication |
+| Dashboard | Server-backed | API connectivity |
 
-`ContentDescription` is a **fatal** lint check. GL quads could not have satisfied it.
+### Locale coverage in Jaagruk-Mobile
 
----
-
-## 8. Voice, and why it had to be built from scratch
-
-Santali has roughly **seven million speakers**, concentrated in exactly the districts this app targets, and
-**no speech engine supports it** — not Vosk, not Whisper, not Google's on-device ASR. Waiting for a corpus is
-not a plan.
-
-So the vocabulary is fixed at **19 words**, a supervisor records them once per site, and matching is MFCC +
-DTW entirely on device. No model download, no network, no cloud.
-
-### The measured separation profile
-
-These are **not** guesses. `DtwSeparationTest` prints them on every run — the figures below are from the last
-one:
-
-```
-                       DTW cost      0        0.5       1.0       1.5       2.0       2.5       3.0
-                                     ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-identical recording      0.0000      zero cost - identical input, no bar
-same word + mic noise    0.5877      ███████████
-same word,  8% slower    0.6262      ████████████
-same word, 46% slower    0.6779      █████████████           ┊ worst legitimate cost
-                                                             ┊
-        accept threshold   1.20                   ═══════════┊  1.77× headroom above the worst legitimate cost
-                                                             ┊
-different command        2.3810      ███████████████████████████████████████████████
-white noise              2.7157      ██████████████████████████████████████████████████████
-```
-
-| Threshold | Value | Distance to nearest failure mode |
-|---|---|---|
-| `acceptCost` | `1.20` | **1.77×** above the worst legitimate same-word cost (0.678) |
-| | | **1.98×** below the nearest different command (2.381) |
-| `minMargin` | `0.15` | Best two candidates must differ by this, or the app asks the worker to repeat |
-| `NOISY_ENVIRONMENT` | `1.60 / 0.25` | Relaxed profile for a running conveyor |
-
-**The first thresholds were wrong.** Initial guesses of `acceptCost = 0.55`, `minMargin = 0.06` rejected
-legitimate re-recordings of the same word — the worst same-word case is 0.678, comfortably *above* 0.55. The
-test exists so nobody has to take the replacements on trust.
-
-Enrolment quality is checked before anything is stored: two takes, compared to each other. A template built
-from a cough or a clipped word is worse than no template, because it produces *confident wrong answers*
-during a live drill.
-
-Below 6 enrolled commands, voice input is **hidden rather than offered broken**. A worker who tries voice
-three times and is ignored stops using the working input too.
-
----
-
-## 9. Comparison: how else this gets done
-
-### 9.1 Against the alternatives
-
-| | Classroom / toolbox talk | Video e-learning | VR headset training | Generic quiz app | **Jaagruk** |
-|---|:-:|:-:|:-:|:-:|:-:|
-| Works with no network | ✅ | ❌ | ⚠️ tethered setup | ❌ | ✅ |
-| Runs on the worker's own phone | — | ✅ | ❌ | ✅ | ✅ |
-| Hardware cost per worker | ₹0 | ₹0 | high | ₹0 | **₹0** |
-| Spatial — "point at *your* exit" | ⚠️ if walked | ❌ | ✅ | ❌ | ✅ |
-| Measures decision latency | ❌ | ❌ | ⚠️ rarely | ❌ | ✅ |
-| Detects hesitation separately | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Certificate verifiable offline | ❌ paper | ❌ | ❌ | ❌ | ✅ |
-| Tamper-evident record | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Readiness decays over time | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Usable without reading | ⚠️ verbal | ❌ | ⚠️ | ❌ | ✅ |
-| Santali support | ⚠️ if trainer speaks it | ❌ | ❌ | ❌ | ✅ |
-| Two-person buddy drill | ✅ real | ❌ | ⚠️ NPC | ❌ | ✅ real |
-| Answers a worker's own question | ✅ if trainer present | ❌ | ❌ | ❌ | ✅ offline, cited |
-| Refuses rather than guessing | ✅ | — | — | — | ✅ enforced in code |
-| Scales to a district | ❌ trainer-bound | ✅ | ❌ | ✅ | ✅ |
-
-Classroom training is genuinely good at the things marked ✅ — it just does not scale and leaves no
-verifiable record. Jaagruk is not trying to replace a trainer walking a section; it is trying to make the
-other 51 weeks of the year measurable.
-
-### 9.2 Engineering choices, and what was rejected
-
-| Decision | Chosen | Rejected | Because |
+| Language | Training resources | In-app selection | Safety coach |
 |---|---|---|---|
-| Where the logic lives | plain Kotlin/JVM `:core` | Android library | 606 tests in 1.4 s, no emulator |
-| AR renderer | GLES3 camera quad + Compose markers | Sceneform / Filament / SceneView / glTF | deprecated, version churn, frame budget, no accessibility |
-| ARCore requirement | `optional` in manifest | `required` | ~⅓ of the target market excluded |
-| Signature algorithm | Ed25519 (BouncyCastle lightweight) | RSA-2048 | 256-byte signature will not fit a QR |
-| Crypto provider | BouncyCastle lightweight API | JCE provider registration | collides with Android's trimmed BC |
-| Keystore Ed25519 | software key in Keystore-backed prefs | Android Keystore Ed25519 | unreliable below API 33 |
-| Device attestation | separate hardware EC P-256 key | reuse the site key | separates "who logged in" from "which device may issue" |
-| Santali voice | per-site MFCC/DTW enrolment | Vosk / general ASR | 50 MB download; **no Santali corpus exists** |
-| Backend stack | sync SQLAlchemy on FastAPI threadpool | full async (asyncpg + aiosqlite) | complexity with no measured benefit at this scale |
-| Assistant model | Gemma 3 1B IT Q4_K_M, 769 MiB | Qwen 2.5 1.5B Q4_K_M, ~1 GB | smaller, and trained across far more languages, which is what Hindi output depends on |
-| Model delivery | sideloaded file, mmapped in place | bundled APK asset | an asset must be extracted before mmap, so bundling costs 769 MiB twice and ends the 32 MB download |
-| Grounding | BM25 over 68 authored passages | embeddings + vector search | no 100 MB embedding model, no index to rebuild, and lexical retrieval is inspectable when it goes wrong |
-| Decoding | greedy | sampled at temperature | one prompt must give one answer, or the guard cannot be pinned by a test |
-| Generated text shown | only after the guard passes | streamed token by token | an invented threshold shown for two seconds has already been read |
-| Password hashing | stdlib `hashlib.scrypt` | `passlib[bcrypt]` | version-conflict fragility |
-| Certificate upload | `qr_text` + `worker_id`, server re-decodes | pre-parsed fields | a second parsing path could accept what the offline verifier rejects |
-| Room migrations | explicit | `fallbackToDestructiveMigration` | would delete unsynced certificates |
-| Map markers | Leaflet `CircleMarker` | `Marker` | avoids broken-icon-asset bugs; size+colour+label all encode severity |
-| Dashboard types | hand-written `types.ts` | OpenAPI codegen | loses the "why" comments |
-| Touch target floor | **64 dp** | Material's 48 dp | glove slip would be recorded as a wrong decision |
+| English | Present | Persistent | Supported |
+| Hindi | Present | Persistent | Supported |
+| Santali / Ol Chiki | Present; new translations need review | Persistent | Unsupported, explicitly reported |
+| Tamil | Present; translations need review | Persistent | Unsupported, explicitly reported |
 
----
+The resource check finds **359 keys per locale** and matching format arguments. That establishes resource parity, not translation quality. Some inherited tool/general-chat screens still contain English literals. Do not interpret these counts as universal localization or speech coverage.
 
-## 10. Efficiency and footprint
+## Measured Results
 
-### 10.1 APK size
+### Evidence, not a combined score
 
-Measured on the universal release APK — compressed sizes as they ship:
+These are **recorded results from different suites/builds**, not a fresh full-system run performed for this README. Counts must not be summed into a claim of unique tests: the projects share substantial logic.
 
-```
-native libs (ARCore + MediaPipe + CameraX + llama.cpp)  ███████████████████████████████████████████   43.05 MB   80.1 %
-dex — ALL of our code + Compose + Room                  ███████▉                                       7.87 MB   14.6 %
-other (META-INF, signatures, manifests)                 █▎                                             1.25 MB    2.3 %
-assets (scenario + pictogram data)                      ▉                                              0.85 MB    1.6 %
-resources (403×3 strings, vectors)                      ▌                                              0.48 MB    0.9 %
-zip overhead (headers, alignment)                       ▎                                              0.26 MB    0.5 %
-                                                                                                    ────────
-one █ = 1 MB                                                                                          53.75 MB   534 entries
-```
-
-**Our own code is 15 % of the download.** The rest is third-party native AR, vision and inference
-libraries — and this is the *universal* APK, which carries three architectures. That framing matters:
-there is very little of *our* fat to trim, and the biggest available win was splitting per-ABI so a
-phone only downloads its own architecture.
-
-Of the native slice, llama.cpp is 3.29 MB per ABI plus 1.20 MB of `libc++_shared`. The 769 MiB model is
-not in here and never will be — §14.6.
-
-| Artifact | Size | Reduction |
-|---|---:|---|
-| debug, universal | 124.66 MB | baseline |
-| release, universal (R8 + resource shrink) | 53.75 MB | **−57 %** |
-| **release, arm64-v8a** — what most phones get | **32.23 MB** | **−74 %** |
-| release, armeabi-v7a | 21.37 MB | −83 % |
-| release, x86_64 (emulator) | 21.20 MB | −83 % |
-
-The arm64 APK grew **4.74 MB** when the on-device assistant was added: a 3.29 MB llama.cpp CPU backend
-plus 1.20 MB of `libc++_shared`. The 769 MiB model is not in it and never will be — see §16.
-
-`armeabi-v7a` grew by 0.24 MB, which is the Kotlin for the assistance layer and nothing else. Those
-phones get **no AI native library at all**, verified by reading the APK: a 32-bit handset shares a 4 GB
-address space with the camera pipeline and the AR session, and a 1B model does not fit alongside them.
-They report `UNSUPPORTED_DEVICE` and everything else works normally.
-
-Two deliberate reductions beyond R8:
-
-- **32-bit x86 dropped** (`abiFilters`). No shipped device is x86 and every current emulator image is x86_64 or
-  arm64. Saved ~26 MB from the universal build.
-- **Three dependencies removed** after audit — `play-services-location` (there is no GPS fix underground, so
-  the app never calls it), `datastore-preferences` (Room + EncryptedSharedPreferences already cover it), and
-  `coil` (nothing is loaded from a network). Each removal is documented in `build.gradle.kts` with the reason.
-
-### 10.2 Runtime and wire efficiency
-
-| Path | Cost | Note |
+| Scope | Recorded result | What it establishes |
 |---|---|---|
-| Certificate payload | **158 bytes** | 81 % of it is signature + hashes |
-| QR text form | **216 chars** | ECC level Q — survives a scratch across ¼ of the symbol |
-| Sync batch cap | 50 items / request | half the server's 100 limit, leaving headroom for step detail |
-| Nearby relay frame | 32 kB | keeps a transfer inside a few seconds of Bluetooth |
-| Voice note | AAC 16 kHz mono 32 kbit/s | ~4 kB per second; a 15 s note is ~60 kB |
-| Media upload cap | 8 MB | matches the server, refused locally rather than sent and rejected |
-| Readiness computation | 5 stored numbers + one `pow` | no query, no job, no cache to go stale |
-| Voice recognition | MFCC + DTW, on device | no model file, no network |
+| Active mobile core | 608 tests; zero failures/errors | JVM logic regression coverage |
+| Active mobile AI unit suite | 72 tests; zero failures/errors | Scripted-engine orchestration, not broad real-model accuracy |
+| Active mobile physical-device UI | 33 tests in 113.153 s | Samsung SM-S721B / Android 16; camera startup, scenes, locales and navigation |
+| Practice coverage within that UI run | 20 completed flows | Five modules × four locales |
+| Active real-model evaluation | Five nominal English/Hindi selections plus refusal/unsupported checks; 70.451 s total | Small device regression run, not an accuracy percentage |
+| Earlier model run, 30 September | 5.3–11.6 s per nominal answer | Observed range for that run only; not p95 or a cross-device benchmark |
+| Locale audit | 359 keys in each of four locales | Key and format-signature parity |
+| Recorded debug lint | Zero errors; 47 warnings | Static checks, not absence of defects |
+| Root core / AI / Android suites | 606 / 57 / 137 tests; zero failures/errors in retained reports | Separate project's recorded JVM/unit results |
+| Latest logo release build | Successful; APK v2 signature and ZIP alignment verified | Build/package validation, not a phone acceptance run |
+| Native release alignment | All 20 ARM64/x86_64 libraries passed 16 KB ELF checks | Packaged native segment alignment |
 
-### 10.3 Build and verification speed
+Sources: [mobile validation](Jaagruk-Mobile/docs/VALIDATION.md), [dated mobile execution history](Jaagruk-Mobile/docs/WEB-PARITY.md), [root native verification](docs/NATIVE-EXPERIENCE.md#automated-verification-30-september-2026). Existing local JUnit XML reports were inspected for the JVM/unit counts; they are generated artifacts, not committed evidence bundles.
 
-`.\tools\verify-all.ps1` runs eight stages and fails the whole run on the first one that fails. Two
-different numbers matter here and conflating them would be dishonest, so both are given: **test
-execution** is what the test runner itself reports, **stage wall-clock** additionally includes Gradle
-daemon startup, compilation, `npm`/`uvicorn` process launch and teardown.
+The 1 October camera tests establish live sessions with advancing frames. They **do not** establish reliable physical placement while walking around a surface. The signed release, including the logo-only rebuild, still needs physical-device acceptance.
 
-| Stage | Tests | Test execution | Stage wall-clock |
+No measured FPS, peak RAM, battery consumption, crash-free rate, fleet-scale throughput or learning-retention improvement is claimed.
+
+## Size, Compression & Efficiency
+
+### Latest local bundled release
+
+Measured directly from the signed APK archive on **1 October 2026**, after the launcher-logo update. Decimal MB below means 1,000,000 bytes.
+
+| Entry group | Uncompressed bytes | Stored bytes | Stored MB |
 |---|---:|---:|---:|
-| `:core` unit tests | **606**, 0 failures, 0 skipped | **1.43 s** | 51.6 s |
-| Cross-language fixture parity | 20 | — | 9.2 s |
-| Backend — `pytest` | **217** | — | 109.6 s |
-| Dashboard — `tsc` + `vite build` | — | — | 35.7 s |
-| `:ai` unit tests — scripted engine, no native library | **52**, 0 failures | 6.56 s | 70.1 s |
-| Android — Robolectric unit tests | **81**, 0 failures | 51.6 s | 5.2 s incremental |
-| Android — `assembleDebug` + `lintDebug` | 0 errors, 296 warnings | — | 304.3 s |
-| Live smoke — 56 HTTP checks, real server start/stop | 56 | — | 8.1 s |
-| **end to end, cold** | | | **≈ 13 min** |
-| **end to end, everything up to date** | | | **2 min 54 s** *(measured)* |
+| GGUF model | 806,058,240 | 806,058,240 | 806.06 |
+| Native libraries | 47,874,880 | 47,874,880 | 47.87 |
+| DEX code | 4,913,548 | 4,913,548 | 4.91 |
+| Offline 3D assets | 1,024,750 | 281,051 | 0.28 |
+| Other archive entries | 8,984,814 | 4,845,292 | 4.85 |
+| ZIP headers, alignment and signing overhead | — | 298,726 | 0.30 |
+| **Complete APK** | — | **864,271,737** | **864.27** |
 
-The two end-to-end figures are far apart now and the reason is the native build: compiling the vendored
-llama.cpp CPU backend for two ABIs takes about four minutes the first time and nothing at all
-afterwards. The warm figure is the one that matters day to day — the run above reported
-`:core` 4.3 s, parity 4.5 s, backend 80 s, dashboard 25 s, `:ai` 3.2 s, android tests 7.4 s, assemble
-and lint 44.6 s, smoke 4.4 s, all passing.
-
-Stage wall-clock is measured on a cold Gradle daemon; when everything is already up to date the Android stage
-drops to a couple of seconds because Gradle skips the work. A clean Android release build of all four ABIs
-through R8 takes **3 m 44 s**.
-
-**The 1.43 s figure is the one that shaped the architecture.** 606 tests covering every certification rule,
-with no emulator and no device, is fast enough to run on every save — and a suite that actually gets run is
-worth more than a thorough one that does not.
-
-### 10.4 Codebase
-
-| Module | Files | Lines | Notes |
-|---|---:|---:|---|
-| `core/` main | 26 | 6,389 | all certification logic |
-| `core/` test | 20 | 5,878 | **0.92 test lines per source line** |
-| `android-app/` Kotlin | 79 | 20,086 | 11 screens, 3 AR controllers |
-| `android-app/` tests | 8 | 1,649 | Robolectric: Room, view models, Compose |
-| `android-app/` resources | 16 | 2,357 | 603 keys × 3 locales, verified equal |
-| `backend/` app | 38 | 9,326 | 38 endpoints, 15 tables |
-| `backend/` tests | 9 | 3,512 | |
-| `dashboard/` src | 23 | 5,118 | 11 pages |
-| `docs/` | 8 | 1,623 | |
-| `tools/` | 5 | 923 | |
-| **total** | **232** | **56,863** | |
-
----
-
-## 11. Quality gates
-
-```
-                         ┌─────────────────────────────────────────────┐
-  every save  ──────────▶│  :core  606 tests · 1.43 s · no emulator    │
-                         │  includes the retrieval and output guard    │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  cross-language ───────▶│  same fixtures asserted from Kotlin AND     │
-                         │  Python — a canonical format only one side  │
-                         │  agrees with is not canonical               │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  backend ─────────────▶ │  217 tests · RBAC · sync replay · chain     │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  ai ──────────────────▶ │  52 tests · scripted engine · no native     │
-                         │  library, no model file · proves a worker    │
-                         │  cannot be shown an invented figure         │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  android tests ───────▶ │  81 Robolectric tests · real Room queries · │
-                         │  view models · screens actually composed    │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  android build ───────▶ │  assemble + lint · MissingTranslation and   │
-                         │  ContentDescription are FATAL · 0 errors    │
-                         └─────────────────────┬───────────────────────┘
-                                               ▼
-                         ┌─────────────────────────────────────────────┐
-  live ────────────────▶ │  56/56 HTTP checks against a real server    │
-                         └─────────────────────────────────────────────┘
+```mermaid
+pie showData
+    title Bundled APK composition (decimal MB; rounded)
+    "Local AI model" : 806.06
+    "Native libraries" : 47.87
+    "DEX code" : 4.91
+    "Offline 3D" : 0.28
+    "Other entries" : 4.85
+    "Archive overhead" : 0.30
 ```
 
-One command runs all of it:
+The model accounts for approximately **93.3%** of the APK. This is a bundled, two-ABI release, not the historical model-free root app. Older 32 MB figures describe a different artifact and must not be used for this APK.
 
-```powershell
-.\tools\verify-all.ps1
+### What actually compresses
+
+```mermaid
+xychart-beta
+    title "ZIP storage: uncompressed vs stored entry bytes"
+    x-axis ["3D raw", "3D stored", "Other raw", "Other stored"]
+    y-axis "Decimal MB" 0 --> 10
+    bar [1.02475, 0.281051, 8.984814, 4.845292]
 ```
 
-It skips Android with a stated reason if no SDK is present, and the summary distinguishes *"everything
-passed"* from *"everything that could run passed"* — because those are different claims.
+- Offline 3D entry bytes are **72.57% smaller** when stored in this APK.
+- Other archive entries are **46.07% smaller**.
+- Model, native libraries and DEX are stored without ZIP size reduction in this artifact.
+- Q4_K_M describes model quantization; it is **not** evidence of a measured fourfold reduction against an FP16 build. No matched FP16 baseline was measured.
+- R8 and resource shrinking are enabled, but no controlled before/after R8 comparison is available for this exact release.
 
-| Claim | How you check it yourself |
-|---|---|
-| The scoring engine is correct | `.\gradlew.bat :core:test` — 606 tests, no device |
-| A model cannot show a worker an invented figure | `.\gradlew.bat :ai:testDebugUnitTest` — 52 tests, no native library, no model file |
-| Hindi retrieval is not silently broken | `.\gradlew.bat :core:test --tests "*AiTokenizerTest"` — the Devanagari cases are the reason that class exists |
-| The assistant is genuinely optional | delete the model file and every AI panel states why it is unavailable; drills, scoring, signing and verification are untouched |
-| Kotlin and Python agree on signed bytes | `AttestationVectorsTest` + `test_canonical_parity.py`, same committed fixtures |
-| Voice thresholds are measured | `.\gradlew.bat :core:test --tests "*DtwSeparationTest"` prints the profile in §8 |
-| Nothing is untranslated | `MissingTranslation` is fatal; `MainActivity` audits all 222 catalog keys on every debug launch |
-| Nothing is unlabelled for a screen reader | `ContentDescription` is fatal |
-| Tamper detection actually detects | Chain integrity page → site `JH-JAM-021`, seeded with a real break at seq 4 |
-| No orphan API routes | `docs/API.md` — 38 endpoints, every one with a named consumer |
-| Every edge case has an owner | `docs/EDGE_CASES.md` — each row names the handling file |
+The chart compares entry storage, not app speed, model quality or total installed footprint. First-use model extraction adds another model-sized file: APK plus extracted weights alone account for about **1.67 GB**, before installation overhead, caches and user data.
 
----
+### Packaging choices
 
-## 12. Getting it running
+| Choice | Benefit | Cost / boundary |
+|---|---|---|
+| Bundled flavor | Model available from the installation package | Large transfer and model extraction space |
+| Lean flavor | Does not package the GGUF | Model must be provisioned separately; not feature-equivalent on first launch |
+| Local lexical retrieval | No extra embedding model in the coach pipeline | Relevance depends on vocabulary and corpus coverage |
+| Eight-token document selection | Bounded generation and no generated safety passage | Retrieval/selection can still be wrong |
+| AI/AR interlock | Avoids intentionally keeping both workloads active | Switching can require unloading/reloading |
+| Prebundled scene JavaScript | No runtime CDN dependency | Assets must be rebuilt to publish scene changes |
+| Compact QR fixture | 158-byte signed fixture, locally verifiable | Payload length can vary; trusted keys still required |
+
+Artifact identity:
+
+```text
+Package:    org.jaagruk.safety.release
+Version:    1.0-bundled (code 1)
+APK bytes:  864271737
+SHA-256:    76089DAC90BEFA003DC3BC5BEC1BFAE9616B09F3FFA99A8E9D0D56D1F9D730D9
+```
+
+The earlier artifact in the historical validation note has a different hash and size. This README identifies the **logo-updated release**. APKs, model weights and private signing material are not committed; no hosted download is implied.
+
+## Implementation Comparisons
+
+These are **comparisons of code paths and design tradeoffs**, not independently measured competitor benchmarks.
+
+| Dimension | Offline 3D practice | Native camera practice | Root assessed drill |
+|---|---|---|---|
+| Renderer | Three.js in local WebView | SceneView / Filament / ARCore | Root AR controller and fallback stack |
+| Real camera tracking | No | Yes, on compatible devices | Controller-dependent |
+| Entry requirement | Local scene support | Camera permission and AR runtime | Worker/assessment workflow prerequisites |
+| Response input | Decision controls | Decision controls alongside anchored scene | Assessment input pipeline |
+| Result | Practice feedback | Practice feedback | Recorded assessment outcome |
+| Certificate path | None | None | Eligibility-controlled signing path |
+| Main validation gap | Broader device coverage | Physical anchor/interaction acceptance | End-to-end field acceptance |
+
+| Decision | Current approach | Alternative and tradeoff |
+|---|---|---|
+| Safety answer presentation | Exact authored passage in active coach | Free-form generation is more flexible but adds generated-content risk |
+| Model hosting | Local GGUF | A hosted model shifts compute off-device but adds network/service dependence |
+| Certificate representation | Signed compact payload | A lookup-only QR relies on a reachable record service |
+| Offline persistence | Local records plus later sync in root app | Server-only writes cannot complete without connectivity |
+| Scene distribution | APK assets | Remote assets reduce initial packaging but require download/version handling |
+
+No claims are made that Jaagruk outperforms commercial simulators, reduces accidents by a percentage or replaces accredited instruction.
+
+## Build & Run
 
 ### Prerequisites
 
-JDK 17 · Node 20+ · Python 3.11+. **An Android SDK and NDK only if you want the APK** — `core/`,
-`backend/` and `dashboard/` all verify without either. No SDK? `.\tools\bootstrap-android-sdk.ps1`
-fetches a minimal one, including NDK `28.2.13676358` and CMake `3.22.1`, and writes `local.properties`;
-`settings.gradle.kts` then includes `:ai` and `:android-app` automatically.
+- JDK 17 and the committed Gradle wrapper.
+- Android SDK platform 36 for the active app, plus the NDK/CMake required by its native build.
+- Android Studio or a configured SDK via `local.properties`, `ANDROID_HOME` or `ANDROID_SDK_ROOT`.
+- Node.js/npm for scene and dashboard builds; Python 3.11 is used by the backend helper.
+- A compatible ARCore device for camera practice; sufficient free space for a bundled APK and model extraction.
 
-The NDK is genuinely required for the APK now, because `:ai` compiles the vendored llama.cpp CPU
-backend. There is deliberately no flag to skip it: the app references `AiCoach` directly, so an absent
-module would not compile, and an escape hatch that does not work is worse than none.
+Keep model licences, signing credentials, SDK paths and deployment secrets out of Git.
 
-### Backend
+### 1. Active Android app
+
+Run from **Jaagruk-Mobile**, not the repository root:
 
 ```powershell
-.\tools\run-backend.ps1 -Seed
+cd Jaagruk-Mobile
+.\gradlew.bat :core:test :ai:testDebugUnitTest :app:assembleLeanDebug --max-workers=2
+powershell -ExecutionPolicy Bypass -File tools/check-strings.ps1
 ```
 
-Venv, requirements, seed, uvicorn on `:8000`. Docs at `/docs`.
+The lean build has no bundled model. For the bundled release, obtain the appropriate licensed model separately and place it at:
 
-The seed is not filler: **2 companies · 4 sites · 5 modules · 80 workers · 170 genuinely Ed25519-signed,
-chained certificates · 28 hazards**. Password for every account: `JaagrukDemo2026!`
+```text
+app/src/bundled/assets/models/gemma-3-1b-it-Q4_K_M.gguf
+```
 
-| Login | Role |
+Create a signing identity **once**, then reuse it:
+
+```powershell
+# First release only; refuses to overwrite an existing identity.
+powershell -ExecutionPolicy Bypass -File tools/build-release.ps1 -CreateSigningKey
+
+# Subsequent releases.
+powershell -ExecutionPolicy Bypass -File tools/build-release.ps1
+```
+
+Standard output: `app/build/outputs/apk/bundled/release/app-bundled-release.apk`. The script supports `-BuildDirectory` for relocated output. On Windows, cross-drive builds use an `app/.release-build` junction to satisfy generated-source path constraints.
+
+Signing credentials live in local `.signing/`; the encrypted password is tied to its Windows account. Back up the signing identity securely before distribution. Debug and release use different package IDs and do not share app data.
+
+Validate a built APK:
+
+```powershell
+.\tools\check-apk.ps1 -Apk "<path-to-apk>" -BuildTools "<sdk>/build-tools/36.0.0"
+```
+
+See [release delivery](Jaagruk-Mobile/docs/AR-AND-RELEASE.md).
+
+### 2. Rebuild offline scenes
+
+From `Jaagruk-Mobile/simulation`:
+
+```powershell
+npm ci
+npm run build
+```
+
+The output goes directly into Android's simulation assets. Rebuild the APK afterward.
+
+### 3. Root assessment application
+
+From the repository root:
+
+```powershell
+.\gradlew.bat :core:test :ai:testDebugUnitTest :android-app:testDebugUnitTest :android-app:assembleDebug
+```
+
+This produces the **other Android app**, not `Jaagruk-Mobile`. See [native experience](docs/NATIVE-EXPERIENCE.md) for its public entry, model import, request lifecycle and verification boundaries.
+
+### 4. Backend and compliance dashboard
+
+Use separate terminals from the repository root:
+
+```powershell
+.\tools\run-backend.ps1
+```
+
+```powershell
+.\tools\run-dashboard.ps1
+```
+
+Backend default: `http://127.0.0.1:8000`; API documentation: `/docs`; dashboard default: `http://localhost:5173`.
+
+The backend helper's `-Seed` option **drops and recreates tables**. Use it only with a disposable demo database, never existing records.
+
+Configure deployment settings using [backend/.env.example](backend/.env.example). SQLite is the local default; PostgreSQL dependencies are separate. Replace secrets and demo credentials, configure allowed origins and HTTPS, and set the Android API base URL explicitly. A default government-style hostname in configuration is **not** a deployed endpoint or endorsement.
+
+### 5. Verification commands
+
+| Scope | Command / location |
 |---|---|
-| `inspector.dgms` | DGMS inspector — reads every company |
-| `admin.coal` · `admin.steel` | Company admins |
-| `officer.dhanbad` · `officer.bokaro` | Site officers |
-| `supervisor.dhanbad` | Supervisor — the role the Android app uses |
+| Mobile unit/build checks | Commands in step 1 |
+| Mobile UI tests on connected target | `gradlew.bat :app:connectedLeanDebugAndroidTest` from `Jaagruk-Mobile`; provision the model for real-model tests |
+| Mobile release package | `tools/check-apk.ps1` |
+| Root Android/unit checks | Commands in step 3 |
+| Dashboard | `npm ci`, then `npm run build` in `dashboard` |
+| Backend | Install its runtime/test requirements, then run `pytest` from `backend` |
 
-`JH-JAM-021` carries a **deliberate chain break at sequence 4**, so tamper detection can be *demonstrated*
-rather than described.
+Check connected targets before instrumentation so results are attributed to the intended device. Unit tests with scripted inference must never be reported as real-model evaluation.
 
-### Dashboard
+## Repository Map
 
-```powershell
-.\tools\run-dashboard.ps1     # localhost:5173, sign in as inspector.dgms
+```text
+Jaagruk-app/
+├── README.md
+├── Jaagruk-Mobile/             Active, independent Android Gradle project
+│   ├── app/                   Compose UI, resources, local scene assets
+│   ├── ai/                    Extractive coach, engine, JNI and llama.cpp
+│   ├── core/                  Pure Kotlin rules and safety corpus
+│   ├── simulation/            Three.js scene source and bundler
+│   ├── tools/                 Build, locale and APK validation helpers
+│   └── docs/                  Mobile architecture and recorded validation
+├── android-app/               Root assessment/compliance Android app
+├── ai/                        Root project's AI integration
+├── core/                      Root assessment, crypto, retrieval and speech logic
+├── backend/                   FastAPI, models, migrations and tests
+├── dashboard/                 React/TypeScript compliance application
+├── docs/                      Architecture, API, calibration and presentation images
+└── tools/                     Root build/demo/verification helpers
 ```
 
-### Android
+Historical documents can describe earlier phases. Prefer current source and dated evidence over older milestone text, especially for camera AR, locale counts and APK sizes.
 
-```powershell
-.\gradlew.bat :android-app:assembleRelease
-```
+## Limitations & Future Scope
 
-Pointing a physical handset at your machine:
+### Current limits
 
-```powershell
-.\tools\run-backend.ps1 -Seed -BindHost 0.0.0.0
-.\gradlew.bat :android-app:assembleDebug "-Pjaagruk.apiBaseUrl=http://192.168.1.42:8000/"
-```
+- **Integration:** The active training app and root compliance implementation are separate. A class or dependency in the tree does not establish an accessible end-to-end feature.
+- **AR:** Camera startup is tested; physical anchor stability and in-camera interaction acceptance remain pending. No real gas, fire, electrical or PPE recognition is claimed.
+- **Safety content:** Corpus passages and translations require industrial-safety review. Draft Santali/Tamil text is not deployment-approved.
+- **AI:** English/Hindi only in the safety coach. General tools are not safety-validated, and five nominal model questions do not establish comprehensive quality.
+- **Devices:** The reported physical-device run is one Samsung on Android 16. Android 10 support is a build target, not proof of every Android 10 handset working.
+- **Release:** Signature and native alignment passed, but the signed release's fresh-install extraction, R8/JNI runtime and complete phone walkthrough remain unverified.
+- **Speech:** Device recognition, narration and noisy-site speech require independent validation. Root MFCC/DTW keyword work is not general Santali speech recognition.
+- **Certification:** Prototype signed records are not legally recognized credentials by virtue of their cryptography.
+- **Operations:** No production-scale load, retention improvement, offline multi-device field trial or independent security audit is claimed.
 
-The default `10.0.2.2` is the host loopback **as seen from an emulator** and resolves nowhere else.
+### Prioritized next work
 
-Without a keystore the release APK is signed with the debug key: it sideloads, and it cannot be published to
-Play — which is correct, because it should not be. Supply `-Pjaagruk.keystorePath=…` for a real one.
-
-### Two optional assets
-
-Both are deliberate omissions with **visible** degradation — the app states what is missing rather than
-appearing broken.
-
-| Asset | Where | Without it |
+| Priority | Deliverable | Acceptance evidence |
 |---|---|---|
-| ARCore Cloud Anchor key | `-Pjaagruk.arcoreApiKey=…` | Site scans are session-scoped, not shared across phones. The supervisor screen says so in plain words. |
-| `gesture_recognizer.task` (~8 MB) | `android-app/src/main/assets/models/` | Gesture input is hidden. Touch and voice unaffected. |
+| 1 | Physical AR and signed-release acceptance | Placement/movement tests, permission recovery, cold offline launch and model extraction on named devices |
+| 2 | Reviewed translations and safety corpus | Native-speaker and industrial-safety sign-off, including Santali terminology |
+| 3 | Consolidate training and compliance workflows | One documented app path from worker identity through assessment, certificate and sync |
+| 4 | Broaden model evaluation | Reviewed multilingual question set, wrong-source analysis, refusals and reproducible timing |
+| 5 | Profile representative devices | FPS, peak memory, thermal/battery behavior and storage measurements |
+| 6 | Harden deployment | Secret/key management, revocation policy, access review, backups and sync-conflict testing |
+| 7 | Improve scenario fidelity | Tested spatial interaction and richer assets without weakening offline accessibility |
 
-One is a credential; the other is third-party model weights. Neither belongs in a public repository.
+These are planned directions, not completed features.
 
----
+## Documentation & Contribution
 
-## 13. Repository layout
-
-```
-Jaagruk/
-├── core/              pure Kotlin/JVM — no Android dependency
-│   ├── assessment/       scoring · hesitation · session lifecycle
-│   ├── cert/             attestation · canonical codec · QR
-│   ├── crypto/           Ed25519 · SHA-256 · chain · 7-state verifier
-│   ├── catalog/          5 modules · 11 scenarios · 73 pictograms · AR targets
-│   ├── retention/        readiness decay · spaced repetition
-│   ├── speech/           FFT · MFCC · DTW · keyword spotter
-│   ├── drill/            buddy-drill protocol state machine
-│   └── ai/               BM25 retrieval · safety corpus · prompt builder · output guard
-├── ai/                Android library — the on-device model, and nothing else
-│   ├── cpp/llama/        vendored llama.cpp, CPU backend only (~7 MB)
-│   └── runtime/          JNI bridge · engine · model store · AR interlock
-├── android-app/
-│   ├── data/             Room (13 tables) · keystore · repositories
-│   ├── sync/             queue worker · media worker · Nearby relay
-│   ├── ar/               ArCore · sensor fallback · pictogram · coach · watchdog
-│   ├── input/            voice engine · enrolment · gestures · narration
-│   ├── ai/               catalog resolver · briefing facts
-│   └── ui/               12 screens · theme · pictogram renderer
-├── backend/              FastAPI · 38 endpoints · 15 tables
-├── dashboard/            React + TS + Vite + Leaflet · 11 pages
-├── tools/                bootstrap · run · verify
-└── docs/                 architecture · edge cases · calibration · capability matrix
-```
-
-| Document | What is in it |
+| Read next | Purpose |
 |---|---|
-| [`docs/CAPABILITY_MATRIX.md`](docs/CAPABILITY_MATRIX.md) | **Built / partial / designed, honestly. Read this before believing anything above.** |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Normative spec: canonical encoding, chain rules, sync protocol, scoring |
-| [`docs/EDGE_CASES.md`](docs/EDGE_CASES.md) | 12-section register; every row names the handling file |
-| [`docs/CALIBRATION.md`](docs/CALIBRATION.md) | Where every threshold came from and what would change it |
-| [`docs/API.md`](docs/API.md) | 38 endpoints, each with a named consumer |
-| [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) | 6-minute walkthrough, with failure paths shown deliberately |
-| [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md) | Every PS 26041 requirement mapped to evidence |
-| [`docs/PLAN.md`](docs/PLAN.md) | Build plan and sequencing |
+| [Mobile overview](Jaagruk-Mobile/README.md) | Active app entry point |
+| [Camera AR and release delivery](Jaagruk-Mobile/docs/AR-AND-RELEASE.md) | Native camera lifecycle, language and signing boundaries |
+| [Mobile validation](Jaagruk-Mobile/docs/VALIDATION.md) | Recorded device results and remaining acceptance |
+| [Mobile execution history](Jaagruk-Mobile/docs/WEB-PARITY.md) | Dated changes and earlier regression runs |
+| [Root architecture](docs/ARCHITECTURE.md) | Assessment/compliance design |
+| [Root native experience](docs/NATIVE-EXPERIENCE.md) | Root app workflow and request lifecycle |
+| [API reference](docs/API.md) | Backend interfaces |
+| [Calibration](docs/CALIBRATION.md) | Scoring/readiness calibration assumptions |
+| [Edge cases](docs/EDGE_CASES.md) | Failure handling and boundaries |
+| [Submission checklist](docs/SUBMISSION_CHECKLIST.md) | Demonstration and delivery planning |
+
+When contributing, identify the project you changed, keep practice separate from assessed records, add tests at the owning layer, and document the exact device/build/model behind any performance claim. Do not commit model weights, signing keys, private device captures or production credentials.
+
+Third-party code and model weights retain their own licences. The vendored llama.cpp notice is in [its source directory](Jaagruk-Mobile/ai/src/main/cpp/llama/LICENSE). No repository-wide open-source licence is asserted here; confirm redistribution terms before reuse.
 
 ---
 
-## 14. The offline assistant, and the fence around it
-
-A local language model, added to do four things a static app cannot: explain a step a worker got wrong,
-answer a question they ask in their own words, draft a shift briefing, and summarise a hazard report.
-Gemma 3 1B instruction-tuned at Q4_K_M, roughly 769 MiB, through a vendored llama.cpp CPU backend. No
-network, ever.
-
-**It is additive by construction.** Nothing in the training, assessment, certification or sync path
-depends on it. Delete the model file and every panel states why it is unavailable; drills, scoring,
-signing and offline verification are untouched. That is not politeness, it is what makes shipping a
-non-deterministic component into a safety certification workflow defensible at all.
-
-### 14.1 What a 1B model is, and is not
-
-It is fluent. It is not a reliable store of specifics. Published benchmarking on sub-1B models shows
-accuracy on classification tasks collapsing without retrieval and recovering sharply once relevant text
-is supplied — [Gemma3-1B goes from 20 % to 85 % on log-severity classification once RAG is
-added](https://arxiv.org/abs/2601.07790), with Qwen3-0.6B reaching 88 % despite being weak without it.
-*(Rephrased for licensing compliance.)*
-
-So the architecture follows the finding rather than hoping around it. **The model supplies phrasing.
-The corpus supplies facts.** 68 authored passages, 34 pairs in English and Hindi, covering all five
-modules plus the statutory hooks and cross-cutting practice, compiled into `:core` the same way the
-scenario catalog is — because it has to work on a handset that has never had signal, and because a
-safety officer has to be able to review it in a diff.
-
-### 14.2 The two gates
-
-The model sits between two deterministic gates, both in `:core`, both unit tested on a plain JVM with
-no emulator, no native library and no 769 MiB file.
-
-**Before: retrieval, which can refuse.** Below a third of the question's distinct terms matched, **no
-model runs at all** and the worker is told the site's documents do not cover it and to ask a
-supervisor. That is a useful answer. A confident paragraph about a hazard nobody wrote down is the
-single worst thing this feature could produce.
-
-**After: the output guard.** Ten checks, each with its own reason code. The one that matters most:
-
-```
-every figure in the output must appear in the prompt
-```
-
-1.25 % is the DGMS methane withdrawal level for Indian coal mines. A model that writes 1.5 % has
-produced a fluent, confident, fatal sentence. That output is discarded, not shown, not softened.
-
-The guard also rejects any claim about passing, failing, scoring or being certified. Those are settled
-by signed code, and a model paraphrasing them would create a second, unsigned source of truth about
-whether a worker may enter a confined space.
-
-A rule that lives only in a prompt is a request. A small model under an unusual input will ignore it,
-and without the guard nothing downstream would know.
-
-### 14.3 Six outcomes, not two
-
-| Outcome | What the worker is told |
-|---|---|
-| `Answer` | the answer, with the document it came from |
-| `NoGrounding` | the documents on this phone do not cover this; ask your supervisor |
-| `ModelDeclined` | same, reached the other way — the model was given sources and said they do not answer it |
-| `Filtered` | that answer did not pass the safety check, so it is not shown |
-| `Unavailable` | not installed / this phone cannot / not in Santali / paused during a drill |
-| `Failed` | could not answer just now |
-
-The same reasoning as the seven certificate verdicts. Collapsing these loses the two a worker can act
-on, and "not installed on this phone" is a thing a supervisor can fix.
-
-### 14.4 Santali gets no generated text at all
-
-No model in this size class writes Ol Chiki. Reported as `LANGUAGE_UNSUPPORTED` with the reason stated,
-and the UI points at what is real for a Santali speaker: the authored translations, the 73 pictograms,
-and the per-site voice recordings. A plausible paragraph of wrong Santali in front of a worker who
-cannot cross-check it is worse than nothing, and the guard rejects Ol Chiki codepoints outright in case
-a model ever tries.
-
-### 14.5 The model is never resident during a drill
-
-An AR drill holds an ARCore session, a GLES3 surface and the camera pipeline. A 1B model at Q4 needs
-roughly 900 MiB resident: 769 MiB of weights plus its KV cache. On the 4 GB handsets this platform targets, holding both means
-sustained thermal throttling.
-
-Throttling is the part that matters. **Decision latency measured on a throttled frame loop describes
-the phone, not the worker** — and that measurement is signed into a certificate. So the model is
-released, by interlock rather than by convention: `DrillViewModel` *awaits* `enterDrill()` immediately
-before the AR controller is created, because starting the session first and unloading afterwards leaves
-exactly the window the interlock exists to close. Reference counted, because a buddy drill has a drill
-screen and a peer session that overlap.
-
-### 14.6 Why the model is not in the APK
-
-At 769 MiB, bundling it would end the 32 MB download and cost a second 769 MiB, because an APK asset has
-to be extracted to a real path before llama.cpp can memory-map it. So it arrives out of band — a
-supervisor copies it onto the handset once — is validated by GGUF magic bytes and a size floor, and is
-mapped in place. The same contract the app already has with `gesture_recognizer.task` and the ARCore
-Cloud Anchor key: absent, the feature hides itself and says why.
-
-### 14.7 What this cost
-
-| | |
-|---|---|
-| APK, arm64-v8a | 27.49 MB → **32.23 MB** (+4.74) |
-| APK, armeabi-v7a | 21.13 MB → **21.37 MB** (+0.24, no native library) |
-| New `:core` tests | **+169** (437 → 606), still 1.43 s |
-| New `:ai` tests | **52**, no emulator, no model |
-| Vendored third-party C++ | ~7 MB of llama.cpp, CPU backend only |
-| Lint | 0 errors, both fatal checks still clean |
-
----
-
-## 15. Decisions worth defending
-
-A few choices that look odd until you know why.
-
-**`:core` is a plain JVM module.** 606 tests in 1.4 s with no emulator. A scoring engine you can only test on
-a device is a scoring engine nobody tests.
-
-**Readiness is computed on read, never stored.** No decay job that could have failed silently.
-
-**Statutory validity and operational readiness are never merged.** They answer different questions and the
-*gap between them* is the finding.
-
-**ARCore is `optional`.** Requiring it excludes ~⅓ of this market — disproportionately the handsets a contract
-worker actually owns.
-
-**`record_hash = SHA-256(canonical_bytes ‖ signature)`.** Hashing the payload alone would let a record be
-re-signed and spliced into another chain.
-
-**Broken-link certificates are quarantined and stored, never discarded.** Destroying tamper evidence defeats
-the purpose of a chain. **There is no `DELETE` anywhere in the API.**
-
-**64 dp minimum touch target, not 48.** Glove contact patches are 15–20 mm and land off-target. At 48 dp,
-glove slip is recorded as a wrong decision — measurement error presented as a training result. It is the most
-consequential UI number in the app.
-
-**PIN lockout is stored against both a wall clock and a monotonic clock**, and expires only when both have
-passed. Either alone is defeated by a clock rollback or a reboot.
-
-**Voice thresholds were measured and the first guesses were wrong.** `DtwSeparationTest` exists so nobody has
-to take the replacements on trust.
-
-**It is called a tamper-evident hash chain.** Project-wide rule, no exceptions.
-
----
-
-**The assistant is fenced, not trusted.** It cannot touch scoring, hesitation classification, pass/fail,
-certificates, the chain, the catalog, or any safety-critical string. `AiTask.StepCoaching` has no field
-for a score, so the model is never told the verdict and cannot restate it — asserted by a test, which is
-a strange thing to test until you consider what adding one field would silently enable.
-
-**Greedy decoding, and no retry.** Sampling would make one prompt produce different output run to run,
-which would make the guard's behaviour impossible to pin in a test. Greedy also removes any reason to
-retry a rejected generation: a second attempt produces the same tokens, so a rejection is reported
-rather than papered over.
-
-**Progress is a word count, never partial text.** Unvalidated output has not been through the guard, and
-showing an invented threshold for two seconds before replacing it would defeat the point of having one.
-
-## 16. Honest limitations
-
-Listed because an assessor will find them anyway, and finding them *listed* is a very different impression
-from finding them hidden. Full accounting in
-[`docs/CAPABILITY_MATRIX.md`](docs/CAPABILITY_MATRIX.md).
-
-| Gap | Consequence | What would close it |
-|---|---|---|
-| Expert baselines are authored, not measured | Hesitation thresholds are defensible but not empirical | Time a trained cohort; method is in `CALIBRATION.md` |
-| Buddy drill not run on two physical phones | Protocol is covered by deterministic two-machine tests; transport surprises possible | Two devices, one afternoon |
-| No TalkBack pass | Semantics present and lint-verified, not walked with a screen reader | Manual AT testing; full WCAG also needs expert review |
-| Santali wording unreviewed | Complete and usable; quality unverified | Native speaker with mine-site vocabulary |
-| No bundled Santali narration | Silent by design rather than wrong — nothing synthesises Santali | Record prompts → `res/raw/sat_<key>.m4a` |
-| 3 of 5 modules use generic AR placement | Fully assessable, not bespoke scenes; the UI says so | Author three more anchor sets |
-| PostgreSQL not exercised here | Supported and isolated in `requirements-postgres.txt` | Run the suite against Postgres in CI |
-| DGMS filing workflow not built | CSV exports with provenance headers only | Needs the statutory return format and a sign-off path |
-| **The model has not been run on a physical mid-range handset** | The library builds and loads, the interlock and guard are covered by tests, and the packaging is verified. What is missing is a 769 MiB model loaded on a real 4 GB phone with timings taken. | One afternoon, one handset, one model file |
-| **Answer quality is unmeasured** | The guard proves what output *cannot* contain. It does not prove answers are good. | Score a sample of real worker questions with a site safety officer; method in `CALIBRATION.md` §4 |
-| Hindi corpus unreviewed | Same standing as the app's Hindi strings: complete and usable, quality unverified | Native speaker with mine-site vocabulary |
-
----
-
-<div align="center">
-
-**Every number in this document is produced by `.\tools\verify-all.ps1` or read directly from the source.**
-**Figures marked *(derived)* are computed from the stated formula, not field-measured.**
-
-*Built for the people who go underground.*
-
-</div>
+**Jaagruk is a training aid built around explicit evidence:** what runs, what was tested, what remains uncertain, and what must be reviewed before field use.
