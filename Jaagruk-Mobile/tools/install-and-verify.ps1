@@ -5,7 +5,7 @@
 # leaves the handset with no app and a dead launcher icon.
 param([string]$Serial = 'RZCY90QZFRD', [string]$Package = 'org.jaagruk.safety')
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $apk = "$d\app\build\outputs\apk\bundled\debug\app-bundled-debug.apk"
 $out = "$d\_install.txt"
 

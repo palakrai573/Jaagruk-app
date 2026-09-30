@@ -1,7 +1,7 @@
 # Captures why the app is not starting. Writes everything to one file.
 param([string]$Serial = 'RZCY90QZFRD', [string]$Package = 'org.jaagruk.safety')
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $out = "$d\_diag.txt"
 
 function Log($t) { $t | Out-File $out -Append -Encoding utf8 }

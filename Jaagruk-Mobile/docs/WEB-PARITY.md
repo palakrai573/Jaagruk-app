@@ -2,7 +2,7 @@
 
 ## Authoritative Projects
 
-- Android implementation: `Jaagruk - Kotlin/INFINITY_MOBILE`, module `:app`.
+- Android implementation: `Jaagruk - Kotlin/Jaagruk-Mobile`, module `:app`.
 - Product and frontend reference: `sih-safety-sim`.
 - Parent Kotlin app: reference implementation only. Its build/test results do not validate this app.
 
@@ -76,7 +76,7 @@ is a failure, not silently counted as a pass. Keep hardware, model checksum and 
 
 ## Device Validation: 2026-09-30
 
-Target: `INFINITY_MOBILE`, package `org.jaagruk.safety`, lean debug APK. Tested on the connected
+Target: `Jaagruk-Mobile`, package `org.jaagruk.safety`, lean debug APK. Tested on the connected
 Samsung SM-S721B, Android 16 / API 36, arm64. These results do not cover other phones or Android 10.
 
 - Build: app and instrumentation APKs assembled successfully after the 3D/UI/localisation pass.

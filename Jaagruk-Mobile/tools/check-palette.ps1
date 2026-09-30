@@ -5,7 +5,7 @@
 # information as a migration checklist you can ask for.
 #
 # Also reports hardcoded hex colours, which are the other way a screen escapes the palette.
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $k = "$d\app\src\main\java\org\jaagruk\safety"
 $files = Get-ChildItem $k -Recurse -Filter *.kt | Where-Object { $_.FullName -notmatch '\\ui\\theme\\' }
 

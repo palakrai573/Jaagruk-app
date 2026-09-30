@@ -10,7 +10,7 @@ param(
     [int]$WaitSeconds = 75
 )
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $out = "$d\_r1.txt"
 
 & $adb -s $Serial shell input keyevent KEYCODE_WAKEUP | Out-Null

@@ -11,7 +11,7 @@ param(
     [int]$WaitSeconds = 240
 )
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $out = "$d\_gen.txt"
 
 & $adb -s $Serial shell svc power stayon usb | Out-Null

@@ -2,7 +2,7 @@
 # Output goes to a file because this session's shell mangles piped adb output.
 param([string]$Serial = 'RZCY90QZFRD', [string]$Tag = 'device')
 $adb = 'D:\Android_SDK\platform-tools\adb.exe'
-$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\INFINITY_MOBILE'
+$d = 'd:\Endeavors\Coding\Projects\Jaagruk - Kotlin\Jaagruk-Mobile'
 $out = "$d\_$Tag.txt"
 
 "=== devices ===" | Out-File $out -Encoding utf8

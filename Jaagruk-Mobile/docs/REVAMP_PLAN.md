@@ -1,6 +1,6 @@
 # Jaagruk — full revamp plan
 
-**Base:** `INFINITY_MOBILE/` — the Infinity AI Command Center app
+**Base:** `Jaagruk-Mobile/` — the Infinity AI Command Center app
 **Target:** Jaagruk, AR vocational safety training and certification for Jharkhand's mining, steel and
 mica sector. SIH problem statement **26041**. On-device Gemma. Fully local.
 
@@ -136,7 +136,7 @@ also why decision latency is measured: the attempt *is* the assessment.
 
 ## 2. Verified current state
 
-### 2.1 `INFINITY_MOBILE` — read, and run on a Galaxy S24 FE over ADB
+### 2.1 `Jaagruk-Mobile` — read, and run on a Galaxy S24 FE over ADB
 
 ```
 Model loaded OK. ctx=2048 tokens          ← llama.cpp runs on real hardware
@@ -565,10 +565,10 @@ ladder):
 
 ## 8. Build configuration changes
 
-`INFINITY_MOBILE` becomes three modules, one app.
+`Jaagruk-Mobile` becomes three modules, one app.
 
 ```
-INFINITY_MOBILE/
+Jaagruk-Mobile/
 ├── core/   pure Kotlin/JVM, no Android — assessment, cert, crypto, catalog,
 │           retention, speech, drill, ai (retrieval + prompt + guard)
 ├── ai/     Android library — vendored llama.cpp, JNI, engine, model store, AR interlock
