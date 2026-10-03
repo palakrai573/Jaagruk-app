@@ -11,6 +11,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.ByteArrayInputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.RandomAccessFile
+import kotlinx.coroutines.CancellationException
 
 /**
  * Where the model file lives, and what counts as a usable one.
@@ -24,6 +28,49 @@ import java.io.ByteArrayInputStream
 @Config(sdk = [33])
 class ModelStoreTest {
 
+    private fun seedInstalledModel(): Long {
+        RandomAccessFile(store.modelFile, "rw").use {
+            it.write(ggufHeader)
+            it.setLength(ModelStore.MIN_PLAUSIBLE_BYTES + 8192)
+        }
+        return store.modelFile.length()
+    }
+
+    @Test fun `invalid replacement preserves the installed model`() = runTest {
+        val originalSize = seedInstalledModel()
+        val result = store.install(ByteArrayInputStream(ggufHeader))
+        assertThat(result.isFailure).isTrue()
+        assertThat(store.isModelPresent()).isTrue()
+        assertThat(store.modelFile.length()).isEqualTo(originalSize)
+        assertThat(store.modelFile.parentFile!!.listFiles()!!.filter { it.extension == "part" }).isEmpty()
+    }
+
+    @Test fun `read failure closes the stream and preserves the installed model`() = runTest {
+        val originalSize = seedInstalledModel()
+        var closed = false
+        val source = object : InputStream() {
+            override fun read(): Int = throw IOException("transfer disconnected")
+            override fun close() { closed = true }
+        }
+        assertThat(store.install(source).isFailure).isTrue()
+        assertThat(closed).isTrue()
+        assertThat(store.isModelPresent()).isTrue()
+        assertThat(store.modelFile.length()).isEqualTo(originalSize)
+        assertThat(store.modelFile.parentFile!!.listFiles()!!.filter { it.extension == "part" }).isEmpty()
+    }
+
+    @Test fun `cancelled import propagates cancellation and removes staging file`() = runTest {
+        val originalSize = seedInstalledModel()
+        var cancelled = false
+        try {
+            store.install(modelStream(8192)) { throw CancellationException("cancel import") }
+        } catch (_: CancellationException) { cancelled = true }
+        assertThat(cancelled).isTrue()
+        assertThat(store.isModelPresent()).isTrue()
+        assertThat(store.modelFile.length()).isEqualTo(originalSize)
+        assertThat(store.modelFile.parentFile!!.listFiles()!!.filter { it.extension == "part" }).isEmpty()
+    }
+
     private lateinit var store: ModelStore
 
     private val ggufHeader = byteArrayOf(0x47, 0x47, 0x55, 0x46) // "GGUF"
@@ -34,11 +81,29 @@ class ModelStoreTest {
         store.delete()
     }
 
-    private fun bytes(size: Long, header: ByteArray = ggufHeader): ByteArray {
-        val content = ByteArray(size.toInt())
-        header.copyInto(content)
-        return content
-    }
+    private fun modelStream(size: Long, header: ByteArray = ggufHeader): InputStream =
+        object : InputStream() {
+            private var position = 0L
+            override fun read(): Int {
+                if (position >= size) return -1
+                val value = if (position < header.size) header[position.toInt()].toInt() and 255 else 0
+                position++
+                return value
+            }
+            override fun read(buffer: ByteArray, offset: Int, length: Int): Int {
+                if (length == 0) return 0
+                if (position >= size) return -1
+                val count = minOf(length.toLong(), size - position).toInt()
+                buffer.fill(0, offset, offset + count)
+                for (index in header.indices) {
+                    if (index.toLong() >= position && index.toLong() < position + count) {
+                        buffer[offset + (index - position).toInt()] = header[index]
+                    }
+                }
+                position += count
+                return count
+            }
+        }
 
     // -----------------------------------------------------------------------
     // Presence
@@ -58,14 +123,14 @@ class ModelStoreTest {
     @Test
     fun `a plausible gguf file is accepted`() = runTest {
         val size = ModelStore.MIN_PLAUSIBLE_BYTES + 1_024
-        val result = store.install(ByteArrayInputStream(bytes(size)))
+        val result = store.install(modelStream(size))
         assertThat(result.isSuccess).isTrue()
         assertThat(store.isModelPresent()).isTrue()
     }
 
     @Test
     fun `an interrupted transfer is refused rather than half installed`() = runTest {
-        val result = store.install(ByteArrayInputStream(bytes(5L * 1024 * 1024)))
+        val result = store.install(modelStream(5L * 1024 * 1024))
         assertThat(result.isFailure).isTrue()
         assertThat(store.isModelPresent()).isFalse()
         // And no partial file is left behind for the next launch to pick up.
@@ -75,8 +140,8 @@ class ModelStoreTest {
     @Test
     fun `a file that is not gguf is refused`() = runTest {
         val size = ModelStore.MIN_PLAUSIBLE_BYTES + 1_024
-        val notAModel = bytes(size, header = byteArrayOf(0x50, 0x4B, 0x03, 0x04)) // a zip
-        val result = store.install(ByteArrayInputStream(notAModel))
+        val notAModel = modelStream(size, header = byteArrayOf(0x50, 0x4B, 0x03, 0x04)) // a zip
+        val result = store.install(notAModel)
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()!!.message).contains("GGUF")
         assertThat(store.isModelPresent()).isFalse()
@@ -85,7 +150,7 @@ class ModelStoreTest {
     @Test
     fun `install reports progress`() = runTest {
         val seen = mutableListOf<Long>()
-        store.install(ByteArrayInputStream(bytes(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024))) {
+        store.install(modelStream(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024)) {
             seen += it
         }
         assertThat(seen).isNotEmpty()
@@ -95,16 +160,16 @@ class ModelStoreTest {
 
     @Test
     fun `installing over an existing model replaces it`() = runTest {
-        store.install(ByteArrayInputStream(bytes(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024)))
+        store.install(modelStream(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024))
         val first = store.modelFile.length()
-        store.install(ByteArrayInputStream(bytes(ModelStore.MIN_PLAUSIBLE_BYTES + 8_192)))
+        store.install(modelStream(ModelStore.MIN_PLAUSIBLE_BYTES + 8_192))
         assertThat(store.modelFile.length()).isNotEqualTo(first)
         assertThat(store.isModelPresent()).isTrue()
     }
 
     @Test
     fun `delete removes the model`() = runTest {
-        store.install(ByteArrayInputStream(bytes(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024)))
+        store.install(modelStream(ModelStore.MIN_PLAUSIBLE_BYTES + 1_024))
         assertThat(store.delete()).isTrue()
         assertThat(store.isModelPresent()).isFalse()
     }

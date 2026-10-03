@@ -10,6 +10,7 @@ import org.jaagruk.core.assessment.AssessmentMode
 import org.jaagruk.core.assessment.AssessmentResult
 import org.jaagruk.core.assessment.AssessmentSession
 import org.jaagruk.core.assessment.Completion
+import org.jaagruk.core.assessment.InputMethod
 import org.jaagruk.core.assessment.ScenarioSpec
 import org.jaagruk.core.cert.OutcomeFlags
 import org.jaagruk.core.catalog.ModuleCatalog
@@ -247,13 +248,14 @@ class AssessmentRepository(
         val candidates = runs.passedWithoutCertificate(siteId, PENDING_CERTIFICATE_SCAN_LIMIT)
 
         for (run in candidates) {
+            val flags = flagsFromEntity(run, siteScannedAr) ?: continue
             val outcome = certificates.issue(
                 siteId = run.siteId,
                 workerId = run.workerId,
                 moduleCode = run.moduleCode,
                 scorePermille = run.scorePermille,
                 medianLatencyMs = run.medianLatencyMs,
-                outcomeFlags = flagsFromEntity(run, siteScannedAr),
+                outcomeFlags = flags,
                 runId = run.runId,
             )
             if (outcome is CertificateRepository.IssueResult.Issued) issued++
@@ -261,7 +263,16 @@ class AssessmentRepository(
         return issued
     }
 
-    private fun flagsFromEntity(run: AssessmentRunEntity, siteScannedAr: Boolean): OutcomeFlags {
+    private fun flagsFromEntity(run: AssessmentRunEntity, siteScannedAr: Boolean): OutcomeFlags? {
+        // Signing requires evidence; the display/upload decoder's empty fallback is not sufficient.
+        val inputMethods = try {
+            val steps = json.decodeFromString<List<StepResultUpload>>(run.stepsJson)
+            require(steps.isNotEmpty()) { "missing step evidence" }
+            steps.map { InputMethod.valueOf(it.inputMethod) }
+        } catch (e: IllegalArgumentException) {
+            Log.w(TAG, "certificate remains pending: unreadable step evidence for ${run.runId}", e)
+            return null
+        }
         var flags = OutcomeFlags.NONE
         if (run.passed) flags = flags.with(OutcomeFlags.PASSED)
         if (run.hesitationFlag) flags = flags.with(OutcomeFlags.HESITATION)
@@ -272,6 +283,7 @@ class AssessmentRepository(
             flags = flags.with(OutcomeFlags.SITE_SCANNED_AR)
         }
         if (run.mode == AssessmentMode.REFRESHER.name) flags = flags.with(OutcomeFlags.REFRESHER)
+        if (inputMethods.any { it.isAssistive }) flags = flags.with(OutcomeFlags.ASSISTED_MODE)
         return flags
     }
 

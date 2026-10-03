@@ -1,10 +1,12 @@
 package org.jaagruk.safety.ui.drill
 
 import android.util.Log
+import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -96,6 +98,7 @@ class DrillViewModel @Inject constructor(
         val gestureCandidate: GloveGesture? = null,
         val message: UiMessage? = null,
         val finishedRunId: String? = null,
+        val saving: Boolean = false,
         val fatalMessage: UiMessage? = null,
     ) {
         val progress: Float
@@ -125,7 +128,11 @@ class DrillViewModel @Inject constructor(
      * claimed and nothing must be released.
      */
     private var drillClaimed = false
-    private var backgroundedAtMs: Long = 0L
+    private var backgroundedAtMs: Long? = null
+    private val pauseReasons = linkedMapOf<Int, UiMessage>()
+    private var narrationGeneration = 0L
+    private var narrationPlaying = false
+    private var finishStarted = false
     private var dwellOptionId: String? = null
 
     val arController: ArController? get() = controller
@@ -228,6 +235,10 @@ class DrillViewModel @Inject constructor(
             )
 
             started.session.start()
+            if (!ar.state.value.quality.isUsable) {
+                pause(UiMessage.warning(R.string.drill_paused_tracking))
+            }
+            updatePauseState()
             presentCurrentStep()
             observeAr()
             observeVoice()
@@ -241,12 +252,11 @@ class DrillViewModel @Inject constructor(
             ar.state.collect { arState ->
                 // Tracking loss pauses the drill. Scoring a decision against a frozen scene would be
                 // measuring the phone, not the worker.
-                val unusable = !arState.quality.isUsable &&
-                    arState.quality != ArTrackingQuality.INITIALISING
+                val unusable = !arState.quality.isUsable
                 if (unusable) {
                     pause(UiMessage.warning(R.string.drill_paused_tracking))
-                } else if (_state.value.paused && _state.value.pauseReason?.resId == R.string.drill_paused_tracking) {
-                    resume()
+                } else {
+                    clearPause(R.string.drill_paused_tracking)
                 }
 
                 arState.failureMessageKey?.let { key ->
@@ -326,13 +336,32 @@ class DrillViewModel @Inject constructor(
         // The prompt is read aloud automatically. For a worker who cannot read it, the audio *is* the
         // question, so waiting for them to press a speaker button would be waiting for something they
         // cannot know is there.
-        narrateCurrentPrompt(step)
+        narrateCurrentPrompt(step, initial = true)
     }
 
-    private fun narrateCurrentPrompt(step: StepSpec) {
-        // Fallback text is resolved in the composable; the key alone lets the player pick a bundled
-        // recording, which is the only path that works for Santali.
-        narration.speak(step.promptKey, "")
+    private fun narrateCurrentPrompt(step: StepSpec, initial: Boolean = false) {
+        val generation = ++narrationGeneration
+        narrationPlaying = true
+        voiceEngine.stopListening()
+        if (initial) pause(UiMessage.info(R.string.drill_paused_narration))
+        val parts = listOf(step.promptKey to null) + step.options.flatMapIndexed { index, option ->
+            listOf("option_number_${index + 1}" to "${index + 1}.", option.labelKey to null)
+        }
+        fun speakPart(index: Int) {
+            if (generation != narrationGeneration) return
+            if (index == parts.size) {
+                narrationPlaying = false
+                val wasRunning = session?.state == SessionState.RUNNING
+                clearPause(R.string.drill_paused_narration)
+                if (wasRunning && session?.state == SessionState.RUNNING && _state.value.voiceAvailable) {
+                    voiceEngine.startListening()
+                }
+                return
+            }
+            val (key, fallback) = parts[index]
+            narration.speak(key, fallback, onComplete = { speakPart(index + 1) })
+        }
+        speakPart(0)
     }
 
     private fun StepSpec.toOptionViews(selected: Set<String>): List<OptionView> =
@@ -457,6 +486,7 @@ class DrillViewModel @Inject constructor(
      * worker is told rather than ignored — silence is what makes people stop using voice.
      */
     private fun applyVoiceCommand(command: VoiceCommand) {
+        if (narrationPlaying) return
         val active = session ?: return
         val step = active.currentStep ?: return
 
@@ -606,36 +636,69 @@ class DrillViewModel @Inject constructor(
     // -----------------------------------------------------------------------
 
     fun pause(reason: UiMessage) {
+        pauseReasons[reason.resId] = reason
+        updatePauseState()
+    }
+
+    private fun clearPause(reasonId: Int) {
+        pauseReasons.remove(reasonId)
+        updatePauseState()
+    }
+
+    private fun updatePauseState() {
         val active = session ?: return
-        if (active.state != SessionState.RUNNING) return
-        active.pause()
-        voiceEngine.stopListening()
-        _state.value = _state.value.copy(paused = true, pauseReason = reason)
+        if (active.state != SessionState.RUNNING && active.state != SessionState.PAUSED) return
+        val reason = pauseReasons.values.firstOrNull()
+        if (reason != null) {
+            if (active.state == SessionState.RUNNING) {
+                active.pause()
+                voiceEngine.stopListening()
+            }
+        } else if (active.state == SessionState.PAUSED) {
+            active.resume()
+            if (_state.value.voiceAvailable && !narrationPlaying) voiceEngine.startListening()
+        }
+        _state.value = _state.value.copy(paused = reason != null, pauseReason = reason)
     }
 
     fun resume() {
-        val active = session ?: return
-        if (active.state != SessionState.PAUSED) return
-        active.resume()
-        if (_state.value.voiceAvailable) voiceEngine.startListening()
-        _state.value = _state.value.copy(paused = false, pauseReason = null)
+        // A UI action cannot override live tracking or lifecycle interruptions.
+        if (controller?.state?.value?.quality?.isUsable == true) {
+            clearPause(R.string.drill_paused_tracking)
+        } else {
+            pause(UiMessage.warning(R.string.drill_paused_tracking))
+        }
+    }
+
+    fun continueWithoutAudio() {
+        if (!narrationPlaying) return
+        narrationGeneration++
+        narrationPlaying = false
+        narration.stop()
+        val wasRunning = session?.state == SessionState.RUNNING
+        clearPause(R.string.drill_paused_narration)
+        if (wasRunning && session?.state == SessionState.RUNNING && _state.value.voiceAvailable) {
+            voiceEngine.startListening()
+        }
     }
 
     /** Called when the app is backgrounded. Pauses immediately; long absences abort. */
     fun onBackgrounded() {
-        backgroundedAtMs = System.currentTimeMillis()
+        if (backgroundedAtMs == null) backgroundedAtMs = SystemClock.elapsedRealtime()
         pause(UiMessage.info(R.string.drill_paused_backgrounded))
     }
 
     fun onForegrounded() {
-        val away = System.currentTimeMillis() - backgroundedAtMs
-        if (backgroundedAtMs > 0L && away > MAX_BACKGROUND_MS) {
+        val started = backgroundedAtMs
+        val away = started?.let { SystemClock.elapsedRealtime() - it } ?: 0L
+        if (started != null && away > MAX_BACKGROUND_MS) {
             // Twenty minutes away is not an interruption, it is a different session. The partial run is
             // still scored and saved; it simply cannot certify.
             abort(AbortReason.APP_BACKGROUNDED_TOO_LONG)
             return
         }
-        resume()
+        backgroundedAtMs = null
+        clearPause(R.string.drill_paused_backgrounded)
     }
 
     fun abort(reason: AbortReason) {
@@ -646,30 +709,44 @@ class DrillViewModel @Inject constructor(
 
     private fun finish() {
         val active = session ?: return
-        if (_state.value.finishedRunId != null) return
+        if (finishStarted || _state.value.finishedRunId != null) return
+        finishStarted = true
+        _state.value = _state.value.copy(saving = true)
 
         tickJob?.cancel()
         voiceEngine.stopListening()
+        narrationGeneration++
+        narrationPlaying = false
         narration.stop()
         controller?.clearMarkers()
 
         viewModelScope.launch {
-            val result = active.finish()
-            val saved = assessments.saveResult(
-                result = result,
-                workerId = workerId,
-                siteId = siteId,
-                siteScannedAr = siteScanned,
-            )
+            try {
+                val result = active.finish()
+                val saved = assessments.saveResult(
+                    result = result,
+                    workerId = workerId,
+                    siteId = siteId,
+                    siteScannedAr = siteScanned,
+                )
 
-            if (saved.certificatePending) {
-                Log.i(TAG, "run ${result.runId} passed but no site key is enrolled yet")
-            }
-            (saved.certificate as? CertificateRepository.IssueResult.Issued)?.let {
-                Log.i(TAG, "issued certificate at seq ${it.certificate.seq}")
-            }
+                if (saved.certificatePending) {
+                    Log.i(TAG, "run ${result.runId} passed but no site key is enrolled yet")
+                }
+                (saved.certificate as? CertificateRepository.IssueResult.Issued)?.let {
+                    Log.i(TAG, "issued certificate at seq ${it.certificate.seq}")
+                }
 
-            _state.value = _state.value.copy(finishedRunId = result.runId)
+                _state.value = _state.value.copy(finishedRunId = result.runId, saving = false)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Log.e(TAG, "could not save drill result", error)
+                _state.value = _state.value.copy(
+                    saving = false,
+                    fatalMessage = UiMessage.error(R.string.drill_save_failed),
+                )
+            }
         }
     }
 
@@ -678,6 +755,8 @@ class DrillViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        narrationGeneration++
+        narrationPlaying = false
         tickJob?.cancel()
         voiceEngine.stopListening()
         narration.stop()

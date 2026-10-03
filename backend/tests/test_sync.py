@@ -107,6 +107,26 @@ def _progress(worker_id: str, **overrides) -> dict:  # noqa: ANN003
 
 
 class TestBatchIdempotency:
+    def test_supervisor_cannot_upload_as_another_sites_device(
+        self, client: TestClient, seeded: dict, supervisor_a_headers: dict
+    ) -> None:
+        response = client.post(
+            "/api/v1/sync/batch",
+            json=_batch(device_id=DEVICE_B),
+            headers=supervisor_a_headers,
+        )
+        assert response.status_code == 404
+
+    def test_supervisor_cannot_replay_another_sites_receipt(
+        self, client: TestClient, seeded: dict, supervisor_a_headers: dict
+    ) -> None:
+        payload = _batch(device_id=DEVICE_B)
+        owner_headers = auth_headers(client, "supervisor.b")
+        original = client.post("/api/v1/sync/batch", json=payload, headers=owner_headers)
+        assert original.status_code == 200, original.text
+        replay = client.post("/api/v1/sync/batch", json=payload, headers=supervisor_a_headers)
+        assert replay.status_code == 404
+
     def test_a_clean_batch_is_accepted(
         self, client: TestClient, seeded: dict, supervisor_a_headers: dict
     ) -> None:

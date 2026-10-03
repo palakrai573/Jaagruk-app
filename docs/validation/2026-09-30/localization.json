@@ -1,0 +1,49 @@
+[
+  {
+    "language": "hi",
+    "baseCount": 688,
+    "localizedCount": 688,
+    "missing": [],
+    "mismatchedPlaceholders": [],
+    "linguisticReview": "Not performed; resource presence does not establish translation quality."
+  },
+  {
+    "language": "sat",
+    "baseCount": 688,
+    "localizedCount": 658,
+    "missing": [
+      "ask_model_settings",
+      "ask_sources_notice",
+      "ask_sources_title",
+      "drill_continue_without_audio",
+      "drill_paused_narration",
+      "drill_save_failed",
+      "explore_body",
+      "explore_certify_body",
+      "explore_certify_title",
+      "explore_coach",
+      "explore_duration",
+      "explore_language",
+      "explore_modules",
+      "explore_offline",
+      "explore_sign_in",
+      "explore_site",
+      "explore_title",
+      "explore_train",
+      "explore_verify",
+      "practice_again",
+      "practice_check",
+      "practice_complete",
+      "practice_correct",
+      "practice_multi",
+      "practice_next",
+      "practice_notice",
+      "practice_order",
+      "practice_result",
+      "practice_review",
+      "practice_step"
+    ],
+    "mismatchedPlaceholders": [],
+    "linguisticReview": "Not performed; resource presence does not establish translation quality."
+  }
+]

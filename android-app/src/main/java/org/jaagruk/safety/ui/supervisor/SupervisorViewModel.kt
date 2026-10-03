@@ -8,6 +8,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.update
 import org.jaagruk.ai.AiCoach
 import org.jaagruk.ai.ModelStore
 import org.jaagruk.core.ai.AiCapability
@@ -100,6 +105,7 @@ class SupervisorViewModel @Inject constructor(
         val password: String = "",
         /** Shift-briefing draft state. */
         val briefing: AiPanelState = AiPanelState.Idle,
+        val briefingRequestId: Long = 0,
         /** Offline assistant availability and installed size, for the diagnostics card. */
         val aiCapability: AiCapability = AiCapability.MODEL_MISSING,
         val aiModelMegabytes: Int = 0,
@@ -110,6 +116,7 @@ class SupervisorViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+    private var briefingJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -174,6 +181,7 @@ class SupervisorViewModel @Inject constructor(
      * so rather than leaving it implied.
      */
     fun draftBriefing() {
+        if (_state.value.busy || _state.value.briefing is AiPanelState.Working) return
         val siteId = _state.value.siteId
         if (siteId.isNullOrBlank()) {
             _state.value = _state.value.copy(
@@ -189,14 +197,46 @@ class SupervisorViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
-            _state.value = _state.value.copy(briefing = AiPanelState.Working())
-            val facts = briefingFacts.build(siteId, _state.value.siteName.orEmpty())
-            val outcome = aiCoach.run(AiTask.ShiftBriefing(language, facts)) { words ->
-                _state.value = _state.value.copy(briefing = AiPanelState.Working(words))
+        val requestId = _state.value.briefingRequestId + 1
+        val siteName = _state.value.siteName.orEmpty()
+        _state.update { it.copy(briefingRequestId = requestId, briefing = AiPanelState.Working()) }
+        briefingJob = viewModelScope.launch {
+            try {
+                val facts = briefingFacts.build(siteId, siteName)
+                val outcome = aiCoach.run(AiTask.ShiftBriefing(language, facts)) { words ->
+                    _state.update {
+                        if (it.briefingRequestId == requestId && it.briefing is AiPanelState.Working)
+                            it.copy(briefing = AiPanelState.Working(words)) else it
+                    }
+                }
+                _state.update {
+                    if (it.briefingRequestId == requestId) it.copy(briefing = outcome.toPanelState()) else it
+                }
+            } catch (cancelled: CancellationException) {
+                _state.update {
+                    if (it.briefingRequestId == requestId) it.copy(briefing = AiPanelState.Idle) else it
+                }
+                throw cancelled
+            } catch (error: Exception) {
+                Log.w(TAG, "briefing generation failed", error)
+                _state.update {
+                    if (it.briefingRequestId == requestId)
+                        it.copy(briefing = AiPanelState.Failed(UiMessage.warning(R.string.ai_failed))) else it
+                }
             }
-            _state.value = _state.value.copy(briefing = outcome.toPanelState())
         }
+    }
+
+    fun stopBriefing() {
+        _state.update { it.copy(
+            briefingRequestId = it.briefingRequestId + 1,
+            briefing = if (it.briefing is AiPanelState.Working) AiPanelState.Idle else it.briefing,
+        ) }
+        if (briefingJob?.isActive == true) {
+            aiCoach.stop()
+            briefingJob?.cancel()
+        }
+        briefingJob = null
     }
 
     /**
@@ -208,49 +248,61 @@ class SupervisorViewModel @Inject constructor(
      * when it does, so a wrong file is a message rather than a broken assistant.
      */
     fun installAiModel(open: () -> java.io.InputStream?) {
+        if (_state.value.busy || _state.value.briefing is AiPanelState.Working) return
+        _state.update { it.copy(busy = true, message = null) }
         viewModelScope.launch {
-            _state.value = _state.value.copy(busy = true, message = null)
-            val stream = runCatching { open() }.getOrNull()
-            if (stream == null) {
-                _state.value = _state.value.copy(
-                    busy = false,
-                    message = UiMessage.error(R.string.ai_model_install_failed),
-                )
-                return@launch
-            }
-            // The model is mapped, not read into the heap, so it must not be loaded while being
-            // replaced. Releasing first also frees the memory the copy is about to need.
-            aiCoach.release()
-            val result = modelStore.install(stream) { copied ->
-                _state.value = _state.value.copy(
-                    message = UiMessage.info(
-                        R.string.ai_model_installing,
-                        (copied / (1024 * 1024)).toInt(),
-                    ),
-                )
-            }
-            refresh()
-            _state.value = _state.value.copy(
-                busy = false,
-                message = if (result.isSuccess) {
+            try {
+                // Release before opening the stream so an unload failure cannot leak a file handle.
+                aiCoach.release()
+                val result = withContext(Dispatchers.IO) {
+                    val source = open() ?: error("model source unavailable")
+                    source.use { stream ->
+                        modelStore.install(stream) { copied ->
+                            _state.update { it.copy(message = UiMessage.info(
+                                R.string.ai_model_installing, (copied / (1024 * 1024)).toInt(),
+                            )) }
+                        }
+                    }
+                }
+                _state.update { it.copy(message = if (result.isSuccess) {
                     UiMessage.success(R.string.ai_model_install_done)
-                } else {
-                    UiMessage.error(R.string.ai_model_install_failed)
-                },
-            )
+                } else UiMessage.error(R.string.ai_model_install_failed)) }
+                refresh()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Log.w("SupervisorViewModel", "assistant installation failed", error)
+                _state.update { it.copy(message = UiMessage.error(R.string.ai_model_install_failed)) }
+            } finally {
+                _state.update { it.copy(busy = false) }
+            }
         }
     }
 
     /** Removes the model, for a handset being handed to somebody who does not need it. */
     fun removeAiModel() {
+        if (_state.value.busy || _state.value.briefing is AiPanelState.Working) return
+        _state.update { it.copy(busy = true, message = null) }
         viewModelScope.launch {
-            aiCoach.release()
-            modelStore.delete()
-            refresh()
-            _state.value = _state.value.copy(
-                message = UiMessage.info(R.string.ai_model_absent),
-                briefing = AiPanelState.Idle,
-            )
+            try {
+                aiCoach.release()
+                val removed = withContext(Dispatchers.IO) {
+                    modelStore.delete() || !modelStore.modelFile.exists()
+                }
+                _state.update { it.copy(
+                    message = if (removed) UiMessage.info(R.string.ai_model_absent)
+                        else UiMessage.error(R.string.ai_failed),
+                    briefing = if (removed) AiPanelState.Idle else it.briefing,
+                ) }
+                refresh()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Log.w("SupervisorViewModel", "assistant removal failed", error)
+                _state.update { it.copy(message = UiMessage.error(R.string.ai_failed)) }
+            } finally {
+                _state.update { it.copy(busy = false) }
+            }
         }
     }
 
@@ -573,6 +625,7 @@ class SupervisorViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        stopBriefing()
         gossip.stop()
         super.onCleared()
     }

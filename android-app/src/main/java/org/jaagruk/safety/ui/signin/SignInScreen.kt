@@ -15,6 +15,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -51,6 +56,7 @@ fun SignInScreen(
     onSupervisorTools: () -> Unit,
     onVerify: () -> Unit,
     viewModel: SignInViewModel = hiltViewModel(),
+    onBack: (() -> Unit)? = null,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -64,10 +70,19 @@ fun SignInScreen(
     ) {
         item {
             Spacer(Modifier.height(16.dp))
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineLarge,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (onBack != null) {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back))
+                    }
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(
+                    text = stringResource(R.string.explore_sign_in),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.weight(1f),
+                )
+            }
             Text(
                 text = stringResource(R.string.signin_tagline),
                 style = MaterialTheme.typography.bodyMedium,

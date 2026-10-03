@@ -100,7 +100,7 @@ fun DrillScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    if (state.loading) {
+    if (state.loading || state.saving) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
@@ -220,6 +220,7 @@ fun DrillScreen(
             PauseOverlay(
                 reason = state.pauseReason,
                 onResume = viewModel::resume,
+                onSkipAudio = viewModel::continueWithoutAudio,
                 onAbandon = { viewModel.abort(AbortReason.USER_CANCELLED) },
             )
         }
@@ -425,9 +426,10 @@ private fun OffScreenArrow(marker: ProjectedMarker) {
 }
 
 @Composable
-private fun PauseOverlay(
+internal fun PauseOverlay(
     reason: UiMessage?,
     onResume: () -> Unit,
+    onSkipAudio: () -> Unit,
     onAbandon: () -> Unit,
 ) {
     Box(
@@ -459,11 +461,20 @@ private fun PauseOverlay(
                 MessageBanner(reason, stringResource(R.string.cd_info))
             }
             Spacer(Modifier.height(20.dp))
-            GloveButton(
-                text = stringResource(R.string.drill_resume),
-                onClick = onResume,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            if (reason?.resId == R.string.drill_paused_narration) {
+                GloveButton(
+                    text = stringResource(R.string.drill_continue_without_audio),
+                    onClick = onSkipAudio,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            } else if (reason?.resId != R.string.drill_paused_tracking &&
+                reason?.resId != R.string.drill_paused_backgrounded) {
+                GloveButton(
+                    text = stringResource(R.string.drill_resume),
+                    onClick = onResume,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             Spacer(Modifier.height(10.dp))
             GloveOutlinedButton(
                 text = stringResource(R.string.drill_stop),
@@ -483,4 +494,3 @@ private fun hintLabel(hint: TrackingHint): Int = when (hint) {
     TrackingHint.CAMERA_BLOCKED -> R.string.ar_hint_camera_blocked
     TrackingHint.RECOVERING -> R.string.ar_hint_recovering
 }
-

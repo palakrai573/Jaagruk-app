@@ -147,6 +147,9 @@
     <string name="drill_paused_not_counted">Paused time is not counted against you. Take your time.</string>
     <string name="drill_paused_tracking">Paused: the camera lost track of the scene.</string>
     <string name="drill_paused_backgrounded">Paused: you left the app.</string>
+    <string name="drill_paused_narration">Listening to the question. The timer is paused.</string>
+    <string name="drill_continue_without_audio">Continue without audio</string>
+    <string name="drill_save_failed">The result could not be saved completely. Completion is not confirmed. Ask your supervisor to check this run before repeating it.</string>
     <string name="drill_ar_gave_up">AR is not holding here. The drill will continue with pictures instead.</string>
     <string name="drill_voice_unclear">Heard something, but not clearly. Say it again.</string>
     <string name="drill_voice_not_applicable">That command does not apply to this step.</string>

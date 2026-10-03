@@ -1,0 +1,29 @@
+<resources>
+    <string name="explore_language">Language</string>
+    <string name="explore_sign_in">Worker sign-in</string>
+    <string name="explore_train">Train</string>
+    <string name="explore_coach">Coach</string>
+    <string name="explore_verify">Verify</string>
+    <string name="explore_site">Site</string>
+    <string name="explore_offline">Practice available offline</string>
+    <string name="explore_title">Ready for a safer shift.</string>
+    <string name="explore_body">Choose a safety module and rehearse at your own pace.</string>
+    <string name="explore_modules">Safety training</string>
+    <string name="explore_duration">%1$d min · %2$d decisions</string>
+    <string name="explore_certify_title">Your next certification</string>
+    <string name="explore_certify_body">Sign in for assessed AR drills, your readiness record and signed certificates.</string>
+    <string name="practice_notice">Untimed pictogram practice. No certificate or readiness score is recorded.</string>
+    <string name="practice_complete">Practice complete</string>
+    <string name="practice_result">%1$d of %2$d decisions correct.</string>
+    <string name="practice_again">Practise again</string>
+    <string name="practice_step">Decision %1$d of %2$d</string>
+    <string name="practice_order">Choose the actions in order.</string>
+    <string name="practice_multi">Choose all required actions.</string>
+    <string name="practice_correct">Correct</string>
+    <string name="practice_review">Review this decision</string>
+    <string name="practice_next">Continue</string>
+    <string name="practice_check">Check answer</string>
+    <string name="ask_sources_title">From the safety library</string>
+    <string name="ask_sources_notice">Related source passages, not a generated answer. Follow your site procedure and ask your supervisor when unsure.</string>
+    <string name="ask_model_settings">Assistant setup</string>
+</resources>

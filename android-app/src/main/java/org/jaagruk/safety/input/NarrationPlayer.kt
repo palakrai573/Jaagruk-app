@@ -1,15 +1,18 @@
 package org.jaagruk.safety.input
 
 import android.content.Context
+import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.io.IOException
+import org.jaagruk.safety.ui.components.CatalogStrings
 import java.util.Locale
 
 /**
@@ -59,6 +62,15 @@ class NarrationPlayer(private val context: Context) {
 
     private var tts: TextToSpeech? = null
     private var ttsReady = false
+    private var ttsUsable = false
+    private var initialising = false
+    private var engineGeneration = 0L
+    private var utteranceSequence = 0L
+    private var activeUtterance: String? = null
+    private var pendingPrompt: Pair<String, String>? = null
+    private var completion: (() -> Unit)? = null
+    private var completionTimeout: Runnable? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
     private var mediaPlayer: MediaPlayer? = null
     private var languageTag: String = "en"
 
@@ -69,8 +81,12 @@ class NarrationPlayer(private val context: Context) {
      * silently falling back to English, so a Santali prompt would be read aloud in English — confidently,
      * and wrongly, to a worker who cannot tell that is what happened.
      */
+    @Synchronized
     fun prepare(tag: String) {
+        stop()
         languageTag = tag
+        ttsUsable = false
+        reportUnavailable(tag)
 
         if (tag == SANTALI) {
             _state.value = State(
@@ -82,60 +98,89 @@ class NarrationPlayer(private val context: Context) {
         }
 
         if (tts == null) {
+            initialising = true
+            val generation = ++engineGeneration
             tts = TextToSpeech(context) { status ->
-                ttsReady = status == TextToSpeech.SUCCESS
-                if (ttsReady) applyLanguage(tag) else reportUnavailable(tag)
+                // Post even synchronous failures until the constructor has assigned the engine.
+                mainHandler.post {
+                    synchronized(this@NarrationPlayer) {
+                        if (generation != engineGeneration) return@post
+                        initialising = false
+                        ttsReady = status == TextToSpeech.SUCCESS
+                        if (languageTag != SANTALI) {
+                            if (ttsReady) applyLanguage(languageTag) else reportUnavailable(languageTag)
+                        }
+                        val pending = pendingPrompt
+                        pendingPrompt = null
+                        if (pending != null) speak(pending.first, pending.second, completion)
+                    }
+                }
             }.also { engine ->
                 engine.setOnUtteranceProgressListener(
                     object : UtteranceProgressListener() {
                         override fun onStart(utteranceId: String?) {
-                            _state.value = _state.value.copy(speaking = true)
+                            updateUtterance(utteranceId, speaking = true)
                         }
 
                         override fun onDone(utteranceId: String?) {
-                            _state.value = _state.value.copy(speaking = false)
+                            updateUtterance(utteranceId, speaking = false)
                         }
 
                         @Deprecated("Required by the platform interface")
                         override fun onError(utteranceId: String?) {
-                            _state.value = _state.value.copy(speaking = false)
+                            updateUtterance(utteranceId, speaking = false)
                         }
                     },
                 )
             }
-        } else {
+        } else if (ttsReady) {
             applyLanguage(tag)
         }
     }
 
+    private fun updateUtterance(id: String?, speaking: Boolean) {
+        mainHandler.post {
+            synchronized(this@NarrationPlayer) {
+                if (id == null || id != activeUtterance) return@post
+                _state.value = _state.value.copy(speaking = speaking)
+                if (!speaking) {
+                    activeUtterance = null
+                    completeNarration()
+                }
+            }
+        }
+    }
+
     private fun applyLanguage(tag: String) {
+        if (tag == SANTALI || !ttsReady) return
         val engine = tts ?: return reportUnavailable(tag)
         val locale = when (tag) {
             HINDI -> Locale("hi", "IN")
-            else -> Locale.ENGLISH
+            else -> Locale.forLanguageTag(tag)
         }
 
         val result = engine.setLanguage(locale)
-        val usable = result != TextToSpeech.LANG_MISSING_DATA &&
-            result != TextToSpeech.LANG_NOT_SUPPORTED
+        ttsUsable = result >= TextToSpeech.LANG_AVAILABLE
 
         // Slower than default. Synthesised Hindi at normal rate is hard to follow through a helmet, and a
         // safety instruction that has to be replayed twice has failed.
         engine.setSpeechRate(SPEECH_RATE)
 
-        _state.value = State(
+        _state.value = _state.value.copy(
             source = when {
+                _state.value.speaking -> _state.value.source
                 hasAnyRecording(tag) -> Source.RECORDED
-                usable -> Source.SYNTHESISED
+                ttsUsable -> Source.SYNTHESISED
                 else -> Source.UNAVAILABLE
             },
             languageTag = tag,
-            ttsMissingForLanguage = !usable,
+            ttsMissingForLanguage = !ttsUsable,
         )
     }
 
     private fun reportUnavailable(tag: String) {
-        _state.value = State(
+        ttsUsable = false
+        _state.value = _state.value.copy(
             source = if (hasAnyRecording(tag)) Source.RECORDED else Source.UNAVAILABLE,
             languageTag = tag,
             ttsMissingForLanguage = true,
@@ -145,27 +190,72 @@ class NarrationPlayer(private val context: Context) {
     /**
      * Speaks the prompt for [stringKey].
      *
-     * [fallbackText] is the already-localised string, used when no recording exists and TTS is available.
+     * [fallbackText], when supplied, is already localised. Otherwise the string resource is resolved
+     * using the prepared language, including on devices where the application context is not localised.
      * Passing the key as well as the text is what lets the recording lookup happen at all — a recording is
      * addressed by key, not by matching text.
      */
-    fun speak(stringKey: String, fallbackText: String) {
+    @Synchronized
+    fun speak(stringKey: String, fallbackText: String? = null, onComplete: (() -> Unit)? = null) {
         stop()
+        completion = onComplete
+        // A broken engine must not hold an assessment paused indefinitely.
+        completionTimeout = Runnable {
+            synchronized(this@NarrationPlayer) {
+                val callback = completion
+                release()
+                _state.value = _state.value.copy(source = Source.UNAVAILABLE)
+                callback?.invoke()
+            }
+        }.also { mainHandler.postDelayed(it, MAX_NARRATION_MS) }
 
         if (playRecording(stringKey)) return
 
-        val engine = tts
-        if (!ttsReady || engine == null || _state.value.source != Source.SYNTHESISED) {
-            // Nothing to play. The caller keeps the text on screen, which it does anyway.
+        _state.value = _state.value.copy(source = Source.UNAVAILABLE)
+        if (languageTag == SANTALI) { completeNarration(); return }
+
+        val text = fallbackText ?: run {
+            val configuration = Configuration(context.resources.configuration)
+            configuration.setLocale(Locale.forLanguageTag(languageTag))
+            val localised = context.createConfigurationContext(configuration)
+            val id = CatalogStrings.resourceId(localised, stringKey)
+            if (id == 0) "" else localised.getString(id)
+        }
+        if (text.isBlank()) { completeNarration(); return }
+        if (initialising) {
+            pendingPrompt = stringKey to text
             return
         }
 
-        engine.speak(
-            fallbackText,
+        val engine = tts
+        if (!ttsReady || !ttsUsable || engine == null) {
+            // Nothing to play. The caller keeps the text on screen, which it does anyway.
+            completeNarration()
+            return
+        }
+
+        val utteranceId = "narration-${++utteranceSequence}"
+        activeUtterance = utteranceId
+        _state.value = _state.value.copy(source = Source.SYNTHESISED)
+        val result = engine.speak(
+            text,
             TextToSpeech.QUEUE_FLUSH,
             null,
-            stringKey,
+            utteranceId,
         )
+        if (result == TextToSpeech.ERROR) {
+            activeUtterance = null
+            _state.value = _state.value.copy(source = Source.UNAVAILABLE, speaking = false)
+            completeNarration()
+        }
+    }
+
+    private fun completeNarration() {
+        completionTimeout?.let(mainHandler::removeCallbacks)
+        completionTimeout = null
+        val callback = completion
+        completion = null
+        callback?.invoke()
     }
 
     /**
@@ -181,47 +271,70 @@ class NarrationPlayer(private val context: Context) {
         val resId = context.resources.getIdentifier(resourceName, "raw", context.packageName)
         if (resId == 0) return false
 
+        var created: MediaPlayer? = null
         return try {
-            mediaPlayer = MediaPlayer.create(context, resId)?.apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder()
-                        // ASSISTANCE_SONIFICATION, not MEDIA: this must not be silenced by a media
-                        // volume of zero, which is how most shared site phones are handed over.
-                        .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .build(),
-                )
-                setOnCompletionListener {
-                    _state.value = _state.value.copy(speaking = false)
-                }
-                start()
-            } ?: return false
+            val attributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build()
+            val player = MediaPlayer.create(context, resId, attributes, 0) ?: return false
+            created = player
+            mediaPlayer = player
+            player.setOnCompletionListener { completed -> finishRecording(completed, failed = false) }
+            player.setOnErrorListener { failed, _, _ ->
+                finishRecording(failed, failed = true)
+                true
+            }
             _state.value = _state.value.copy(speaking = true, source = Source.RECORDED)
+            player.start()
             true
-        } catch (e: IOException) {
-            Log.w(TAG, "could not play the recording for $stringKey", e)
-            false
-        } catch (e: IllegalStateException) {
+        } catch (e: RuntimeException) {
+            if (mediaPlayer === created) mediaPlayer = null
+            runCatching { created?.release() }
+            _state.value = _state.value.copy(speaking = false)
             Log.w(TAG, "media player refused to start for $stringKey", e)
             false
         }
     }
 
-    fun stop() {
-        runCatching { tts?.stop() }
-        mediaPlayer?.let { player ->
-            runCatching { player.stop() }
-            player.release()
-        }
+    @Synchronized
+    private fun finishRecording(player: MediaPlayer, failed: Boolean) {
+        if (mediaPlayer !== player) return
         mediaPlayer = null
+        runCatching { player.release() }
+        _state.value = _state.value.copy(
+            speaking = false,
+            source = if (failed) Source.UNAVAILABLE else Source.RECORDED,
+        )
+        completeNarration()
+    }
+
+    @Synchronized
+    fun stop() {
+        completionTimeout?.let(mainHandler::removeCallbacks)
+        completionTimeout = null
+        completion = null
+        pendingPrompt = null
+        activeUtterance = null
+        runCatching { tts?.stop() }
+        val recording = mediaPlayer
+        mediaPlayer = null
+        recording?.let { player ->
+            runCatching { player.stop() }
+            runCatching { player.release() }
+        }
         _state.value = _state.value.copy(speaking = false)
     }
 
+    @Synchronized
     fun release() {
         stop()
+        engineGeneration++
         runCatching { tts?.shutdown() }
         tts = null
         ttsReady = false
+        ttsUsable = false
+        initialising = false
     }
 
     /**
@@ -241,6 +354,7 @@ class NarrationPlayer(private val context: Context) {
         const val SANTALI = "sat"
 
         const val SPEECH_RATE = 0.9f
+        const val MAX_NARRATION_MS = 60_000L
 
         /** Present in every complete recording set, so its absence means the set is absent. */
         const val PROBE_KEY = "step_fire_detect_alarm_prompt"

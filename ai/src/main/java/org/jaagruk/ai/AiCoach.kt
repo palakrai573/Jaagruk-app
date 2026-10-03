@@ -1,6 +1,7 @@
 package org.jaagruk.ai
 
 import android.util.Log
+import org.jaagruk.ai.runtime.StopReason
 import org.jaagruk.core.ai.AiCapability
 import org.jaagruk.core.ai.AiLanguage
 import org.jaagruk.core.ai.AiTaskKind
@@ -150,12 +151,16 @@ class AiCoach(
             return AiOutcome.Failed(error.message ?: "generation failed")
         }
 
+        if (generation.reason == StopReason.CANCELLED) {
+            return AiOutcome.Failed("generation cancelled")
+        }
+
         return when (val verdict = AnswerGuard.check(generation.text, prompt)) {
             is GuardVerdict.Accepted -> AiOutcome.Answer(
                 text = verdict.text,
                 citations = verdict.citations,
                 passageIds = verdict.passageIds,
-                truncated = verdict.truncated,
+                truncated = verdict.truncated || generation.reason == StopReason.TOKEN_LIMIT,
                 tokenCount = generation.tokenCount,
                 elapsedMs = generation.elapsedMs,
             )

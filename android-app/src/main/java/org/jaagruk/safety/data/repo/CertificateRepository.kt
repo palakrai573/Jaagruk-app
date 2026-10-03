@@ -109,16 +109,25 @@ class CertificateRepository(
         outcomeFlags: OutcomeFlags,
         runId: String?,
     ): IssueResult {
-        if (!keyStore.hasSiteKey()) return IssueResult.NoSigningKey
-
-        val worker = workers.find(workerId)
-            ?: return IssueResult.Rejected("worker $workerId is not on this device's roster")
-
-        val issuedAtSec = clock.epochSeconds()
-        val issuedAtMin = TimeUnits.epochSecondsToMinutes(issuedAtSec)
-
         return try {
             database.withTransaction {
+                if (runId != null) {
+                    require(runId.isNotBlank()) { "runId must not be blank" }
+                    val existing = certificates.findByRunId(runId)
+                    if (existing != null) {
+                        if (existing.siteId != siteId || existing.workerId != workerId ||
+                            existing.moduleCode != moduleCode || existing.scorePermille != scorePermille ||
+                            existing.medianLatencyMs != medianLatencyMs || existing.outcomeFlags != outcomeFlags.bits) {
+                            return@withTransaction IssueResult.Rejected("run already has a different certificate")
+                        }
+                        return@withTransaction IssueResult.Issued(existing, QrCodec.decode(existing.qrText))
+                    }
+                }
+                if (!keyStore.hasSiteKey()) return@withTransaction IssueResult.NoSigningKey
+                val worker = workers.find(workerId)
+                    ?: return@withTransaction IssueResult.Rejected("worker $workerId is not on this device's roster")
+                val issuedAtSec = clock.epochSeconds()
+                val issuedAtMin = TimeUnits.epochSecondsToMinutes(issuedAtSec)
                 val head = currentHead(siteId)
 
                 val attestation = org.jaagruk.core.crypto.CertificateChain.buildNext(

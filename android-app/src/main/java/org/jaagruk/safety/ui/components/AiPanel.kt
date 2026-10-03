@@ -223,8 +223,12 @@ fun AiPanel(
                 )
             }
 
-            is AiPanelState.Unavailable ->
+            is AiPanelState.Unavailable -> {
                 MessageBanner(state.message, stringResource(R.string.cd_info))
+                Spacer(Modifier.height(10.dp))
+                GloveOutlinedButton(stringResource(actionRes), onAsk,
+                    enabled = enabled, modifier = Modifier.fillMaxWidth())
+            }
 
             is AiPanelState.Failed -> {
                 MessageBanner(state.message, stringResource(R.string.cd_warning))

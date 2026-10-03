@@ -62,7 +62,7 @@ fun GloveButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.heightIn(min = MinGloveTouchTarget),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = if (destructive) {
             ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -96,7 +96,7 @@ fun GloveOutlinedButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.heightIn(min = MinGloveTouchTarget),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(8.dp),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge)
     }
@@ -137,9 +137,9 @@ fun OptionCard(
             .border(
                 width = if (selected) 4.dp else 2.dp,
                 color = borderColour,
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(8.dp),
             ),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
@@ -286,14 +286,7 @@ fun SectionCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) { content() }
-    }
+    Column(modifier = modifier.fillMaxWidth().padding(vertical = 16.dp)) { content() }
 }
 
 /** Tone of an inline message. Each maps to a distinct colour *and* a distinct pictogram. */
