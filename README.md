@@ -8,9 +8,15 @@ A Kotlin Android project for vocational safety training in Jharkhand's mining an
 
 **Android 10+ · Timed assessment · Signed offline certificates · ARCore with fallbacks · Hindi + Santali**
 
+**[Watch the demo video](https://youtu.be/B-6fgtAkHbg)** · **[Download the Android APK](https://github.com/palakrai573/Jaagruk-app/releases/latest)**
+
 [Build the submission app](#1-sih-submission-app-android-app) · [Architecture](#architecture) · [Measured Results](#measured-results) · [Companion Web App](https://github.com/palakrai573/Jaagruk)
 
+[![Jaagruk demo video: AR safety training, offline AI and the compliance dashboard](https://img.youtube.com/vi/B-6fgtAkHbg/maxresdefault.jpg)](https://youtu.be/B-6fgtAkHbg)
+
 </div>
+
+**Installing the APK.** The [Releases page](https://github.com/palakrai573/Jaagruk-app/releases/latest) carries the submission app (`android-app`) built by CI, one APK per CPU type plus `SHA256SUMS`. Take **`arm64-v8a`** for almost any current phone (about 32 MiB), or `universal` if unsure. Android 10 or later. The files are named `debugkey` because they are signed with the debug key for sideloading rather than a store key — allow "install unknown apps" when Android asks.
 
 > **Which app is the SIH 26041 submission:** the root `android-app`, with `backend/` and `dashboard/`. It is the one that runs the complete flow the problem statement asks for — worker sign-in, timed drills with hesitation scoring, Ed25519-signed QR certificates, offline QR verification, queued sync to the FastAPI backend, and ARCore with sensor and pictogram fallbacks. Build it from the [repository root](#1-sih-submission-app-android-app).
 >
@@ -469,7 +475,7 @@ APK bytes:  864271737
 SHA-256:    76089DAC90BEFA003DC3BC5BEC1BFAE9616B09F3FFA99A8E9D0D56D1F9D730D9
 ```
 
-The earlier artifact in the historical validation note has a different hash and size. This README identifies the **logo-updated release**. APKs, model weights and private signing material are not committed; no hosted download is implied.
+The earlier artifact in the historical validation note has a different hash and size. This README identifies the **logo-updated release**. That paragraph describes the experimental `Jaagruk-Mobile` bundled build, which is not hosted: its APK, model weights and signing material are not committed. The submission app's APKs are the ones on the [Releases page](https://github.com/palakrai573/Jaagruk-app/releases/latest).
 
 ## Implementation Comparisons
 
