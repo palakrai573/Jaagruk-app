@@ -77,3 +77,9 @@ desktop.ini
 secrets/
 *.pem
 !docs/**/*.pem
+
+# Device validation evidence (screenshots, logs) and build scratch files for the
+# experimental app. Kept on the machine that produced them.
+Jaagruk-Mobile/docs/validation/
+Jaagruk-Mobile/_*.exit
+Jaagruk-Mobile/_*.txt
