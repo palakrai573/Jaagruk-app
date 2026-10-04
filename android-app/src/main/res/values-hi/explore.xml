@@ -1,0 +1,29 @@
+<resources>
+    <string name="explore_language">भाषा</string>
+    <string name="explore_sign_in">कर्मचारी साइन इन</string>
+    <string name="explore_train">प्रशिक्षण</string>
+    <string name="explore_coach">सहायक</string>
+    <string name="explore_verify">जाँच</string>
+    <string name="explore_site">कार्यस्थल</string>
+    <string name="explore_offline">अभ्यास ऑफलाइन उपलब्ध है</string>
+    <string name="explore_title">सुरक्षित पाली की तैयारी।</string>
+    <string name="explore_body">सुरक्षा मॉड्यूल चुनें और अपनी गति से अभ्यास करें।</string>
+    <string name="explore_modules">सुरक्षा प्रशिक्षण</string>
+    <string name="explore_duration">%1$d मिनट · %2$d निर्णय</string>
+    <string name="explore_certify_title">आपका अगला प्रमाणन</string>
+    <string name="explore_certify_body">मूल्यांकन वाले AR अभ्यास, तैयारी रिकॉर्ड और हस्ताक्षरित प्रमाणपत्रों के लिए साइन इन करें।</string>
+    <string name="practice_notice">बिना समय सीमा का चित्र अभ्यास। कोई प्रमाणपत्र या तैयारी स्कोर दर्ज नहीं होगा।</string>
+    <string name="practice_complete">अभ्यास पूरा हुआ</string>
+    <string name="practice_result">%2$d में से %1$d निर्णय सही।</string>
+    <string name="practice_again">दोबारा अभ्यास करें</string>
+    <string name="practice_step">निर्णय %1$d / %2$d</string>
+    <string name="practice_order">कार्रवाइयाँ सही क्रम में चुनें।</string>
+    <string name="practice_multi">सभी आवश्यक कार्रवाइयाँ चुनें।</string>
+    <string name="practice_correct">सही</string>
+    <string name="practice_review">इस निर्णय की समीक्षा करें</string>
+    <string name="practice_next">आगे बढ़ें</string>
+    <string name="practice_check">उत्तर जाँचें</string>
+    <string name="ask_sources_title">सुरक्षा पुस्तकालय से</string>
+    <string name="ask_sources_notice">संबंधित मूल अंश, AI का बनाया उत्तर नहीं। कार्यस्थल की प्रक्रिया का पालन करें और संदेह होने पर पर्यवेक्षक से पूछें।</string>
+    <string name="ask_model_settings">सहायक सेटअप</string>
+</resources>

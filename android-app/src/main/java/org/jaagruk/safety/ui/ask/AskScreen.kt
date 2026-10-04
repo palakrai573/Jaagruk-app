@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +20,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +30,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.update
 import org.jaagruk.ai.AiCoach
 import org.jaagruk.core.ai.AiTask
+import org.jaagruk.core.ai.CorpusPassage
+import org.jaagruk.core.ai.RetrievalResult
+import org.jaagruk.core.ai.SafetyCorpus
 import org.jaagruk.safety.R
 import org.jaagruk.safety.ai.currentAiLanguage
 import org.jaagruk.safety.ui.components.AiPanel
@@ -60,9 +72,21 @@ import javax.inject.Inject
 @Composable
 fun AskScreen(
     onBack: () -> Unit,
+    onSetup: () -> Unit = {},
     viewModel: AskViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(viewModel, lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) viewModel.stop()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            viewModel.stop()
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -108,6 +132,25 @@ fun AskScreen(
                 onStop = viewModel::stop,
                 enabled = state.question.isNotBlank(),
             )
+        }
+
+        if (state.panel is AiPanelState.Unavailable) {
+            item { GloveOutlinedButton(stringResource(R.string.ask_model_settings), onSetup, Modifier.fillMaxWidth()) }
+        }
+        if (state.sources.isNotEmpty() && state.panel !is AiPanelState.Working) {
+            item {
+                Text(stringResource(R.string.ask_sources_title), style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.ask_sources_notice), style = MaterialTheme.typography.bodyMedium)
+            }
+            state.sources.forEach { passage ->
+                item(key = passage.passageId) {
+                    Column {
+                        Text(passage.title, style = MaterialTheme.typography.titleMedium)
+                        Text(passage.body, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(passage.sourceLabel, style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
         }
 
         // Shown until the worker has had one answer. After that the box is understood and the examples
@@ -162,23 +205,29 @@ class AskViewModel @Inject constructor(
     data class State(
         val question: String = "",
         val panel: AiPanelState = AiPanelState.Idle,
+        val sources: List<CorpusPassage> = emptyList(),
+        val requestId: Long = 0,
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+    private var requestJob: Job? = null
 
     fun onQuestionChanged(value: String) {
         // Capped at the length the task type accepts, so typing cannot reach a state that throws.
         val trimmed = value.take(AiTask.SafetyQuestion.MAX_QUESTION_CHARS)
-        _state.value = _state.value.copy(question = trimmed)
+        if (trimmed == _state.value.question) return
+        stop()
+        _state.update { it.copy(question = trimmed, panel = AiPanelState.Idle, sources = emptyList()) }
     }
 
     fun askExample(text: String) {
-        _state.value = _state.value.copy(question = text)
+        onQuestionChanged(text)
         ask()
     }
 
     fun ask() {
+        if (requestJob?.isActive == true) return
         val question = _state.value.question.trim()
         if (question.isBlank()) {
             _state.value = _state.value.copy(
@@ -194,16 +243,39 @@ class AskViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
-            _state.value = _state.value.copy(panel = AiPanelState.Working())
-            val outcome = aiCoach.run(AiTask.SafetyQuestion(language, question)) { words ->
-                _state.value = _state.value.copy(panel = AiPanelState.Working(words))
+        val requestId = _state.value.requestId + 1
+        _state.update { it.copy(panel = AiPanelState.Working(), sources = emptyList(), requestId = requestId) }
+        requestJob = viewModelScope.launch {
+            try {
+                val task = AiTask.SafetyQuestion(language, question)
+                val sources = withContext(Dispatchers.Default) {
+                    (SafetyCorpus.retriever.retrieveForTask(task) as? RetrievalResult.Grounded)
+                        ?.passages?.map { it.passage }.orEmpty()
+                }
+                _state.update { if (it.requestId == requestId) it.copy(sources = sources) else it }
+                val outcome = aiCoach.run(task) { words ->
+                    _state.update { if (it.requestId == requestId) it.copy(panel = AiPanelState.Working(words)) else it }
+                }
+                _state.update { if (it.requestId == requestId) it.copy(panel = outcome.toPanelState()) else it }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                _state.update {
+                    if (it.requestId == requestId) it.copy(panel = AiPanelState.Failed(UiMessage.warning(R.string.ai_failed))) else it
+                }
             }
-            _state.value = _state.value.copy(panel = outcome.toPanelState())
         }
     }
 
     fun stop() {
-        aiCoach.stop()
+        if (requestJob?.isActive == true) {
+            aiCoach.stop()
+            requestJob?.cancel()
+        }
+        requestJob = null
+        _state.update { it.copy(requestId = it.requestId + 1,
+            panel = if (it.panel is AiPanelState.Working) AiPanelState.Idle else it.panel) }
     }
+
+    override fun onCleared() { stop(); super.onCleared() }
 }

@@ -22,6 +22,18 @@ import org.junit.Test
  */
 class AiCoachTest {
 
+    @Test fun `cancelled generation never publishes its partial answer`() = runTest {
+        engine.response = "Leave the area when methane reaches 1.25 percent."
+        engine.stopReason = org.jaagruk.ai.runtime.StopReason.CANCELLED
+        assertThat(coach.run(methaneQuestion)).isInstanceOf(AiOutcome.Failed::class.java)
+    }
+
+    @Test fun `token limited generation is marked incomplete even with a complete sentence`() = runTest {
+        engine.response = "Leave the area when methane reaches 1.25 percent."
+        engine.stopReason = org.jaagruk.ai.runtime.StopReason.TOKEN_LIMIT
+        assertThat((coach.run(methaneQuestion) as AiOutcome.Answer).truncated).isTrue()
+    }
+
     private val engine = FakeLlmEngine()
     private val coach = AiCoach(engine)
 

@@ -13,6 +13,8 @@ import org.jaagruk.safety.ui.drill.DrillScreen
 import org.jaagruk.safety.ui.drill.ResultScreen
 import org.jaagruk.safety.ui.hazard.HazardScreen
 import org.jaagruk.safety.ui.home.HomeScreen
+import org.jaagruk.safety.ui.home.ExploreScreen
+import org.jaagruk.safety.ui.home.PracticeScreen
 import org.jaagruk.safety.ui.ask.AskScreen
 import org.jaagruk.safety.ui.signin.SignInScreen
 import org.jaagruk.safety.ui.supervisor.SiteScanScreen
@@ -29,6 +31,11 @@ import org.jaagruk.safety.ui.verify.VerifyScreen
  * disagree with itself.
  */
 sealed class Route(val pattern: String) {
+
+    data object Explore : Route("explore")
+    data object Practice : Route("practice/{scenarioId}") {
+        fun of(scenarioId: String) = "practice/$scenarioId"
+    }
 
     data object SignIn : Route("signin")
 
@@ -105,10 +112,29 @@ fun JaagrukNavHost(
     val start = if (openRefreshers && !notifiedWorkerId.isNullOrBlank()) {
         Route.Home.of(notifiedWorkerId)
     } else {
-        Route.SignIn.pattern
+        Route.Explore.pattern
     }
 
     NavHost(navController = navController, startDestination = start) {
+
+        composable(Route.Explore.pattern) {
+            ExploreScreen(
+                onPractice = { navController.navigate(Route.Practice.of(it)) },
+                onSignIn = { navController.navigate(Route.SignIn.pattern) },
+                onAsk = { navController.navigate(Route.Ask.pattern) },
+                onVerify = { navController.navigate(Route.Verify.of()) },
+                onSupervisor = { navController.navigate(Route.Supervisor.pattern) },
+            )
+        }
+        composable(Route.Practice.pattern,
+            arguments = listOf(navArgument("scenarioId") { type = NavType.StringType }),
+        ) { entry ->
+            PracticeScreen(
+                scenarioId = entry.arguments?.getString("scenarioId").orEmpty(),
+                onBack = { navController.popBackStack() },
+                onSignIn = { navController.navigate(Route.SignIn.pattern) },
+            )
+        }
 
         composable(Route.SignIn.pattern) {
             SignInScreen(
@@ -121,6 +147,7 @@ fun JaagrukNavHost(
                 },
                 onSupervisorTools = { navController.navigate(Route.Supervisor.pattern) },
                 onVerify = { navController.navigate(Route.Verify.of()) },
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -144,7 +171,7 @@ fun JaagrukNavHost(
                 onVerify = { navController.navigate(Route.Verify.of()) },
                 onSupervisorTools = { navController.navigate(Route.Supervisor.pattern) },
                 onSignOut = {
-                    navController.navigate(Route.SignIn.pattern) {
+                    navController.navigate(Route.Explore.pattern) {
                         popUpTo(0) { inclusive = true }
                     }
                 },
@@ -244,7 +271,8 @@ fun JaagrukNavHost(
         }
 
         composable(Route.Ask.pattern) {
-            AskScreen(onBack = { navController.popBackStack() })
+            AskScreen(onBack = { navController.popBackStack() },
+                onSetup = { navController.navigate(Route.Supervisor.pattern) })
         }
 
         composable(Route.SiteScan.pattern) {

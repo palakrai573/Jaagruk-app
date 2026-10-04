@@ -25,7 +25,7 @@ from app.api.serializers import (
 )
 from app.core.security import Role
 from app.db.base import utcnow
-from app.models import ChainHead, ModuleRecord, SiteKey, TrainingProgress, Worker
+from app.models import ChainHead, Device, ModuleRecord, SiteKey, TrainingProgress, Worker
 from app.schemas import BootstrapResponse, SyncBatchRequest, SyncBatchResponse
 from app.services import events, sync as sync_service
 from app.services.sync import BatchTooLarge, DeviceNotRegistered
@@ -60,6 +60,12 @@ def upload_batch(
     six weeks offline does not lose hundreds of good records to a single bad one.
     """
     try:
+        device = db.get(Device, payload.device_id)
+        if device is None or not device.active:
+            raise DeviceNotRegistered(payload.device_id)
+        # Authorize before ingestion AND receipt replay; knowing a device id is
+        # not permission to submit or inspect another site's records.
+        require_site_access(db, scope, device.site_id)
         summary = sync_service.ingest_batch(
             db,
             payload,

@@ -4,9 +4,14 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 /**
  * Finds the model file, and never copies it.
@@ -131,14 +136,17 @@ class ModelStore(private val context: Context) {
     suspend fun install(source: InputStream, onProgress: (Long) -> Unit = {}): Result<File> =
         withContext(Dispatchers.IO) {
             val destination = modelFile
-            val temporary = File("${destination.absolutePath}.part")
+            var temporary: File? = null
             try {
-                if (temporary.exists()) temporary.delete()
                 var written = 0L
                 source.use { input ->
-                    temporary.outputStream().use { output ->
+                    currentCoroutineContext().ensureActive()
+                    val staging = File.createTempFile("model-", ".part", destination.parentFile)
+                    temporary = staging
+                    staging.outputStream().use { output ->
                         val buffer = ByteArray(4 * 1024 * 1024)
                         while (true) {
+                            currentCoroutineContext().ensureActive()
                             val read = input.read(buffer)
                             if (read < 0) break
                             output.write(buffer, 0, read)
@@ -146,35 +154,37 @@ class ModelStore(private val context: Context) {
                             onProgress(written)
                         }
                         output.flush()
+                        output.fd.sync()
                     }
                 }
                 if (written < MIN_PLAUSIBLE_BYTES) {
-                    temporary.delete()
+                    temporary?.delete()
                     return@withContext Result.failure(
                         IllegalStateException(
                             "transfer ended at $written bytes, below the $MIN_PLAUSIBLE_BYTES floor",
                         ),
                     )
                 }
-                if (!hasGgufMagic(temporary)) {
-                    temporary.delete()
+                val staging = checkNotNull(temporary)
+                if (!hasGgufMagic(staging)) {
+                    staging.delete()
                     return@withContext Result.failure(
                         IllegalStateException("the file is not in GGUF format"),
                     )
                 }
-                if (destination.exists()) destination.delete()
-                if (!temporary.renameTo(destination)) {
-                    temporary.delete()
-                    return@withContext Result.failure(
-                        IllegalStateException("could not move the model into place"),
-                    )
-                }
+                currentCoroutineContext().ensureActive()
+                // Same-directory atomic replacement preserves the old model if promotion fails.
+                Files.move(staging.toPath(), destination.toPath(),
+                    StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
                 Log.i(TAG, "model installed, ${destination.length()} bytes")
                 Result.success(destination)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "model install failed", e)
-                temporary.delete()
                 Result.failure(e)
+            } finally {
+                temporary?.delete()
             }
         }
 

@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +27,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import org.jaagruk.ai.ModelStore
 import org.jaagruk.core.ai.AiCapability
 import org.jaagruk.safety.R
@@ -59,6 +63,17 @@ fun SupervisorScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, viewModel) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) viewModel.stopBriefing()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            viewModel.stopBriefing()
+        }
+    }
 
     // OpenDocument rather than GetContent: the model is hundreds of megabytes and needs to be read as
     // a stream from wherever it actually is, not copied into a cache first by the picker. The MIME
@@ -553,6 +568,8 @@ fun SupervisorScreen(
                     disclaimerRes = R.string.briefing_disclaimer,
                     actionRes = R.string.briefing_action,
                     onAsk = viewModel::draftBriefing,
+                    onStop = viewModel::stopBriefing,
+                    enabled = !state.busy,
                 )
             }
         }
@@ -581,10 +598,8 @@ fun SupervisorScreen(
                 // Named explicitly so a supervisor copying a file onto the handset knows what to call
                 // it. The store refuses anything that is not a GGUF of a plausible size, so a wrong
                 // file is a message rather than a crash.
-                DiagnosticRow(
-                    stringResource(R.string.ai_model_expected_file),
-                    ModelStore.MODEL_FILE_NAME,
-                )
+                Text(stringResource(R.string.ai_model_expected_file, ModelStore.MODEL_FILE_NAME),
+                    style = MaterialTheme.typography.bodyMedium)
                 // Only offered where it could work. A phone with no native library or not enough
                 // memory would copy 769 MiB and then still report unavailable.
                 if (state.aiCapability == AiCapability.MODEL_MISSING) {
@@ -603,6 +618,7 @@ fun SupervisorScreen(
                     GloveOutlinedButton(
                         text = stringResource(R.string.ai_model_remove),
                         onClick = viewModel::removeAiModel,
+                        enabled = !state.busy && state.briefing !is org.jaagruk.safety.ui.components.AiPanelState.Working,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

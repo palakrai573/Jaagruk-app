@@ -120,6 +120,9 @@
     <string name="drill_paused_not_counted">रुकने का समय आपके ख़िलाफ़ नहीं गिना जाता। आराम से करें।</string>
     <string name="drill_paused_tracking">रुका: कैमरा दृश्य पकड़ नहीं पा रहा।</string>
     <string name="drill_paused_backgrounded">रुका: आपने ऐप छोड़ दिया था।</string>
+    <string name="drill_paused_narration">प्रश्न सुनें। समय मापना रुका हुआ है।</string>
+    <string name="drill_continue_without_audio">बिना आवाज़ के आगे बढ़ें</string>
+    <string name="drill_save_failed">परिणाम पूरी तरह सहेजा नहीं जा सका। प्रशिक्षण पूरा होने की पुष्टि नहीं हुई है। दोबारा करने से पहले पर्यवेक्षक से इस प्रयास की जाँच कराएं।</string>
     <string name="drill_ar_gave_up">यहाँ AR टिक नहीं रहा। अभ्यास तस्वीरों से आगे चलेगा।</string>
     <string name="drill_voice_unclear">कुछ सुना, पर साफ़ नहीं। फिर बोलें।</string>
     <string name="drill_voice_not_applicable">यह आदेश इस चरण पर नहीं चलता।</string>

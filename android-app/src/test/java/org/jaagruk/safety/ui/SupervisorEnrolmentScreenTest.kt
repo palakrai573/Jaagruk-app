@@ -10,6 +10,19 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.verify
+import kotlinx.coroutines.awaitCancellation
+import org.jaagruk.safety.ui.components.AiPanelState
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
+import androidx.lifecycle.viewModelScope
 import org.jaagruk.ai.AiCoach
 import org.jaagruk.ai.ModelStore
 import org.jaagruk.ai.NoopLlmEngine
@@ -61,7 +74,7 @@ import org.robolectric.annotation.Config
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [33])
+@Config(sdk = [33], qualifiers = "en")
 class SupervisorEnrolmentScreenTest {
 
     @get:Rule
@@ -71,6 +84,7 @@ class SupervisorEnrolmentScreenTest {
     private lateinit var workers: WorkerRepository
     private lateinit var deviceProfile: DeviceProfile
     private lateinit var keyStore: SiteKeyStore
+    private val viewModels = mutableListOf<SupervisorViewModel>()
 
     private val siteId = "JH-DHN-001"
     private val clock = FixedWallClock(1_760_000_000_000L)
@@ -91,11 +105,19 @@ class SupervisorEnrolmentScreenTest {
 
     @After
     fun tearDown() {
+        runBlocking {
+            viewModels.forEach { it.viewModelScope.coroutineContext[Job]?.cancelAndJoin() }
+        }
+        viewModels.clear()
         database.close()
         Dispatchers.resetMain()
     }
 
-    private fun buildViewModel(): SupervisorViewModel {
+    private fun buildViewModel(
+        coach: AiCoach = AiCoach(NoopLlmEngine()),
+        models: ModelStore = ModelStore(ApplicationProvider.getApplicationContext()),
+        facts: BriefingFactsBuilder? = null,
+    ): SupervisorViewModel {
         val gossip = mockk<NearbyGossipService>(relaxed = true)
         every { gossip.state } returns MutableStateFlow(NearbyGossipService.State())
 
@@ -118,16 +140,59 @@ class SupervisorEnrolmentScreenTest {
             // armeabi-v7a handset, so this configuration is one the app genuinely ships into. What it
             // proves here is that the supervisor screen composes and enrols workers with the assistant
             // reporting unavailable, which is the property that matters: assistance is additive.
-            aiCoach = AiCoach(NoopLlmEngine()),
-            modelStore = ModelStore(ApplicationProvider.getApplicationContext()),
-            briefingFacts = BriefingFactsBuilder(
+            aiCoach = coach,
+            modelStore = models,
+            briefingFacts = facts ?: BriefingFactsBuilder(
                 database = database,
                 retention = RetentionRepository(database, clock),
                 resolver = CatalogResolver(ApplicationProvider.getApplicationContext()),
                 clock = clock,
             ),
             syncStatus = SyncStatusProvider(database),
-        )
+        ).also { viewModels += it }
+    }
+
+    @Test fun `failed model unload clears busy and never opens the file`() = runTest {
+        val coach = mockk<AiCoach>(relaxed = true)
+        coEvery { coach.release() } throws IllegalStateException("unload failed")
+        val vm = buildViewModel(coach)
+        var opened = false
+        vm.installAiModel { opened = true; null }
+        assertThat(opened).isFalse()
+        assertThat(vm.state.value.busy).isFalse()
+        assertThat(vm.state.value.message?.resId).isEqualTo(org.jaagruk.safety.R.string.ai_model_install_failed)
+    }
+
+    @Test fun `failed model deletion never reports a successful removal`() = runTest {
+        val models = mockk<ModelStore>(relaxed = true)
+        val file = mockk<java.io.File>(relaxed = true)
+        every { models.modelFile } returns file
+        every { models.delete() } returns false
+        every { file.exists() } returns true
+        val vm = buildViewModel(models = models)
+        vm.removeAiModel()
+        withContext(Dispatchers.Default) {
+            withTimeout(10000) { while (vm.state.value.busy) delay(10) }
+        }
+        assertThat(vm.state.value.message?.resId).isEqualTo(org.jaagruk.safety.R.string.ai_failed)
+    }
+
+    @Test fun `duplicate install is ignored while unload is pending`() = runTest {
+        val release = CompletableDeferred<Unit>()
+        val coach = mockk<AiCoach>(relaxed = true)
+        coEvery { coach.release() } coAnswers { release.await() }
+        val vm = buildViewModel(coach)
+        var duplicateOpened = false
+        vm.installAiModel { null }
+        vm.installAiModel { duplicateOpened = true; null }
+        coVerify(exactly = 1) { coach.release() }
+        assertThat(vm.state.value.busy).isTrue()
+        release.complete(Unit)
+        withContext(Dispatchers.Default) {
+            withTimeout(10000) { while (vm.state.value.busy) delay(10) }
+        }
+        assertThat(duplicateOpened).isFalse()
+        assertThat(vm.state.value.message?.resId).isEqualTo(org.jaagruk.safety.R.string.ai_model_install_failed)
     }
 
     private fun setScreen(viewModel: SupervisorViewModel) {
@@ -142,6 +207,58 @@ class SupervisorEnrolmentScreenTest {
                 )
             }
         }
+    }
+
+    private suspend fun awaitSite(vm: SupervisorViewModel) = withContext(Dispatchers.Default) {
+        withTimeout(10000) { while (vm.state.value.siteId == null) delay(10) }
+    }
+
+    @Test fun `briefing fact failure is recoverable without starting inference`() = runTest {
+        val coach = mockk<AiCoach>(relaxed = true)
+        val facts = mockk<BriefingFactsBuilder>()
+        coEvery { facts.build(any(), any()) } throws IllegalStateException("database unavailable")
+        val vm = buildViewModel(coach, facts = facts)
+        awaitSite(vm)
+        vm.draftBriefing()
+        assertThat(vm.state.value.briefing).isInstanceOf(AiPanelState.Failed::class.java)
+        vm.draftBriefing()
+        coVerify(exactly = 2) { facts.build(any(), any()) }
+        coVerify(exactly = 0) { coach.run(any(), any()) }
+    }
+
+    @Test fun `briefing engine failure does not leave a working panel`() = runTest {
+        val coach = mockk<AiCoach>(relaxed = true)
+        val facts = mockk<BriefingFactsBuilder>(relaxed = true)
+        coEvery { coach.run(any(), any()) } throws IllegalStateException("engine failure")
+        val vm = buildViewModel(coach, facts = facts)
+        awaitSite(vm)
+        vm.draftBriefing()
+        assertThat(vm.state.value.briefing).isInstanceOf(AiPanelState.Failed::class.java)
+    }
+
+    @Test fun `stopped briefing rejects stale progress and permits a new request`() = runTest {
+        val coach = mockk<AiCoach>(relaxed = true)
+        val facts = mockk<BriefingFactsBuilder>(relaxed = true)
+        val callbacks = mutableListOf<(Int) -> Unit>()
+        coEvery { coach.run(any(), any()) } coAnswers {
+            callbacks += secondArg<(Int) -> Unit>()
+            awaitCancellation()
+        }
+        val vm = buildViewModel(coach, facts = facts)
+        awaitSite(vm)
+        vm.draftBriefing()
+        vm.draftBriefing()
+        coVerify(exactly = 1) { coach.run(any(), any()) }
+        vm.stopBriefing()
+        callbacks.first()(99)
+        assertThat(vm.state.value.briefing).isEqualTo(AiPanelState.Idle)
+        verify(exactly = 1) { coach.stop() }
+        vm.draftBriefing()
+        callbacks.first()(99)
+        assertThat((vm.state.value.briefing as AiPanelState.Working).words).isEqualTo(0)
+        callbacks.last()(7)
+        assertThat((vm.state.value.briefing as AiPanelState.Working).words).isEqualTo(7)
+        vm.stopBriefing()
     }
 
     @Test

@@ -36,9 +36,9 @@ private val SignalBlue = Color(0xFF005EB8)
 private val JaagrukTeal = Color(0xFF00696E)
 private val JaagrukTealLight = Color(0xFF4FD8E0)
 
-private val SurfaceDark = Color(0xFF10161C)
-private val SurfaceDarkElevated = Color(0xFF1A232B)
-private val SurfaceLight = Color(0xFFF7F9FB)
+private val SurfaceDark = Color(0xFF14171A)
+private val SurfaceDarkElevated = Color(0xFF23272A)
+private val SurfaceLight = Color(0xFFF7F8F9)
 
 private val DarkColors = darkColorScheme(
     primary = JaagrukTealLight,
@@ -79,7 +79,7 @@ private val LightColors = lightColorScheme(
     onBackground = Color(0xFF10161C),
     surface = Color.White,
     onSurface = Color(0xFF10161C),
-    surfaceVariant = Color(0xFFDBE4EA),
+    surfaceVariant = Color(0xFFEEF1F2),
     onSurfaceVariant = Color(0xFF3F484E),
     outline = Color(0xFF6F797F),
 )
