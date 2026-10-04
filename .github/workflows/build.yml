@@ -116,9 +116,16 @@ jobs:
           if [ -n "$RELEASE_API_BASE_URL" ]; then
             ARGS="$ARGS -Pjaagruk.releaseApiBaseUrl=$RELEASE_API_BASE_URL"
           fi
+          set -o pipefail
           ./gradlew --no-daemon \
             :core:test :ai:testDebugUnitTest :android-app:testDebugUnitTest \
-            :android-app:assembleRelease $ARGS
+            :android-app:assembleRelease $ARGS 2>&1 | tee "$RUNNER_TEMP/gradle.log"
+          # Gradle does not fail when it cannot strip native libraries; it ships them with
+          # debug symbols. That once more than doubled the APK without anything going red.
+          if grep -q "Unable to strip" "$RUNNER_TEMP/gradle.log"; then
+            echo "::error::Native libraries were packaged unstripped. Check ndkVersion in android-app/build.gradle.kts."
+            exit 1
+          fi
 
       - name: Collect APKs
         run: |

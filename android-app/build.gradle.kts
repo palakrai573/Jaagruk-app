@@ -26,12 +26,19 @@ android {
     namespace = "org.jaagruk.safety"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    // The same NDK :ai builds with. This module compiles no native code, but it is the one that
+    // STRIPS every packaged .so, and with no ndkVersion here it used the Android Gradle Plugin's
+    // default NDK for that. Where that default is not installed the build does not fail: it logs
+    // "Unable to strip the following libraries" and ships debug symbols, which more than doubled
+    // the arm64 APK (34 MB to 77 MB) on a machine that only had the pinned NDK.
+    ndkVersion = "28.2.13676358"
+
     defaultConfig {
         applicationId = "org.jaagruk.safety"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
