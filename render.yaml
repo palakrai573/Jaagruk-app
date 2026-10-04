@@ -1,0 +1,36 @@
+# Render blueprint: a public DEMO of the compliance service.
+#
+# One web service (FastAPI backend + React dashboard, one origin, built from ./Dockerfile) and one
+# PostgreSQL database. Deploy with "New > Blueprint" in the Render dashboard, pointing at this repo.
+#
+# DEMO ONLY as written. JAAGRUK_DEMO_SEED resets the database to the seeded fake dataset on every
+# start, and the demo password is published in backend/app/seed.py. For anything holding real
+# records, remove JAAGRUK_DEMO_SEED and create the schema another way (see deploy/README.md).
+
+services:
+  - type: web
+    name: jaagruk-compliance
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      # Production mode turns on the startup guards: PostgreSQL required, a strong JWT secret,
+      # no wildcard CORS origin.
+      - key: JAAGRUK_ENVIRONMENT
+        value: production
+      - key: JAAGRUK_JWT_SECRET
+        generateValue: true
+      - key: JAAGRUK_DATABASE_URL
+        fromDatabase:
+          name: jaagruk-db
+          property: connectionString
+      - key: JAAGRUK_DEMO_SEED
+        value: "true"
+
+databases:
+  - name: jaagruk-db
+    plan: free
+    databaseName: jaagruk
+    user: jaagruk

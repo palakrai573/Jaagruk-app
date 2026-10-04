@@ -1,0 +1,16 @@
+# Whitelist. The repository carries a full second Android project (Jaagruk-Mobile/) and vendored
+# llama.cpp sources; none of it belongs in the compliance service's build context.
+*
+!backend/
+!dashboard/
+!deploy/
+
+backend/.venv/
+backend/**/__pycache__/
+backend/.pytest_cache/
+backend/*.db
+backend/*.db-*
+backend/media_store/
+backend/.env
+dashboard/node_modules/
+dashboard/dist/

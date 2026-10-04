@@ -16,7 +16,9 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import __version__
 from app.api import health
@@ -55,6 +57,80 @@ Key behaviours worth knowing before integrating:
   the evidence of tampering would defeat the point of keeping a chain.
 * **Statutory validity and operational readiness are separate numbers** and are never blended.
 """
+
+
+#: Applied to every API response. The API serves JSON and CSV, never HTML that should run anything.
+API_CSP = "default-src 'none'; frame-ancestors 'none'"
+
+#: Applied to dashboard pages only. Everything is same-origin except the OpenStreetMap tiles behind
+#: the hazard map; Leaflet's bundled marker images arrive as data: URIs. 'self' in connect-src also
+#: covers the same-host WebSocket for live events.
+DASHBOARD_CSP = (
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+    "img-src 'self' data: blob: https://*.tile.openstreetmap.org; connect-src 'self'; "
+    "font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; "
+    "frame-ancestors 'none'"
+)
+
+#: Paths that always belong to the API, whether or not the dashboard is mounted.
+API_ONLY_PATHS = ("/health", "/readyz", "/docs", "/redoc", "/openapi.json")
+
+
+class DashboardFiles(StaticFiles):
+    """Static files with a single-page-app fallback.
+
+    The dashboard routes client-side (/workers/42, /hazards/map), so a deep link or a refresh asks
+    the server for a path with no file behind it; that must return index.html. An unmatched API
+    path must NOT: a client calling a mistyped endpoint should get a JSON 404, not a 200 of HTML
+    it will fail to parse.
+    """
+
+    def __init__(self, *, api_prefixes: tuple[str, ...], **kwargs) -> None:  # noqa: ANN003
+        super().__init__(**kwargs)
+        self._api_prefixes = tuple(p.strip("/") + "/" for p in api_prefixes)
+
+    async def get_response(self, path: str, scope):  # noqa: ANN001, ANN201
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            if exc.status_code != status.HTTP_404_NOT_FOUND:
+                raise
+            # Starlette hands over an OS path (normpath), so on Windows the separators are
+            # backslashes; compare in URL form or the API check silently never matches there.
+            url_path = path.replace("\\", "/").strip("/")
+            if (url_path + "/").startswith(self._api_prefixes):
+                raise
+            # Client-side routes never have a file extension. A missing file that does -- a
+            # hashed chunk a stale page still asks for after a redeploy -- must be a 404, not
+            # index.html served as JavaScript, which fails as "Unexpected token '<'".
+            if "." in url_path.rsplit("/", 1)[-1]:
+                raise
+            return await super().get_response("index.html", scope)
+
+
+def _is_api_path(path: str, settings: Settings) -> bool:
+    return path.startswith(settings.api_prefix) or path.startswith(API_ONLY_PATHS)
+
+
+def _mount_dashboard(app: FastAPI, settings: Settings) -> bool:
+    directory = settings.dashboard_dir
+    if directory is None:
+        return False
+    if not (directory / "index.html").is_file():
+        logger.error(
+            "JAAGRUK_DASHBOARD_DIR is set to %s but it has no index.html; serving the API only. "
+            "Build the dashboard first: cd dashboard && npm ci && npm run build",
+            directory,
+        )
+        return False
+    # Mounted last, after every router, so it only ever sees requests no route has claimed.
+    app.mount(
+        "/",
+        DashboardFiles(directory=directory, html=True, api_prefixes=(settings.api_prefix,)),
+        name="dashboard",
+    )
+    logger.info("serving the compliance dashboard from %s", directory)
+    return True
 
 
 def _log_startup_state(settings: Settings) -> None:
@@ -133,12 +209,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health.router)
     app.include_router(api_router, prefix=settings.api_prefix)
 
-    _install_middleware(app)
+    dashboard_mounted = _mount_dashboard(app, settings)
+
+    _install_middleware(app, settings, dashboard_mounted=dashboard_mounted)
     _install_exception_handlers(app)
     return app
 
 
-def _install_middleware(app: FastAPI) -> None:
+def _install_middleware(app: FastAPI, settings: Settings, *, dashboard_mounted: bool) -> None:
     @app.middleware("http")
     async def timing_and_security_headers(request: Request, call_next):  # noqa: ANN001, ANN202
         started = time.perf_counter()
@@ -148,8 +226,13 @@ def _install_middleware(app: FastAPI) -> None:
         response.headers["X-Response-Time-Ms"] = f"{elapsed_ms:.1f}"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
-        # The API serves JSON and CSV, never HTML that should execute anything.
-        response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'"
+        # The API keeps its lock-everything policy. Dashboard pages need their own scripts and
+        # styles, so they get a same-origin policy instead -- scoped by path, never loosened for
+        # the API.
+        if dashboard_mounted and not _is_api_path(request.url.path, settings):
+            response.headers["Content-Security-Policy"] = DASHBOARD_CSP
+        else:
+            response.headers["Content-Security-Policy"] = API_CSP
 
         if elapsed_ms > 2_000:
             logger.warning(

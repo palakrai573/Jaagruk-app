@@ -100,10 +100,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // No real default. This used to be https://jaagruk.jharkhand.gov.in/, a government domain this
+            // project does not control, so a release APK would have sent worker sync data to whoever answers
+            // there. .invalid is reserved by RFC 2606 and can never resolve: until a server is configured with
+            // -Pjaagruk.releaseApiBaseUrl (or local.properties), the sync workers hit UnknownHostException, which
+            // they already treat as "offline" and retry — records stay queued on the phone, nothing leaves it.
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${buildConfigString("jaagruk.releaseApiBaseUrl", "https://jaagruk.jharkhand.gov.in/")}\"",
+                "\"${buildConfigString("jaagruk.releaseApiBaseUrl", "https://sync.invalid/")}\"",
             )
             buildConfigField("boolean", "ALLOW_CLEARTEXT", "false")
             buildConfigField("boolean", "VERBOSE_LOGGING", "false")

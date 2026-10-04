@@ -6,13 +6,17 @@
 
 A Kotlin Android project for vocational safety training in Jharkhand's mining and manufacturing sector, developed for **Smart India Hackathon · Problem Statement 26041**.
 
-**Android 10+ training app · Five safety modules · Native camera AR · Four training locales**
+**Android 10+ · Timed assessment · Signed offline certificates · ARCore with fallbacks · Hindi + Santali**
 
-[Active Mobile App](Jaagruk-Mobile/README.md) · [Architecture](#architecture) · [Measured Results](#measured-results) · [Build & Run](#build--run) · [Companion Web App](https://github.com/palakrai573/Jaagruk)
+[Build the submission app](#1-sih-submission-app-android-app) · [Architecture](#architecture) · [Measured Results](#measured-results) · [Companion Web App](https://github.com/palakrai573/Jaagruk)
 
 </div>
 
-> **Project status — 1 October 2026:** The active mobile app has recorded physical-device checks for training, language switching, offline 3D and AR camera startup. The repository also contains a separate assessment/compliance implementation. These are **two Gradle projects, not one fully integrated release**. Physical AR anchor stability, release-device acceptance and expert translation review remain outstanding.
+> **Which app is the SIH 26041 submission:** the root `android-app`, with `backend/` and `dashboard/`. It is the one that runs the complete flow the problem statement asks for — worker sign-in, timed drills with hesitation scoring, Ed25519-signed QR certificates, offline QR verification, queued sync to the FastAPI backend, and ARCore with sensor and pictogram fallbacks. Build it from the [repository root](#1-sih-submission-app-android-app).
+>
+> `Jaagruk-Mobile/` is a separate, **experimental** Gradle project: an on-device safety-coach and 3D-practice prototype. It has no sign-in, assessment, certificate or sync workflow, so it is not the submission and should not be judged as one.
+>
+> **Status — 3 October 2026:** physical AR anchor stability, signed-release device acceptance and expert translation review remain outstanding.
 
 ## Contents
 
@@ -44,15 +48,36 @@ The broader repository explores the administrative side of training as well: det
 
 | Audience | Intended workflow | Current implementation boundary |
 |---|---|---|
-| New workers and trainees | Explore hazards, rehearse decisions, repeat a module | Active mobile app |
-| Workers revising procedures | Ask an English/Hindi safety question and inspect its source | Active mobile app; installed model required for selection |
-| Trainers | Demonstrate an offline scene or camera-anchored tabletop model | Active mobile app; physical placement acceptance pending |
+| New workers and trainees | Explore hazards, rehearse decisions, repeat a module | Submission app (public Explore/Practice) and Jaagruk-Mobile |
+| Workers revising procedures | Ask an English/Hindi safety question and inspect its source | Jaagruk-Mobile (experimental); installed model required for selection |
+| Trainers | Demonstrate an offline scene or camera-anchored tabletop model | Jaagruk-Mobile (experimental); physical placement acceptance pending |
 | Safety supervisors | Review assessed records, readiness, hazards and certificates | Root assessment app, backend and dashboard |
 | Verifiers | Scan a signed certificate and inspect verification status | Root assessment/compliance implementation |
 
 This is a training prototype, **not a hazard detector, work permit, emergency-response authority or government-approved certification system**. Follow site procedures and qualified supervision.
 
 ## Interface Gallery
+
+### Compliance dashboard — real screenshots
+
+Captured on 3 October 2026 from the backend serving the built dashboard (`deploy/`), with the seeded demo dataset, signed in as the DGMS inspector.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/dashboard-overview.jpg" alt="Compliance overview: 80 workers across 4 sites, 82.5% statutorily certified, mean readiness 24.6%, and a readiness distribution chart dominated by expired retention" width="260" /></td>
+    <td align="center" width="33%"><img src="docs/screenshots/dashboard-hazard-map.jpg" alt="Hazard map with OpenStreetMap tiles around Ramgarh, located hazard markers and a list of reports without coordinates" width="260" /></td>
+    <td align="center" width="33%"><img src="docs/screenshots/dashboard-chain-integrity.jpg" alt="Chain integrity for the Jamshedpur site: 35 records verified end to end, one quarantined record retained as evidence, and the ledger with previous and record hashes" width="260" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Statutory vs operational readiness</strong></td>
+    <td align="center"><strong>Near-miss reports from the field</strong></td>
+    <td align="center"><strong>Tamper evidence, verified in the browser</strong></td>
+  </tr>
+</table>
+
+Screenshots of the Android submission app need a physical ARCore device and are not included yet.
+
+### Experimental app — presentation visuals
 
 <table>
   <tr>
@@ -67,35 +92,35 @@ This is a training prototype, **not a hazard detector, work permit, emergency-re
   </tr>
 </table>
 
-**Image provenance:** These are user-supplied presentation visuals in iPhone-style frames, not evidence of an iOS build or screenshots from the tested Samsung. Actual layouts and labels can differ. This repository's app implementation is Android/Kotlin.
+**Image provenance:** These depict the experimental `Jaagruk-Mobile` app. They are user-supplied presentation visuals in iPhone-style frames, not evidence of an iOS build or screenshots from the tested Samsung. Actual layouts and labels can differ. This repository's app implementation is Android/Kotlin.
 
 The three supplied Tools PNGs are byte-identical, so the gallery displays one rather than repeating it. All originals remain available: [Tools](docs/Jaagruk%20Tools%20Screen%20on%20iPhone.png), [Tools (1)](docs/Jaagruk%20Tools%20Screen%20on%20iPhone%20%281%29.png), [Tools (2)](docs/Jaagruk%20Tools%20Screen%20on%20iPhone%20%282%29.png).
 
 ## Choose the Right Project
 
-| Project | Open/build from | Purpose | Important distinction |
+| Project | Open/build from | Role | Purpose |
 |---|---|---|---|
-| **Jaagruk-Mobile** | `Jaagruk-Mobile/` | Current phone-tested training experience, 3D scenes, camera AR and extractive coach | Modules are `:app`, `:ai`, `:core`; guest practice does not issue certificates |
-| **Root assessment app** | Repository root | Assessed drills, worker identity, QR verification, readiness and offline records | Modules are `:android-app`, `:ai`, `:core`; different UI and validation history |
-| **Compliance backend** | `backend/` | Authentication, batch ingestion, records, verification and reports | Requires its own server/database configuration |
-| **Compliance dashboard** | `dashboard/` | Browser-based oversight and reporting | Separate React application, backed by the API |
+| **`android-app`** | Repository root | **SIH submission** | Worker identity, assessed drills, signed QR certificates and verification, readiness, offline records and sync. Modules `:android-app`, `:ai`, `:core` |
+| **Compliance backend** | `backend/` | **SIH submission** | Authentication, batch ingestion, records, verification and reports. Requires its own server/database configuration |
+| **Compliance dashboard** | `dashboard/` | **SIH submission** | Browser-based oversight and reporting, backed by the API |
+| **Jaagruk-Mobile** | `Jaagruk-Mobile/` | Experimental | Phone-tested 3D scenes, camera AR and an extractive on-device coach. Modules `:app`, `:ai`, `:core`; guest practice only — no sign-in, assessment or certificates |
 | **Companion web training app** | [Separate repository](https://github.com/palakrai573/Jaagruk) | Product/UI reference and browser experience | Not the same project as this repository's compliance dashboard |
 
 The two copies of `:core` and `:ai` are separate source trees; one is not automatically linked into the other. Passing tests in one tree does not validate the other. Their feature consolidation is future work.
 
-**Documentation snapshot:** Root-app results and the native-experience note include locally tested changes that are not all published in this documentation-only commit. This update does not publish those unrelated implementation changes. Re-run the relevant gates on your checkout before treating historical counts or local workflow descriptions as release acceptance.
+**Published state:** the root app's locally tested changes — public Explore and Practice routes, drill pause, certificate replay, recorded narration and the device-scoped sync authorisation — are now committed. Re-run the relevant gates on your checkout before treating historical counts as release acceptance.
 
 ## Capabilities & Training Modules
 
 ### Capability matrix
 
-| Capability | Active mobile app | Root assessment/compliance project |
+| Capability | Jaagruk-Mobile (experimental) | `android-app` + backend + dashboard (submission) |
 |---|---|---|
-| Public training entry | Starts on training without sign-in | Public explore/practice routes in the local implementation |
+| Public training entry | Starts on training without sign-in | Public Explore and Practice routes; sign-in only for assessed drills |
 | Five rehearsal modules | Implemented, including complete practice/restart flows | Catalog and guest practice implementation |
 | Interactive offline 3D | Bundled Three.js scenes in a network-blocked WebView | Different presentation implementation; not the same scene bundle |
 | Live camera AR | SceneView/ARCore plane placement and native props | ARCore controller with sensor/pictogram fallbacks |
-| Assessed spatial interaction | Not connected to the active practice screen | Controller/session/repository implementation |
+| Assessed spatial interaction | Not connected to the experimental app's practice screen | Controller/session/repository implementation |
 | Safety coach | Model selects an authored passage; exact text displayed | Retrieval, bounded generation and answer guard |
 | Signed QR certificates | Not exposed as a completed mobile workflow | Core codec, signing, verification and Android screens |
 | Backend synchronization | Do not infer a complete workflow from data-layer classes | WorkManager queue and FastAPI ingestion |
@@ -121,7 +146,7 @@ See the [module catalog](Jaagruk-Mobile/core/src/main/kotlin/org/jaagruk/core/ca
 
 ```mermaid
 flowchart TB
-    subgraph MOBILE["Active project: Jaagruk-Mobile"]
+    subgraph MOBILE["Experimental: Jaagruk-Mobile"]
         UI["Compose Material 3 UI"]
         PRACTICE["Catalog + practice matcher"]
         WEBVIEW["Network-blocked WebView"]
@@ -137,7 +162,7 @@ flowchart TB
         UI --> LOCAL
     end
 
-    subgraph COMPLIANCE["Separate root project"]
+    subgraph COMPLIANCE["SIH submission: android-app"]
         APP["android-app"]
         CORE["Pure Kotlin assessment / crypto / readiness"]
         ROOM["Room records + sync queue"]
@@ -207,7 +232,7 @@ The current models are procedural tabletop representations, not photorealistic c
 
 ## How the Safety Coach Works
 
-The active coach uses the model as a **document selector**, not as an unrestricted author of safety instructions.
+The experimental app's coach uses the model as a **document selector**, not as an unrestricted author of safety instructions.
 
 ```mermaid
 sequenceDiagram
@@ -227,7 +252,7 @@ sequenceDiagram
     Repo-->>UI: Unchanged source text + citation, or explicit failure/refusal
 ```
 
-### Guardrails implemented in the active path
+### Guardrails implemented in the experimental app's coach
 
 - Language-scoped retrieval grounds the request in the bundled corpus.
 - Only the top three candidates enter the selector prompt.
@@ -241,7 +266,7 @@ sequenceDiagram
 
 This limits generated safety prose, but **does not prove retrieval relevance, corpus correctness or suitability for a particular mine**. A model can select the wrong authored passage. The small regression evaluation is not a comprehensive safety benchmark.
 
-The root project's [AiCoach](ai/src/main/java/org/jaagruk/ai/AiCoach.kt) follows a different retrieval/prompt/guard pipeline. Its tests and behavior must not be attributed to the active extractive coach.
+The root project's [AiCoach](ai/src/main/java/org/jaagruk/ai/AiCoach.kt) follows a different retrieval/prompt/guard pipeline. Its tests and behavior must not be attributed to the experimental app's extractive coach.
 
 ### General tools are a different trust boundary
 
@@ -249,7 +274,7 @@ OCR, document summaries, screenshot explanation, Circle Learn and general chat a
 
 ## Assessment, Certificates & Compliance
 
-**This section describes the root assessment project, not completed workflows in the active mobile practice screen.**
+**This section describes the root assessment project, the submission app's workflows, not the experimental app's practice screen.**
 
 ```mermaid
 flowchart LR
@@ -308,7 +333,7 @@ The dashboard includes overview, workers, sites, modules, readiness/hesitation v
 
 ## Technology Stack
 
-| Layer | Active mobile implementation / repository stack |
+| Layer | Jaagruk-Mobile implementation / repository stack |
 |---|---|
 | Android UI | Kotlin 2.0.21, Jetpack Compose, Material 3, Navigation Compose |
 | Build | AGP 8.10.1, Gradle wrapper, JDK 17; compile/target SDK 36; minimum SDK 29 |
@@ -358,9 +383,9 @@ These are **recorded results from different suites/builds**, not a fresh full-sy
 
 | Scope | Recorded result | What it establishes |
 |---|---|---|
-| Active mobile core | 608 tests; zero failures/errors | JVM logic regression coverage |
-| Active mobile AI unit suite | 72 tests; zero failures/errors | Scripted-engine orchestration, not broad real-model accuracy |
-| Active mobile physical-device UI | 33 tests in 113.153 s | Samsung SM-S721B / Android 16; camera startup, scenes, locales and navigation |
+| Jaagruk-Mobile core | 608 tests; zero failures/errors | JVM logic regression coverage |
+| Jaagruk-Mobile AI unit suite | 72 tests; zero failures/errors | Scripted-engine orchestration, not broad real-model accuracy |
+| Jaagruk-Mobile physical-device UI | 33 tests in 113.153 s | Samsung SM-S721B / Android 16; camera startup, scenes, locales and navigation |
 | Practice coverage within that UI run | 20 completed flows | Five modules × four locales |
 | Active real-model evaluation | Five nominal English/Hindi selections plus refusal/unsupported checks; 70.451 s total | Small device regression run, not an accuracy percentage |
 | Earlier model run, 30 September | 5.3–11.6 s per nominal answer | Observed range for that run only; not p95 or a cross-device benchmark |
@@ -475,14 +500,32 @@ No claims are made that Jaagruk outperforms commercial simulators, reduces accid
 ### Prerequisites
 
 - JDK 17 and the committed Gradle wrapper.
-- Android SDK platform 36 for the active app, plus the NDK/CMake required by its native build.
+- Android SDK platform 35 (submission app) and 36 (experimental app), plus the NDK and CMake: both `:ai` modules build vendored llama.cpp natively.
 - Android Studio or a configured SDK via `local.properties`, `ANDROID_HOME` or `ANDROID_SDK_ROOT`.
 - Node.js/npm for scene and dashboard builds; Python 3.11 is used by the backend helper.
 - A compatible ARCore device for camera practice; sufficient free space for a bundled APK and model extraction.
 
 Keep model licences, signing credentials, SDK paths and deployment secrets out of Git.
 
-### 1. Active Android app
+### 1. SIH submission app (`android-app`)
+
+From the repository root:
+
+```powershell
+.\gradlew.bat :core:test :ai:testDebugUnitTest :android-app:testDebugUnitTest :android-app:assembleDebug
+```
+
+For a release build, pass a keystore — without one, `assembleRelease` deliberately signs with the debug key so the APK still sideloads:
+
+```powershell
+.\gradlew.bat :android-app:assembleRelease `
+  -Pjaagruk.keystorePath=<path> -Pjaagruk.keystorePassword=<pw> -Pjaagruk.keyAlias=<alias> -Pjaagruk.keyPassword=<pw> `
+  -Pjaagruk.releaseApiBaseUrl=https://<your-backend>/
+```
+
+ABI splits produce one APK per architecture plus a universal one under `android-app/build/outputs/apk/release/`. The release sync endpoint has **no real default**: until `jaagruk.releaseApiBaseUrl` is set it points at `https://sync.invalid/`, a reserved name that never resolves, so records stay queued on the phone rather than going anywhere unintended. See [native experience](docs/NATIVE-EXPERIENCE.md) for the public entry, model import, request lifecycle and verification boundaries.
+
+### 2. Experimental assistant app (`Jaagruk-Mobile`)
 
 Run from **Jaagruk-Mobile**, not the repository root:
 
@@ -520,7 +563,7 @@ Validate a built APK:
 
 See [release delivery](Jaagruk-Mobile/docs/AR-AND-RELEASE.md).
 
-### 2. Rebuild offline scenes
+### 3. Rebuild the experimental app's offline scenes
 
 From `Jaagruk-Mobile/simulation`:
 
@@ -530,16 +573,6 @@ npm run build
 ```
 
 The output goes directly into Android's simulation assets. Rebuild the APK afterward.
-
-### 3. Root assessment application
-
-From the repository root:
-
-```powershell
-.\gradlew.bat :core:test :ai:testDebugUnitTest :android-app:testDebugUnitTest :android-app:assembleDebug
-```
-
-This produces the **other Android app**, not `Jaagruk-Mobile`. See [native experience](docs/NATIVE-EXPERIENCE.md) for its public entry, model import, request lifecycle and verification boundaries.
 
 ### 4. Backend and compliance dashboard
 
@@ -555,18 +588,20 @@ Use separate terminals from the repository root:
 
 Backend default: `http://127.0.0.1:8000`; API documentation: `/docs`; dashboard default: `http://localhost:5173`.
 
+To run or host both as **one service on one origin** — the backend serving the built dashboard — use the `Dockerfile` at the repository root, or deploy the [`render.yaml`](render.yaml) blueprint for a public demo with seeded logins. See [deploy/README.md](deploy/README.md).
+
 The backend helper's `-Seed` option **drops and recreates tables**. Use it only with a disposable demo database, never existing records.
 
-Configure deployment settings using [backend/.env.example](backend/.env.example). SQLite is the local default; PostgreSQL dependencies are separate. Replace secrets and demo credentials, configure allowed origins and HTTPS, and set the Android API base URL explicitly. A default government-style hostname in configuration is **not** a deployed endpoint or endorsement.
+Configure deployment settings using [backend/.env.example](backend/.env.example). SQLite is the local default; PostgreSQL dependencies are separate. Replace secrets and demo credentials, configure allowed origins and HTTPS, and set the Android API base URL explicitly. The government-style hostname still used as the default certificate **verification** URL (`JAAGRUK_VERIFY_BASE_URL`) is **not** a deployed endpoint or an endorsement — set it to a host you control before issuing certificates outside a demo.
 
 ### 5. Verification commands
 
 | Scope | Command / location |
 |---|---|
-| Mobile unit/build checks | Commands in step 1 |
-| Mobile UI tests on connected target | `gradlew.bat :app:connectedLeanDebugAndroidTest` from `Jaagruk-Mobile`; provision the model for real-model tests |
-| Mobile release package | `tools/check-apk.ps1` |
-| Root Android/unit checks | Commands in step 3 |
+| Submission app unit/build checks | Commands in step 1 |
+| Experimental app unit/build checks | Commands in step 2 |
+| Experimental app UI tests on connected target | `gradlew.bat :app:connectedLeanDebugAndroidTest` from `Jaagruk-Mobile`; provision the model for real-model tests |
+| Experimental app release package | `tools/check-apk.ps1` |
 | Dashboard | `npm ci`, then `npm run build` in `dashboard` |
 | Backend | Install its runtime/test requirements, then run `pytest` from `backend` |
 
@@ -577,14 +612,14 @@ Check connected targets before instrumentation so results are attributed to the 
 ```text
 Jaagruk-app/
 ├── README.md
-├── Jaagruk-Mobile/             Active, independent Android Gradle project
+├── Jaagruk-Mobile/             Experimental, independent Android Gradle project
 │   ├── app/                   Compose UI, resources, local scene assets
 │   ├── ai/                    Extractive coach, engine, JNI and llama.cpp
 │   ├── core/                  Pure Kotlin rules and safety corpus
 │   ├── simulation/            Three.js scene source and bundler
 │   ├── tools/                 Build, locale and APK validation helpers
 │   └── docs/                  Mobile architecture and recorded validation
-├── android-app/               Root assessment/compliance Android app
+├── android-app/               SIH submission Android app (assessment, certificates, sync)
 ├── ai/                        Root project's AI integration
 ├── core/                      Root assessment, crypto, retrieval and speech logic
 ├── backend/                   FastAPI, models, migrations and tests
@@ -599,7 +634,7 @@ Historical documents can describe earlier phases. Prefer current source and date
 
 ### Current limits
 
-- **Integration:** The active training app and root compliance implementation are separate. A class or dependency in the tree does not establish an accessible end-to-end feature.
+- **Integration:** The submission app and the experimental `Jaagruk-Mobile` app are separate projects with separately maintained copies of `:core` and `:ai`. A class or dependency in one tree does not establish a feature in the other.
 - **AR:** Camera startup is tested; physical anchor stability and in-camera interaction acceptance remain pending. No real gas, fire, electrical or PPE recognition is claimed.
 - **Safety content:** Corpus passages and translations require industrial-safety review. Draft Santali/Tamil text is not deployment-approved.
 - **AI:** English/Hindi only in the safety coach. General tools are not safety-validated, and five nominal model questions do not establish comprehensive quality.
@@ -627,7 +662,7 @@ These are planned directions, not completed features.
 
 | Read next | Purpose |
 |---|---|
-| [Mobile overview](Jaagruk-Mobile/README.md) | Active app entry point |
+| [Experimental app overview](Jaagruk-Mobile/README.md) | `Jaagruk-Mobile` entry point |
 | [Camera AR and release delivery](Jaagruk-Mobile/docs/AR-AND-RELEASE.md) | Native camera lifecycle, language and signing boundaries |
 | [Mobile validation](Jaagruk-Mobile/docs/VALIDATION.md) | Recorded device results and remaining acceptance |
 | [Mobile execution history](Jaagruk-Mobile/docs/WEB-PARITY.md) | Dated changes and earlier regression runs |
@@ -640,7 +675,7 @@ These are planned directions, not completed features.
 
 When contributing, identify the project you changed, keep practice separate from assessed records, add tests at the owning layer, and document the exact device/build/model behind any performance claim. Do not commit model weights, signing keys, private device captures or production credentials.
 
-Third-party code and model weights retain their own licences. The vendored llama.cpp notice is in [its source directory](Jaagruk-Mobile/ai/src/main/cpp/llama/LICENSE). No repository-wide open-source licence is asserted here; confirm redistribution terms before reuse.
+This repository's own code is released under the [MIT licence](LICENSE). Third-party code and model weights retain their own licences — the vendored llama.cpp notice is in [its source directory](Jaagruk-Mobile/ai/src/main/cpp/llama/LICENSE), and model weights are never committed.
 
 ---
 

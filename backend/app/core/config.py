@@ -82,12 +82,25 @@ class Settings(BaseSettings):
     # --- public -----------------------------------------------------------
     verify_base_url: str = "https://jaagruk.jharkhand.gov.in"
 
+    # --- dashboard --------------------------------------------------------
+    # The built compliance dashboard (dashboard/dist), served from this same origin, or unset for
+    # an API-only deployment. The dashboard calls the API with relative URLs and opens its live
+    # WebSocket on the page's own host, so serving it from here needs no CORS and no proxy.
+    dashboard_dir: Path | None = None
+
     @field_validator("database_url")
     @classmethod
     def _validate_database_url(cls, value: str) -> str:
-        if not value.strip():
+        value = value.strip()
+        if not value:
             raise ValueError("JAAGRUK_DATABASE_URL must not be empty")
-        return value.strip()
+        # Managed PostgreSQL (Render, Railway, Heroku) hands out postgres:// or postgresql://.
+        # SQLAlchemy maps both to the psycopg2 driver, which is not installed -- psycopg 3 is
+        # (requirements-postgres.txt) -- so the URL as given crashes on the first connection.
+        for scheme in ("postgres://", "postgresql://"):
+            if value.startswith(scheme):
+                return "postgresql+psycopg://" + value[len(scheme) :]
+        return value
 
     @property
     def cors_origin_list(self) -> list[str]:
